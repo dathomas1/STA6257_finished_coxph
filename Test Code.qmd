@@ -1,0 +1,13 @@
+---
+title: "Project"
+author: "Edwin Alvarado, Darnell Thomas, Michael Ho"
+format: html
+editor: visual
+---
+
+
+```{r}
+1 + 1
+```
+
+
