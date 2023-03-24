@@ -5,9 +5,10 @@ format: html
 editor: visual
 ---
 
-
 ```{r}
+install.packages("gitcreds")
+library(gitcreds)
+gitcreds_set(url = "https://github.com/e-alvarado/STA6257_coxph")
+
 1 + 1
 ```
-
-
