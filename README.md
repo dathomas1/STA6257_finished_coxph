@@ -1,8 +1,3 @@
----
-editor_options: 
-  markdown: 
-    wrap: 72
----
 
 # STA6257_coxph
 
@@ -11,6 +6,7 @@ Cox Proportional Hazards Model Group Project
 # Members
 
 Edwin Alvarado, Darnell Thomas, Michael Ho
+
 
 ## Introduction
 
@@ -33,7 +29,7 @@ age, gender, height, and so on. Another key factor in the CPH's
 popularity in survival analysis is its semiparametric nature (Kleinbaum,
 D. G., & Klein, M. (2011)). The composition of the model is as follows:
 
-![Cox Model Function](http://url/to/img.png)
+![](https://user-images.githubusercontent.com/108135009/229657141-11ea1351-0db1-467e-8a2f-7a00afa6e096.jpg)
 
 Where H_0 (t) is considered to be the baseline hazard function of the
 model. If in the event all other variables X are equal to zero, the
@@ -57,6 +53,7 @@ While parametric methods are still preferred over the CPH models in
 cases where the correct method is clearly indicated, the CPH model
 demonstrates its versatility by being both semiparametric in nature as
 well as attaining comparable results to its parametric counterparts.
+
 
 ## Method
 
@@ -118,6 +115,7 @@ the survival function cannot be calculated since the baseline hazard is
 unknown. This hinders clinicians in determining the net benefit of
 treatments (McLernon).
 
+
 ## Application
 
 The Cox Proportional Hazard model is used for modeling survival data and
@@ -151,6 +149,7 @@ identified in Stensrud (2020), which highlights how treatment effects
 may not be constant over a whole sample and in some cases may have no
 effect for months and then a drastic effect after some time. This has
 led to the use of models which can include time dependent variables.
+
 
 ## Our Dataset
 
