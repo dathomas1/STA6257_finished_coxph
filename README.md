@@ -12,7 +12,7 @@ Cox Proportional Hazards Model Group Project
 
 Edwin Alvarado, Darnell Thomas, Michael Ho
 
-#Introduction
+## Introduction
 
 The Cox Proportional Hazards (CPH) model is a method used for performing
 survival analyses, namely in the medical field. It is used to relate
@@ -32,6 +32,8 @@ event but are not of direct interest in a study - such as treatment,
 age, gender, height, and so on. Another key factor in the CPH's
 popularity in survival analysis is its semiparametric nature (Kleinbaum,
 D. G., & Klein, M. (2011)). The composition of the model is as follows:
+
+![Cox Model Function](http://url/to/img.png)
 
 Where H_0 (t) is considered to be the baseline hazard function of the
 model. If in the event all other variables X are equal to zero, the
@@ -56,7 +58,7 @@ cases where the correct method is clearly indicated, the CPH model
 demonstrates its versatility by being both semiparametric in nature as
 well as attaining comparable results to its parametric counterparts.
 
-#Method
+## Method
 
 The Cox PH model proposed in 1972 allows the estimation of regression
 coefficients of a hazard function without specifying the baseline hazard
@@ -116,7 +118,7 @@ the survival function cannot be calculated since the baseline hazard is
 unknown. This hinders clinicians in determining the net benefit of
 treatments (McLernon).
 
-#Application
+## Application
 
 The Cox Proportional Hazard model is used for modeling survival data and
 identifying relationships between predictors and survival times, and is
@@ -150,7 +152,7 @@ may not be constant over a whole sample and in some cases may have no
 effect for months and then a drastic effect after some time. This has
 led to the use of models which can include time dependent variables.
 
-#Our Dataset
+## Our Dataset
 
 We decided to use a dataset named VA:
 <https://vincentarelbundock.github.io/Rdatasets/doc/MASS/VA.html>
