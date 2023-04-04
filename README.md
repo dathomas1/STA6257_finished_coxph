@@ -61,28 +61,48 @@ The Cox PH model proposed in 1972 allows the estimation of regression
 coefficients of a hazard function without specifying the baseline hazard
 (Cox) The hazard function is the instantaneous risk of failure at time
 (t). The hazard function for other survival distributions such as
-Weibull take the form below: hit= exp(α+ Ziβ) where hit is the hazard
-function with respect to time α is a constant that represents baseline
-hazard when all Zs are zero Zi are the covariates measured for i-th
-individuals (Z1i, Z2i, ..., Zpi) is the unknown regression coefficients
-(Fox).
+Weibull take the form below: 
+
+$$h_i(t)= exp(α+ Z_iβ) $$
+
+where 
+
+$h_i(t)$ is the hazard function with respect to time 
+
+α is a constant that represents baseline hazard when all Zs are zero 
+
+$Z_i$ are the covariates measured for $i$-th individuals ($Z_{1i}+, Z_{2i}, ..., Z_{pi}$) is the unknown regression coefficients (Fox).
 
 In contrast to Weibull, the Cox PH model leaves the baseline hazard
-unspecified (i.e. α=hit ), and this baseline function can fluctuate with
-respect time instead of remaining constant. hit= h0t exp(Ziβ) where hit
-is the hazard function with respect to time h0t is the unknown baseline
-hazard function which can fluctuate with respect to time Zi are the
-covariates measured for i-th individuals (Z1i, Z2i, ..., Zpi) is the
-unknown regression coefficients (Cox). To demonstrate the impact of
+unspecified (i.e. $α=h_i(t)$ ), and this baseline function can fluctuate with
+respect time instead of remaining constant. 
+
+$$h_i(t)= h_0(t) exp(Z_iβ) $$
+where 
+
+$h_i(t)$ is the hazard function with respect to time 
+
+$h_0(t)$ is the unknown baseline hazard function which can fluctuate with respect to time (Cox). 
+
+To demonstrate the impact of
 differing variables on the hazard function, Cox (1972) used the example
 of one Z variable (p=1) with values 0 and 1. The corresponding hazard
-functions become h0t and h0texp⁡(β). This example can be extended to
+functions become $h_0(t)$ and $h_0(t)exp⁡(β$). This example can be extended to
 include more variables and used to calculate the hazard ratio for the
 two cases:
 
-Where is the hazard ratio (HR) and is assumed to be constant with
-respect to time (Stensrud)(Fox) is corresponding linear predictors of i
-is corresponding linear predictors of i' The benefit of the Cox PH model
+$$ {h_i(t) \over h_{i'}(t)} = {h_0(t)exp(\eta_i) \over h_0(t)exp(\eta_{i'})} =  {exp(\eta_i) \over exp(\eta_{i'})} $$
+
+Where 
+
+$h_i(t) \over h_{i'}(t)$ is the hazard ratio (HR) and is assumed to be constant with
+respect to time (Stensrud)(Fox) 
+
+$\eta_i$ is corresponding linear predictors of $i$
+
+$\eta_{i'}$ is corresponding linear predictors of $i'$ 
+
+The benefit of the Cox PH model
 is that the baseline hazard function can fluctuate with time instead of
 being constant or multiplicative. Another benefit is that the regression
 coefficients can be estimated without knowing the baseline hazard using
@@ -93,14 +113,23 @@ broken, one solution is to include an interaction between the covariate
 and time into the Cox model which is called time-dependent covariates
 (Fox) . Time dependent covariates are variables that vary with respect
 to time. Time dependent covariates can be modeled in the Cox by
-replacing Zi with Zi(t) which indicates that Zi varies with respect to
-time. hit= h0t exp(Zi(t)β) where hit is the hazard function with respect
-to time h0t is the unknown baseline hazard function which can fluctuate
-with respect to time Zi(t) are the covariates that may be time-fixed or
-time-dependent (Hendry) is the unknown regression coefficients. The
-hazard ratio (HR) then becomes the following:
+replacing $Z_i$ with $Z_i(t)$ which indicates that $Z_i$ varies with respect to
+time. 
 
-This allows the use of Cox PH for non-constant HR if the covariate In
+$$h_i(t)= h_0(t) exp(Z_i(t)β) $$
+
+where 
+
+$h_i(t)$ is the hazard function with respect
+
+$Z_i(t)$ are the covariates that may be time-fixed or
+time-dependent (Hendry) is the unknown regression coefficients. 
+
+The hazard ratio (HR) then becomes the following:
+
+$$ {h_0(t)exp(Z_i(t)β) \over h_0(t)exp(Z_j(t)β)} =  {exp(Z_i(t)β) \over exp(Z_j(t)β)} $$
+
+This allows the use of Cox PH for non-constant HR if the covariate is time-dependent. In
 general, the log hazard and covariates are assumed to be linear in the
 Cox PH model (Fox). The Cox model also assumes that the failure time of
 an individual is independent of the other individuals. This means that
