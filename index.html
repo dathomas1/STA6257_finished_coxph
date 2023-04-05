@@ -9,7 +9,7 @@
 <meta name="author" content="Edwin Alvarado, Darnell Thomas, and Michael Ho">
 <meta name="dcterms.date" content="2023-04-05">
 
-<title>Cox Proportional Hazards Model Group Projec</title>
+<title>Cox Proportional Hazards Model Group Project</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -85,6 +85,25 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 
@@ -111,7 +130,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Cox Proportional Hazards Model Group Projec</h1>
+<h1 class="title">Cox Proportional Hazards Model Group Project</h1>
 </div>
 
 
@@ -139,51 +158,51 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>The Cox Proportional Hazards (CPH) model is a method used for performing survival analyses, namely in the medical field. It is used to relate several risk factors simultaneously against survival time and is widely considered to be one of the most popular methods in survival analyses. One of the key reasons why it is popular in survival analysis is due to its ability to handle censored time-to-event data (Fisher, L. D., &amp; Lin D. Y. (1999)). “Censored” in this case would mean that some observed units were recorded for various lengths of time, but the event of interest did not occur during those studies. With this, Sir David Cox, the inventor of the model, considered such predictors and covariates when creating the Cox method. The risks, or “hazards,” were thought of as proportional to the probability of an event occurring at any particular time. Some of the risk factors used in its analyses include covariates – independent variables that can influence the outcome of an event but are not of direct interest in a study - such as treatment, age, gender, height, and so on. Another key factor in the CPH’s popularity in survival analysis is its semiparametric nature (Kleinbaum, D. G., &amp; Klein, M. (2011)). The composition of the model is as follows:</p>
-<p><span class="math display">\[ Add formula here \]</span></p>
-<p>Where H_0 (t) is considered to be the baseline hazard function of the model. If in the event all other variables X are equal to zero, the formula reduces to H_0 (t) ; hence, it is the baseline hazard function. It is due to the hazard function being unspecified that the CPH model can be considered semiparametric. In other words, it is semiparametric because there is no assumption about the distribution of survival times, but rather assumes that the effects of different variables that affect survival are constant over time, hence the composition of its formula (Samar Abd ElHafeez, Graziella D’Arrigo, Daniela Leonardis, Maria Fusaro, Giovanni Tripepi, Stefanos Roumeliotis (2021)). Where parametric models have completely specified functional forms, the unspecified nature of the baseline hazard function allows the CPH model to be naturally more flexible. Another reason for its popularity is that even with an unspecified hazard function, the CPH model is robust, being able to obtain favorable results such as good estimates of regression coefficients, hazard ratios of interest, and adjusted survival curves (Kleinbaum, D. G., &amp; Klein, M. (2011)). As a robust model, the CPH method can obtain results comparable to those of a parametric model. While parametric methods are still preferred over the CPH models in cases where the correct method is clearly indicated, the CPH model demonstrates its versatility by being both semiparametric in nature as well as attaining comparable results to its parametric counterparts.</p>
+<p>The Cox Proportional Hazards (CPH) model is a method used for performing survival analyses, namely in the medical field. It is used to relate several risk factors simultaneously against survival time and is widely considered to be one of the most popular methods in survival analyses. One of the key reasons why it is popular in survival analysis is due to its ability to handle censored time-to-event data <span class="citation" data-cites="fisher1999time">(<a href="#ref-fisher1999time" role="doc-biblioref">Fisher and Lin 1999</a>)</span>. “Censored” in this case would mean that some observed units were recorded for various lengths of time, but the event of interest did not occur during those studies. With this, Sir David Cox, the inventor of the model, considered such predictors and covariates when creating the Cox method. The risks, or “hazards,” were thought of as proportional to the probability of an event occurring at any particular time. Some of the risk factors used in its analyses include covariates – independent variables that can influence the outcome of an event but are not of direct interest in a study - such as treatment, age, gender, height, and so on. Another key factor in the CPH’s popularity in survival analysis is its semiparametric nature (Kleinbaum, D. G., &amp; Klein, M. (2011)). The composition of the model is as follows:</p>
+<p><span class="math display">\[ H(t) = H_0(t) \times exp(b_1x_1 + b_2x_2 + ... + b_kx_k) \]</span></p>
+<p>Where <span class="math inline">\(H_0 (t)\)</span> is considered to be the baseline hazard function of the model. If in the event all other variables X are equal to zero, the formula reduces to <span class="math inline">\(H_0 (t)\)</span> ; hence, it is the baseline hazard function. It is due to the hazard function being unspecified that the CPH model can be considered semiparametric. In other words, it is semiparametric because there is no assumption about the distribution of survival times, but rather assumes that the effects of different variables that affect survival are constant over time, hence the composition of its formula <span class="citation" data-cites="d2021methods">(<a href="#ref-d2021methods" role="doc-biblioref">D’Arrigo et al. 2021</a>)</span>. Where parametric models have completely specified functional forms, the unspecified nature of the baseline hazard function allows the CPH model to be naturally more flexible. Another reason for its popularity is that even with an unspecified hazard function, the CPH model is robust, being able to obtain favorable results such as good estimates of regression coefficients, hazard ratios of interest, and adjusted survival curves (Kleinbaum, D. G., &amp; Klein, M. (2011)). As a robust model, the CPH method can obtain results comparable to those of a parametric model. While parametric methods are still preferred over the CPH models in cases where the correct method is clearly indicated, the CPH model demonstrates its versatility by being both semiparametric in nature as well as attaining comparable results to its parametric counterparts.</p>
 </section>
 <section id="methods" class="level2">
 <h2 class="anchored" data-anchor-id="methods">Methods</h2>
-<p>The Cox PH model proposed in 1972 allows the estimation of regression coefficients of a hazard function without specifying the baseline hazard (Cox) The hazard function is the instantaneous risk of failure at time (t). The hazard function for other survival distributions such as Weibull take the form below:</p>
-<p><span class="math display">\[h_i(t)= exp(α+ Z_iβ) \]</span></p>
+<p>The Cox PH model proposed in 1972 allows the estimation of regression coefficients of a hazard function without specifying the baseline hazard <span class="citation" data-cites="cox1972regression">(<a href="#ref-cox1972regression" role="doc-biblioref">D. R. Cox 1972</a>)</span> The hazard function is the instantaneous risk of failure at time (t). The hazard function for other survival distributions such as Weibull take the form below:</p>
+<p><span class="math display">\[h_i(t)= exp \times (α+ Z_iβ) \]</span></p>
 <p>where</p>
 <p><span class="math inline">\(h_i(t)\)</span> is the hazard function with respect to time</p>
 <p>α is a constant that represents baseline hazard when all Zs are zero</p>
-<p><span class="math inline">\(Z_i\)</span> are the covariates measured for <span class="math inline">\(i\)</span>-th individuals (<span class="math inline">\(Z_{1i}+, Z_{2i}, ..., Z_{pi}\)</span>) is the unknown regression coefficients (Fox).</p>
+<p><span class="math inline">\(Z_i\)</span> are the covariates measured for <span class="math inline">\(i\)</span>-th individuals (<span class="math inline">\(Z_{1i}+, Z_{2i}, ..., Z_{pi}\)</span>) is the unknown regression coefficients <span class="citation" data-cites="fox2002r">(<a href="#ref-fox2002r" role="doc-biblioref">Fox 2002</a>)</span>.</p>
 <p>In contrast to Weibull, the Cox PH model leaves the baseline hazard unspecified (i.e.&nbsp;<span class="math inline">\(α=h_i(t)\)</span> ), and this baseline function can fluctuate with respect time instead of remaining constant.</p>
 <p><span class="math display">\[h_i(t)= h_0(t) exp(Z_iβ) \]</span> where</p>
 <p><span class="math inline">\(h_i(t)\)</span> is the hazard function with respect to time</p>
-<p><span class="math inline">\(h_0(t)\)</span> is the unknown baseline hazard function which can fluctuate with respect to time (Cox).</p>
-<p>To demonstrate the impact of differing variables on the hazard function, Cox (1972) used the example of one Z variable (p=1) with values 0 and 1. The corresponding hazard functions become <span class="math inline">\(h_0(t)\)</span> and <span class="math inline">\(h_0(t)exp⁡(β\)</span>). This example can be extended to include more variables and used to calculate the hazard ratio for the two cases:</p>
-<p><span class="math display">\[ {h_i(t) \over h_{i'}(t)} = {h_0(t)exp(\eta_i) \over h_0(t)exp(\eta_{i'})} =  {exp(\eta_i) \over exp(\eta_{i'})} \]</span></p>
+<p><span class="math inline">\(h_0(t)\)</span> is the unknown baseline hazard function which can fluctuate with respect to time <span class="citation" data-cites="cox1972regression">(<a href="#ref-cox1972regression" role="doc-biblioref">D. R. Cox 1972</a>)</span>.</p>
+<p>To demonstrate the impact of differing variables on the hazard function, Cox used the example of one Z variable (p=1) with values 0 and 1. The corresponding hazard functions become <span class="math inline">\(h_0(t)\)</span> and <span class="math inline">\(h_0(t) \times exp(\beta)\)</span> <span class="citation" data-cites="cox1972regression">(<a href="#ref-cox1972regression" role="doc-biblioref">D. R. Cox 1972</a>)</span>. This example can be extended to include more variables and used to calculate the hazard ratio for the two cases:</p>
+<p><span class="math display">\[ {h_i(t) \over h_{i'}(t)} = {h_0(t)\times exp(\eta_i) \over h_0(t) \times exp(\eta_{i'})} =  {exp(\eta_i) \over exp(\eta_{i'})} \]</span></p>
 <p>Where</p>
-<p><span class="math inline">\(h_i(t) \over h_{i'}(t)\)</span> is the hazard ratio (HR) and is assumed to be constant with respect to time (Stensrud)(Fox)</p>
+<p><span class="math inline">\(h_i(t) \over h_{i'}(t)\)</span> is the hazard ratio (HR) and is assumed to be constant with respect to time [<span class="citation" data-cites="stensrud2019limitations">Stensrud et al. (<a href="#ref-stensrud2019limitations" role="doc-biblioref">2019</a>)</span>]<span class="citation" data-cites="fox2002r">(<a href="#ref-fox2002r" role="doc-biblioref">Fox 2002</a>)</span></p>
 <p><span class="math inline">\(\eta_i\)</span> is corresponding linear predictors of <span class="math inline">\(i\)</span></p>
 <p><span class="math inline">\(\eta_{i'}\)</span> is corresponding linear predictors of <span class="math inline">\(i'\)</span></p>
-<p>The benefit of the Cox PH model is that the baseline hazard function can fluctuate with time instead of being constant or multiplicative. Another benefit is that the regression coefficients can be estimated without knowing the baseline hazard using the partial likelihood method as proposed by Cox (1972). Although the baseline hazard function can fluctuate, the Cox PH model assumes that the hazard ratio (HR) is constant. If the constant HR assumption is broken, one solution is to include an interaction between the covariate and time into the Cox model which is called time-dependent covariates (Fox) . Time dependent covariates are variables that vary with respect to time. Time dependent covariates can be modeled in the Cox by replacing <span class="math inline">\(Z_i\)</span> with <span class="math inline">\(Z_i(t)\)</span> which indicates that <span class="math inline">\(Z_i\)</span> varies with respect to time.</p>
+<p>The benefit of the Cox PH model is that the baseline hazard function can fluctuate with time instead of being constant or multiplicative. Another benefit is that the regression coefficients can be estimated without knowing the baseline hazard using the partial likelihood method as proposed by Cox (1972). Although the baseline hazard function can fluctuate, the Cox PH model assumes that the hazard ratio (HR) is constant. If the constant HR assumption is broken, one solution is to include an interaction between the covariate and time into the Cox model which is called time-dependent covariates <span class="citation" data-cites="fox2002r">(<a href="#ref-fox2002r" role="doc-biblioref">Fox 2002</a>)</span> . Time dependent covariates are variables that vary with respect to time. Time dependent covariates can be modeled in the Cox by replacing <span class="math inline">\(Z_i\)</span> with <span class="math inline">\(Z_i(t)\)</span> which indicates that <span class="math inline">\(Z_i\)</span> varies with respect to time.</p>
 <p><span class="math display">\[h_i(t)= h_0(t) exp(Z_i(t)β) \]</span></p>
 <p>where</p>
 <p><span class="math inline">\(h_i(t)\)</span> is the hazard function with respect</p>
-<p><span class="math inline">\(Z_i(t)\)</span> are the covariates that may be time-fixed or time-dependent (Hendry) is the unknown regression coefficients.</p>
+<p><span class="math inline">\(Z_i(t)\)</span> are the covariates that may be time-fixed or time-dependent <span class="citation" data-cites="hendry2014data">(<a href="#ref-hendry2014data" role="doc-biblioref">Hendry 2014</a>)</span> is the unknown regression coefficients.</p>
 <p>The hazard ratio (HR) then becomes the following:</p>
-<p><span class="math display">\[ {h_0(t)exp(Z_i(t)β) \over h_0(t)exp(Z_j(t)β)} =  {exp(Z_i(t)β) \over exp(Z_j(t)β)} \]</span></p>
-<p>This allows the use of Cox PH for non-constant HR if the covariate is time-dependent. In general, the log hazard and covariates are assumed to be linear in the Cox PH model (Fox). The Cox model also assumes that the failure time of an individual is independent of the other individuals. This means that if one participant in a study dies that no other participants are affected. The Cox PH also assumes that censored individuals have a failure time that exceeds the censoring time (Cox). For example, a participant is still alive at the end of the study and is right-censored. The assumptions of proportional HR, independent individuals and right-censoring also applies to other exponential survival distributions (Fox) (Hendry). A key downside of Cox PH is that the survival function cannot be calculated since the baseline hazard is unknown. This hinders clinicians in determining the net benefit of treatments (McLernon).</p>
+<p><span class="math display">\[ {h_0(t) \times exp(Z_i(t)β) \over h_0(t) \times exp(Z_j(t)β)} =  {exp(Z_i(t)β) \over exp(Z_j(t)β)} \]</span></p>
+<p>This allows the use of Cox PH for non-constant HR if the covariate is time-dependent. In general, the log hazard and covariates are assumed to be linear in the Cox PH model <span class="citation" data-cites="fox2002r">(<a href="#ref-fox2002r" role="doc-biblioref">Fox 2002</a>)</span>. The Cox model also assumes that the failure time of an individual is independent of the other individuals. This means that if one participant in a study dies that no other participants are affected. The Cox PH also assumes that censored individuals have a failure time that exceeds the censoring time <span class="citation" data-cites="cox1972regression">(<a href="#ref-cox1972regression" role="doc-biblioref">D. R. Cox 1972</a>)</span>. For example, a participant is still alive at the end of the study and is right-censored. The assumptions of proportional HR, independent individuals and right-censoring also applies to other exponential survival distributions <span class="citation" data-cites="fox2002r">(<a href="#ref-fox2002r" role="doc-biblioref">Fox 2002</a>)</span> <span class="citation" data-cites="hendry2014data">(<a href="#ref-hendry2014data" role="doc-biblioref">Hendry 2014</a>)</span>. A key downside of Cox PH is that the survival function cannot be calculated since the baseline hazard is unknown. This hinders clinicians in determining the net benefit of treatments <span class="citation" data-cites="mclernon2023assessing">(<a href="#ref-mclernon2023assessing" role="doc-biblioref">McLernon et al. 2023</a>)</span>.</p>
 </section>
 <section id="application" class="level2">
 <h2 class="anchored" data-anchor-id="application">Application</h2>
-<p>The Cox Proportional Hazard model is used for modeling survival data and identifying relationships between predictors and survival times, and is commonly used in the medical research field but has also been applied in fields like finance and the social sciences. (Hendry) In medical research it is used to identify factors that influence patient outcomes, e.g.&nbsp;death or other health status. For example, Thiruvengadam et al. (2020) used the Cox model to analyze the factors that determine the length of stay for COVID-19 patients, using different demographic and health information to find connections to the length of stay or even death of patients. (Thiruvengadam) Other medical research often mirrors this structure and the model has also been applied in the context of clinical trials. For example, researchers used the model to determine treatment risks and treatment effectiveness for those in a systolic blood pressure intervention trial, finding a 25% lower hazard rate for those receiving intensive treatment. (Stensrud) The Cox proportional hazard model excels at modeling this type of scenario, using survival data that can be censored, i.e.&nbsp;as in the case where patients have died or left the study. Although commonly used for medical research, the application is straightforward in other fields with some research looking at the duration of events like marriages, recidivism, and bank failures. For example, researchers examining the factors leading to bank failure used the 2008 recession as a case study to determine and predict what factors, e.g.&nbsp;asset ratios and loan amounts, are indicators of failure. (COX/KIMMEL/WANG) The model has some limitations especially when not including time dependent structure in the model. In that case, the model assumes the hazard ratio is the same across the time sample, which is often not the case in medical research. This shortcoming is identified in Stensrud (2020), which highlights how treatment effects may not be constant over a whole sample and in some cases may have no effect for months and then a drastic effect after some time. This has led to the use of models which can include time dependent variables.</p>
+<p>The Cox Proportional Hazard model is used for modeling survival data and identifying relationships between predictors and survival times, and is commonly used in the medical research field but has also been applied in fields like finance and the social sciences. <span class="citation" data-cites="hendry2014data">(<a href="#ref-hendry2014data" role="doc-biblioref">Hendry 2014</a>)</span> In medical research it is used to identify factors that influence patient outcomes, e.g.&nbsp;death or other health status. For example, <span class="citation" data-cites="thiruvengadam2021study">(<a href="#ref-thiruvengadam2021study" role="doc-biblioref">Thiruvengadam, Lakshmi, and Ramanujam 2021</a>)</span> used the Cox model to analyze the factors that determine the length of stay for COVID-19 patients, using different demographic and health information to find connections to the length of stay or even death of patients. <span class="citation" data-cites="thiruvengadam2021study">(<a href="#ref-thiruvengadam2021study" role="doc-biblioref">Thiruvengadam, Lakshmi, and Ramanujam 2021</a>)</span> Other medical research often mirrors this structure and the model has also been applied in the context of clinical trials. For example, researchers used the model to determine treatment risks and treatment effectiveness for those in a systolic blood pressure intervention trial, finding a 25% lower hazard rate for those receiving intensive treatment. <span class="citation" data-cites="stensrud2019limitations">(<a href="#ref-stensrud2019limitations" role="doc-biblioref">Stensrud et al. 2019</a>)</span> The Cox proportional hazard model excels at modeling this type of scenario, using survival data that can be censored, i.e.&nbsp;as in the case where patients have died or left the study. Although commonly used for medical research, the application is straightforward in other fields with some research looking at the duration of events like marriages, recidivism, and bank failures. For example, researchers examining the factors leading to bank failure used the 2008 recession as a case study to determine and predict what factors, e.g.&nbsp;asset ratios and loan amounts, are indicators of failure. <span class="citation" data-cites="cox2017proportional">(<a href="#ref-cox2017proportional" role="doc-biblioref">R. A. Cox, Kimmel, and Wang 2017</a>)</span> The model has some limitations especially when not including time dependent structure in the model. In that case, the model assumes the hazard ratio is the same across the time sample, which is often not the case in medical research. This shortcoming is identified in <span class="citation" data-cites="stensrud2020test">(<a href="#ref-stensrud2020test" role="doc-biblioref">Stensrud and Hernán 2020</a>)</span>, which highlights how treatment effects may not be constant over a whole sample and in some cases may have no effect for months and then a drastic effect after some time. This has led to the use of models which can include time dependent variables.</p>
 </section>
 <section id="our-dataset" class="level2">
 <h2 class="anchored" data-anchor-id="our-dataset">Our Dataset</h2>
 <p>We decided to use a dataset named VA: <a href="https://vincentarelbundock.github.io/Rdatasets/doc/MASS/VA.html" class="uri">https://vincentarelbundock.github.io/Rdatasets/doc/MASS/VA.html</a></p>
 <p>The reason for this is because we believe the dataset fulfills the criteria necessary to conduct a survival analysis - in this case, studying a veteran’s probability of survival from lung cancer. It contains relevant covariates in a standard Cox model, such as age, treatment, survival time, and so on.</p>
 </section>
-<section id="analysis-and-results" class="level2">
-<h2 class="anchored" data-anchor-id="analysis-and-results">Analysis and Results</h2>
+<section id="analysis-and-results-need-to-update-for-our-model-and-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="analysis-and-results-need-to-update-for-our-model-and-analysis">Analysis and Results [[NEED TO UPDATE FOR OUR MODEL AND ANALYSIS]]</h2>
 <section id="data-and-vizualisation" class="level3">
 <h3 class="anchored" data-anchor-id="data-and-vizualisation">Data and Vizualisation</h3>
-<p>A study was conducted to determine how… NEED TO UPDATE FOR OUR MODEL AND ANALYSIS</p>
+<p>A study was conducted to determine how…</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -285,11 +304,43 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3 class="anchored" data-anchor-id="conlusion">Conlusion</h3>
 </section>
 </section>
-<section id="references" class="level2">
-<h2 class="anchored" data-anchor-id="references">References</h2>
+<section id="references" class="level2 unnumbered">
+
+
 </section>
 
-</main>
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-cox1972regression" class="csl-entry" role="doc-biblioentry">
+Cox, David R. 1972. <span>“Regression Models and Life-Tables.”</span> <em>Journal of the Royal Statistical Society: Series B (Methodological)</em> 34 (2): 187–202.
+</div>
+<div id="ref-cox2017proportional" class="csl-entry" role="doc-biblioentry">
+Cox, Raymond AK, Randall K Kimmel, and Grace WY Wang. 2017. <span>“Proportional Hazards Model of Bank Failure: Evidence from USA.”</span> <em>Journal of Economic &amp; Financial Studies</em> 5 (3): 35–45.
+</div>
+<div id="ref-d2021methods" class="csl-entry" role="doc-biblioentry">
+D’Arrigo, Graziella, Daniela Leonardis, Samar Abd ElHafeez, Maria Fusaro, Giovanni Tripepi, and Stefanos Roumeliotis. 2021. <span>“Methods to Analyse Time-to-Event Data: The Kaplan-Meier Survival Curve.”</span> <em>Oxidative Medicine and Cellular Longevity</em> 2021.
+</div>
+<div id="ref-fisher1999time" class="csl-entry" role="doc-biblioentry">
+Fisher, Lloyd D, and Danyu Y Lin. 1999. <span>“Time-Dependent Covariates in the Cox Proportional-Hazards Regression Model.”</span> <em>Annual Review of Public Health</em> 20 (1): 145–57.
+</div>
+<div id="ref-fox2002r" class="csl-entry" role="doc-biblioentry">
+Fox, John. 2002. <em>An r and s-Plus Companion to Applied Regression</em>. Sage.
+</div>
+<div id="ref-hendry2014data" class="csl-entry" role="doc-biblioentry">
+Hendry, David J. 2014. <span>“Data Generation for the Cox Proportional Hazards Model with Time-Dependent Covariates: A Method for Medical Researchers.”</span> <em>Statistics in Medicine</em> 33 (3): 436–54.
+</div>
+<div id="ref-mclernon2023assessing" class="csl-entry" role="doc-biblioentry">
+McLernon, David J, Daniele Giardiello, Ben Van Calster, Laure Wynants, Nan van Geloven, Maarten van Smeden, Terry Therneau, Ewout W Steyerberg, topic groups 6, and 8 of the STRATOS Initiative. 2023. <span>“Assessing Performance and Clinical Usefulness in Prediction Models with Survival Outcomes: Practical Guidance for Cox Proportional Hazards Models.”</span> <em>Annals of Internal Medicine</em> 176 (1): 105–14.
+</div>
+<div id="ref-stensrud2019limitations" class="csl-entry" role="doc-biblioentry">
+Stensrud, Mats J, John M Aalen, Odd O Aalen, and Morten Valberg. 2019. <span>“Limitations of Hazard Ratios in Clinical Trials.”</span> <em>European Heart Journal</em>.
+</div>
+<div id="ref-stensrud2020test" class="csl-entry" role="doc-biblioentry">
+Stensrud, Mats J, and Miguel A Hernán. 2020. <span>“Why Test for Proportional Hazards?”</span> <em>Jama</em> 323 (14): 1401–2.
+</div>
+<div id="ref-thiruvengadam2021study" class="csl-entry" role="doc-biblioentry">
+Thiruvengadam, Gayathri, Marappa Lakshmi, and Ravanan Ramanujam. 2021. <span>“A Study of Factors Affecting the Length of Hospital Stay of COVID-19 Patients by Cox-Proportional Hazard Model in a South Indian Tertiary Care Hospital.”</span> <em>Journal of Primary Care &amp; Community Health</em> 12: 21501327211000231.
+</div>
+</div></section></div></main>
 <!-- /main column -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
