@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.189">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Edwin Alvarado, Darnell Thomas, and Michael Ho">
+<meta name="dcterms.date" content="2023-04-05">
+
+<title>Cox Proportional Hazards Model Group Projec</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="index_files/libs/clipboard/clipboard.min.js"></script>
+<script src="index_files/libs/quarto-html/quarto.js"></script>
+<script src="index_files/libs/quarto-html/popper.min.js"></script>
+<script src="index_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="index_files/libs/quarto-html/anchor.min.js"></script>
+<link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="index_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="index_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="index_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="index_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Cox Proportional Hazards Model Group Projec</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Edwin Alvarado, Darnell Thomas, and Michael Ho </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">April 5, 2023</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>The Cox Proportional Hazards (CPH) model is a method used for performing survival analyses, namely in the medical field. It is used to relate several risk factors simultaneously against survival time and is widely considered to be one of the most popular methods in survival analyses. One of the key reasons why it is popular in survival analysis is due to its ability to handle censored time-to-event data (Fisher, L. D., &amp; Lin D. Y. (1999)). “Censored” in this case would mean that some observed units were recorded for various lengths of time, but the event of interest did not occur during those studies. With this, Sir David Cox, the inventor of the model, considered such predictors and covariates when creating the Cox method. The risks, or “hazards,” were thought of as proportional to the probability of an event occurring at any particular time. Some of the risk factors used in its analyses include covariates – independent variables that can influence the outcome of an event but are not of direct interest in a study - such as treatment, age, gender, height, and so on. Another key factor in the CPH’s popularity in survival analysis is its semiparametric nature (Kleinbaum, D. G., &amp; Klein, M. (2011)). The composition of the model is as follows:</p>
+<p><span class="math display">\[ Add formula here \]</span></p>
+<p>Where H_0 (t) is considered to be the baseline hazard function of the model. If in the event all other variables X are equal to zero, the formula reduces to H_0 (t) ; hence, it is the baseline hazard function. It is due to the hazard function being unspecified that the CPH model can be considered semiparametric. In other words, it is semiparametric because there is no assumption about the distribution of survival times, but rather assumes that the effects of different variables that affect survival are constant over time, hence the composition of its formula (Samar Abd ElHafeez, Graziella D’Arrigo, Daniela Leonardis, Maria Fusaro, Giovanni Tripepi, Stefanos Roumeliotis (2021)). Where parametric models have completely specified functional forms, the unspecified nature of the baseline hazard function allows the CPH model to be naturally more flexible. Another reason for its popularity is that even with an unspecified hazard function, the CPH model is robust, being able to obtain favorable results such as good estimates of regression coefficients, hazard ratios of interest, and adjusted survival curves (Kleinbaum, D. G., &amp; Klein, M. (2011)). As a robust model, the CPH method can obtain results comparable to those of a parametric model. While parametric methods are still preferred over the CPH models in cases where the correct method is clearly indicated, the CPH model demonstrates its versatility by being both semiparametric in nature as well as attaining comparable results to its parametric counterparts.</p>
+</section>
+<section id="methods" class="level2">
+<h2 class="anchored" data-anchor-id="methods">Methods</h2>
+<p>The Cox PH model proposed in 1972 allows the estimation of regression coefficients of a hazard function without specifying the baseline hazard (Cox) The hazard function is the instantaneous risk of failure at time (t). The hazard function for other survival distributions such as Weibull take the form below:</p>
+<p><span class="math display">\[h_i(t)= exp(α+ Z_iβ) \]</span></p>
+<p>where</p>
+<p><span class="math inline">\(h_i(t)\)</span> is the hazard function with respect to time</p>
+<p>α is a constant that represents baseline hazard when all Zs are zero</p>
+<p><span class="math inline">\(Z_i\)</span> are the covariates measured for <span class="math inline">\(i\)</span>-th individuals (<span class="math inline">\(Z_{1i}+, Z_{2i}, ..., Z_{pi}\)</span>) is the unknown regression coefficients (Fox).</p>
+<p>In contrast to Weibull, the Cox PH model leaves the baseline hazard unspecified (i.e.&nbsp;<span class="math inline">\(α=h_i(t)\)</span> ), and this baseline function can fluctuate with respect time instead of remaining constant.</p>
+<p><span class="math display">\[h_i(t)= h_0(t) exp(Z_iβ) \]</span> where</p>
+<p><span class="math inline">\(h_i(t)\)</span> is the hazard function with respect to time</p>
+<p><span class="math inline">\(h_0(t)\)</span> is the unknown baseline hazard function which can fluctuate with respect to time (Cox).</p>
+<p>To demonstrate the impact of differing variables on the hazard function, Cox (1972) used the example of one Z variable (p=1) with values 0 and 1. The corresponding hazard functions become <span class="math inline">\(h_0(t)\)</span> and <span class="math inline">\(h_0(t)exp⁡(β\)</span>). This example can be extended to include more variables and used to calculate the hazard ratio for the two cases:</p>
+<p><span class="math display">\[ {h_i(t) \over h_{i'}(t)} = {h_0(t)exp(\eta_i) \over h_0(t)exp(\eta_{i'})} =  {exp(\eta_i) \over exp(\eta_{i'})} \]</span></p>
+<p>Where</p>
+<p><span class="math inline">\(h_i(t) \over h_{i'}(t)\)</span> is the hazard ratio (HR) and is assumed to be constant with respect to time (Stensrud)(Fox)</p>
+<p><span class="math inline">\(\eta_i\)</span> is corresponding linear predictors of <span class="math inline">\(i\)</span></p>
+<p><span class="math inline">\(\eta_{i'}\)</span> is corresponding linear predictors of <span class="math inline">\(i'\)</span></p>
+<p>The benefit of the Cox PH model is that the baseline hazard function can fluctuate with time instead of being constant or multiplicative. Another benefit is that the regression coefficients can be estimated without knowing the baseline hazard using the partial likelihood method as proposed by Cox (1972). Although the baseline hazard function can fluctuate, the Cox PH model assumes that the hazard ratio (HR) is constant. If the constant HR assumption is broken, one solution is to include an interaction between the covariate and time into the Cox model which is called time-dependent covariates (Fox) . Time dependent covariates are variables that vary with respect to time. Time dependent covariates can be modeled in the Cox by replacing <span class="math inline">\(Z_i\)</span> with <span class="math inline">\(Z_i(t)\)</span> which indicates that <span class="math inline">\(Z_i\)</span> varies with respect to time.</p>
+<p><span class="math display">\[h_i(t)= h_0(t) exp(Z_i(t)β) \]</span></p>
+<p>where</p>
+<p><span class="math inline">\(h_i(t)\)</span> is the hazard function with respect</p>
+<p><span class="math inline">\(Z_i(t)\)</span> are the covariates that may be time-fixed or time-dependent (Hendry) is the unknown regression coefficients.</p>
+<p>The hazard ratio (HR) then becomes the following:</p>
+<p><span class="math display">\[ {h_0(t)exp(Z_i(t)β) \over h_0(t)exp(Z_j(t)β)} =  {exp(Z_i(t)β) \over exp(Z_j(t)β)} \]</span></p>
+<p>This allows the use of Cox PH for non-constant HR if the covariate is time-dependent. In general, the log hazard and covariates are assumed to be linear in the Cox PH model (Fox). The Cox model also assumes that the failure time of an individual is independent of the other individuals. This means that if one participant in a study dies that no other participants are affected. The Cox PH also assumes that censored individuals have a failure time that exceeds the censoring time (Cox). For example, a participant is still alive at the end of the study and is right-censored. The assumptions of proportional HR, independent individuals and right-censoring also applies to other exponential survival distributions (Fox) (Hendry). A key downside of Cox PH is that the survival function cannot be calculated since the baseline hazard is unknown. This hinders clinicians in determining the net benefit of treatments (McLernon).</p>
+</section>
+<section id="application" class="level2">
+<h2 class="anchored" data-anchor-id="application">Application</h2>
+<p>The Cox Proportional Hazard model is used for modeling survival data and identifying relationships between predictors and survival times, and is commonly used in the medical research field but has also been applied in fields like finance and the social sciences. (Hendry) In medical research it is used to identify factors that influence patient outcomes, e.g.&nbsp;death or other health status. For example, Thiruvengadam et al. (2020) used the Cox model to analyze the factors that determine the length of stay for COVID-19 patients, using different demographic and health information to find connections to the length of stay or even death of patients. (Thiruvengadam) Other medical research often mirrors this structure and the model has also been applied in the context of clinical trials. For example, researchers used the model to determine treatment risks and treatment effectiveness for those in a systolic blood pressure intervention trial, finding a 25% lower hazard rate for those receiving intensive treatment. (Stensrud) The Cox proportional hazard model excels at modeling this type of scenario, using survival data that can be censored, i.e.&nbsp;as in the case where patients have died or left the study. Although commonly used for medical research, the application is straightforward in other fields with some research looking at the duration of events like marriages, recidivism, and bank failures. For example, researchers examining the factors leading to bank failure used the 2008 recession as a case study to determine and predict what factors, e.g.&nbsp;asset ratios and loan amounts, are indicators of failure. (COX/KIMMEL/WANG) The model has some limitations especially when not including time dependent structure in the model. In that case, the model assumes the hazard ratio is the same across the time sample, which is often not the case in medical research. This shortcoming is identified in Stensrud (2020), which highlights how treatment effects may not be constant over a whole sample and in some cases may have no effect for months and then a drastic effect after some time. This has led to the use of models which can include time dependent variables.</p>
+</section>
+<section id="our-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="our-dataset">Our Dataset</h2>
+<p>We decided to use a dataset named VA: <a href="https://vincentarelbundock.github.io/Rdatasets/doc/MASS/VA.html" class="uri">https://vincentarelbundock.github.io/Rdatasets/doc/MASS/VA.html</a></p>
+<p>The reason for this is because we believe the dataset fulfills the criteria necessary to conduct a survival analysis - in this case, studying a veteran’s probability of survival from lung cancer. It contains relevant covariates in a standard Cox model, such as age, treatment, survival time, and so on.</p>
+</section>
+<section id="analysis-and-results" class="level2">
+<h2 class="anchored" data-anchor-id="analysis-and-results">Analysis and Results</h2>
+<section id="data-and-vizualisation" class="level3">
+<h3 class="anchored" data-anchor-id="data-and-vizualisation">Data and Vizualisation</h3>
+<p>A study was conducted to determine how… NEED TO UPDATE FOR OUR MODEL AND ANALYSIS</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># loading packages </span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggthemes)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggrepel)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dslabs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load Data</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(murders))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<thead>
+<tr class="header">
+<th style="text-align: left;">state</th>
+<th style="text-align: left;">abb</th>
+<th style="text-align: left;">region</th>
+<th style="text-align: right;">population</th>
+<th style="text-align: right;">total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Alabama</td>
+<td style="text-align: left;">AL</td>
+<td style="text-align: left;">South</td>
+<td style="text-align: right;">4779736</td>
+<td style="text-align: right;">135</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Alaska</td>
+<td style="text-align: left;">AK</td>
+<td style="text-align: left;">West</td>
+<td style="text-align: right;">710231</td>
+<td style="text-align: right;">19</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Arizona</td>
+<td style="text-align: left;">AZ</td>
+<td style="text-align: left;">West</td>
+<td style="text-align: right;">6392017</td>
+<td style="text-align: right;">232</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Arkansas</td>
+<td style="text-align: left;">AR</td>
+<td style="text-align: left;">South</td>
+<td style="text-align: right;">2915918</td>
+<td style="text-align: right;">93</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">California</td>
+<td style="text-align: left;">CA</td>
+<td style="text-align: left;">West</td>
+<td style="text-align: right;">37253956</td>
+<td style="text-align: right;">1257</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Colorado</td>
+<td style="text-align: left;">CO</td>
+<td style="text-align: left;">West</td>
+<td style="text-align: right;">5029196</td>
+<td style="text-align: right;">65</td>
+</tr>
+</tbody>
+</table>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ggplot1 <span class="ot">=</span> murders <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span>population<span class="sc">/</span><span class="dv">10</span><span class="sc">^</span><span class="dv">6</span>, <span class="at">y=</span>total)) </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  ggplot1 <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">col=</span>region), <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text_repel</span>(<span class="fu">aes</span>(<span class="at">label=</span>abb)) <span class="sc">+</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>() <span class="sc">+</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">formula =</span> <span class="st">"y~x"</span>, <span class="at">method=</span>lm,<span class="at">se =</span> F)<span class="sc">+</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Populations in millions (log10 scale)"</span>) <span class="sc">+</span> </span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Total number of murders (log10 scale)"</span>) <span class="sc">+</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"US Gun Murders in 2010"</span>) <span class="sc">+</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_discrete</span>(<span class="at">name =</span> <span class="st">"Region"</span>)<span class="sc">+</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme_wsj</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="statistical-modeling" class="level3">
+<h3 class="anchored" data-anchor-id="statistical-modeling">Statistical Modeling</h3>
+</section>
+<section id="conlusion" class="level3">
+<h3 class="anchored" data-anchor-id="conlusion">Conlusion</h3>
+</section>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
