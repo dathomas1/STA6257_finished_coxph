@@ -206,8 +206,16 @@ package in R.
 
 Variables:
 
-*       test1
-*       test2
+*   stime: survival or follow-up time in days
+*   status: dead or censored
+*   treat: treatment, either standard or test (chemotherapy)
+*   age: patient's age in years
+*   Karn: Karnofsky score of patient's performance on scale of 0 to 100
+*   diag.time: patient's time since diagnosis, measured at time of entry to trial, in months
+*   cell: one of four cell types
+*   prior: prior therapy factor of yes/no
+
+
 
 ```{r, warning=FALSE, echo=T, message=FALSE}
 # loading packages 
