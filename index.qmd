@@ -207,13 +207,13 @@ package in R.
 Variables:
 
 *   stime: survival or follow-up time in days
-*   status: dead or censored
-*   treat: treatment, either standard or test (chemotherapy)
+*   status: dead or alive/censored; 0 (alive), 1 (dead)
+*   treat: treatment, either standard or test (chemotherapy); 1 (standard), 2 (test)
 *   age: patient's age in years
 *   Karn: Karnofsky score of patient's performance on scale of 0 to 100
 *   diag.time: patient's time since diagnosis, measured at time of entry to trial, in months
-*   cell: one of four cell types
-*   prior: prior therapy factor of yes/no
+*   cell: one of four cell types; 1 (squamous), 2 (small cell), 3 (adeno), 4 (large)
+*   prior: denotes prior therapy; 10 (yes), 0 (no)
 
 
 
