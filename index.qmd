@@ -191,7 +191,7 @@ treatment, survival time, and so on.
 
 ## Analysis and Results [[NEED TO UPDATE FOR OUR MODEL AND ANALYSIS]]
 ### Data and Vizualisation
-A study was conducted to determine how...
+The data used is from a Veteran's Administrative lung cancer trial of 137 male patients with advanced inoperable lung cancer. (Kalbfleisch & Prentice FIX CITATION) The data set is available through the MASS package in R. 
 
 
 ```{r, warning=FALSE, echo=T, message=FALSE}
@@ -201,6 +201,7 @@ library(knitr)
 library(ggthemes)
 library(ggrepel)
 library(dslabs)
+library(MASS)
 ```
 
 
