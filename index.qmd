@@ -204,6 +204,11 @@ The data used is from a Veteran's Administrative lung cancer trial of
 Prentice FIX CITATION) The data set is available through the MASS
 package in R.
 
+Variables:
+
+*       test1
+*       test2
+
 ```{r, warning=FALSE, echo=T, message=FALSE}
 # loading packages 
 library(tidyverse)
