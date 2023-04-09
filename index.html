@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Edwin Alvarado, Darnell Thomas, and Michael Ho">
-<meta name="dcterms.date" content="2023-04-08">
+<meta name="dcterms.date" content="2023-04-09">
 
 <title>Cox Proportional Hazards Model Group Project</title>
 <style>
@@ -147,7 +147,7 @@ div.csl-indent {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">April 8, 2023</p>
+      <p class="date">April 9, 2023</p>
     </div>
   </div>
     
@@ -205,27 +205,33 @@ div.csl-indent {
 <p>The data used is from a Veteran’s Administrative lung cancer trial of 137 male patients with advanced inoperable lung cancer. (Kalbfleisch &amp; Prentice FIX CITATION) The data set is available through the MASS package in R.</p>
 <p>Variables:</p>
 <ul>
-<li><pre><code>  test1</code></pre></li>
-<li><pre><code>  test2</code></pre></li>
+<li>stime: survival or follow-up time in days</li>
+<li>status: dead or alive/censored; 0 (alive), 1 (dead)</li>
+<li>treat: treatment, either standard or test (chemotherapy); 1 (standard), 2 (test)</li>
+<li>age: patient’s age in years</li>
+<li>Karn: Karnofsky score of patient’s performance on scale of 0 to 100</li>
+<li>diag.time: patient’s time since diagnosis, measured at time of entry to trial, in months</li>
+<li>cell: one of four cell types; 1 (squamous), 2 (small cell), 3 (adeno), 4 (large)</li>
+<li>prior: denotes prior therapy; 10 (yes), 0 (no)</li>
 </ul>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># loading packages </span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggthemes)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggrepel)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dslabs)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># loading packages </span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggthemes)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggrepel)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dslabs)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load Data</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(VA)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(VA))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load Data</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(VA)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(VA))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <table class="table table-sm table-striped">
@@ -306,9 +312,253 @@ div.csl-indent {
 </table>
 </div>
 </div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Must leave status as numeric instead of converting to factor</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(VA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>     stime           status       treat       age             Karn      
+ Min.   :  1.0   Min.   :0.0000   1:69   Min.   :34.00   Min.   :10.00  
+ 1st Qu.: 25.0   1st Qu.:1.0000   2:68   1st Qu.:51.00   1st Qu.:40.00  
+ Median : 80.0   Median :1.0000          Median :62.00   Median :60.00  
+ Mean   :121.6   Mean   :0.9343          Mean   :58.31   Mean   :58.57  
+ 3rd Qu.:144.0   3rd Qu.:1.0000          3rd Qu.:66.00   3rd Qu.:75.00  
+ Max.   :999.0   Max.   :1.0000          Max.   :81.00   Max.   :99.00  
+   diag.time      cell   prior  
+ Min.   : 1.000   1:35   0 :97  
+ 1st Qu.: 3.000   2:48   10:40  
+ Median : 5.000   3:27          
+ Mean   : 8.774   4:27          
+ 3rd Qu.:11.000                 
+ Max.   :87.000                 </code></pre>
+</div>
+</div>
 </section>
 <section id="statistical-modeling" class="level3">
 <h3 class="anchored" data-anchor-id="statistical-modeling">Statistical Modeling</h3>
+<p>We will start by using all the variables in the inital Cox PH model.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import Survival package with Cox proportional-hazard model</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survival)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit model with all variables.</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># stime and status are the output values</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>cox.mod <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(stime, status) <span class="sc">~</span> treat <span class="sc">+</span> age <span class="sc">+</span> Karn <span class="sc">+</span> diag.time <span class="sc">+</span> cell <span class="sc">+</span> prior, <span class="at">data=</span>VA)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Concordance Index or Harrel's C (model evaluation: higher is better. 50% is equivalent to guessing.)</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Likelihood ratio useful comparing nested models</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(cox.mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call:
+coxph(formula = Surv(stime, status) ~ treat + age + Karn + diag.time + 
+    cell + prior, data = VA)
+
+  n= 137, number of events= 128 
+
+                coef  exp(coef)   se(coef)      z Pr(&gt;|z|)    
+treat2     2.946e-01  1.343e+00  2.075e-01  1.419  0.15577    
+age       -8.706e-03  9.913e-01  9.300e-03 -0.936  0.34920    
+Karn      -3.282e-02  9.677e-01  5.508e-03 -5.958 2.55e-09 ***
+diag.time  8.132e-05  1.000e+00  9.136e-03  0.009  0.99290    
+cell2      8.616e-01  2.367e+00  2.753e-01  3.130  0.00175 ** 
+cell3      1.196e+00  3.307e+00  3.009e-01  3.975 7.05e-05 ***
+cell4      4.013e-01  1.494e+00  2.827e-01  1.420  0.15574    
+prior10    7.159e-02  1.074e+00  2.323e-01  0.308  0.75794    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+          exp(coef) exp(-coef) lower .95 upper .95
+treat2       1.3426     0.7448    0.8939    2.0166
+age          0.9913     1.0087    0.9734    1.0096
+Karn         0.9677     1.0334    0.9573    0.9782
+diag.time    1.0001     0.9999    0.9823    1.0182
+cell2        2.3669     0.4225    1.3799    4.0597
+cell3        3.3071     0.3024    1.8336    5.9647
+cell4        1.4938     0.6695    0.8583    2.5996
+prior10      1.0742     0.9309    0.6813    1.6937
+
+Concordance= 0.736  (se = 0.021 )
+Likelihood ratio test= 62.1  on 8 df,   p=2e-10
+Wald test            = 62.37  on 8 df,   p=2e-10
+Score (logrank) test = 66.74  on 8 df,   p=2e-11</code></pre>
+</div>
+</div>
+<p>Some of the variables had p-values less than the significant level. We will check if we can drop age, diag.time, and prior from the model without reducint accuracy.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Can we drop age, diag.time, and prior</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>cox.mod2 <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(stime, status) <span class="sc">~</span> treat <span class="sc">+</span> Karn <span class="sc">+</span> cell, <span class="at">data=</span>VA)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(cox.mod2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call:
+coxph(formula = Surv(stime, status) ~ treat + Karn + cell, data = VA)
+
+  n= 137, number of events= 128 
+
+            coef exp(coef)  se(coef)      z Pr(&gt;|z|)    
+treat2  0.261744  1.299194  0.200923  1.303  0.19267    
+Karn   -0.031271  0.969213  0.005165 -6.054 1.41e-09 ***
+cell2   0.824980  2.281836  0.268911  3.068  0.00216 ** 
+cell3   1.153994  3.170833  0.295038  3.911 9.18e-05 ***
+cell4   0.394625  1.483828  0.282243  1.398  0.16206    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+       exp(coef) exp(-coef) lower .95 upper .95
+treat2    1.2992     0.7697    0.8763    1.9262
+Karn      0.9692     1.0318    0.9595    0.9791
+cell2     2.2818     0.4382    1.3471    3.8653
+cell3     3.1708     0.3154    1.7784    5.6534
+cell4     1.4838     0.6739    0.8534    2.5801
+
+Concordance= 0.737  (se = 0.022 )
+Likelihood ratio test= 61.07  on 5 df,   p=7e-12
+Wald test            = 63.41  on 5 df,   p=2e-12
+Score (logrank) test = 66.55  on 5 df,   p=5e-13</code></pre>
+</div>
+</div>
+<p>We will use ANOVA with the Likelihood Ratio test to determine if we can simplify the model. Since the difference in Likelihood ratio test is insignificant, we can simplify the model to treat + Karn + cell.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Using anova with Likelihood ratio test</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(cox.mod2, cox.mod, <span class="at">test=</span><span class="st">"LRT"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Deviance Table
+ Cox model: response is  Surv(stime, status)
+ Model 1: ~ treat + Karn + cell
+ Model 2: ~ treat + age + Karn + diag.time + cell + prior
+   loglik  Chisq Df Pr(&gt;|Chi|)
+1 -474.91                     
+2 -474.40 1.0348  3     0.7928</code></pre>
+</div>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Can we also remove treat from the model</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>cox.mod3 <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(stime, status) <span class="sc">~</span> Karn <span class="sc">+</span> cell, <span class="at">data=</span>VA)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(cox.mod3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call:
+coxph(formula = Surv(stime, status) ~ Karn + cell, data = VA)
+
+  n= 137, number of events= 128 
+
+           coef exp(coef)  se(coef)      z Pr(&gt;|z|)    
+Karn  -0.031057  0.969421  0.005177 -5.999 1.99e-09 ***
+cell2  0.715334  2.044870  0.252686  2.831  0.00464 ** 
+cell3  1.157733  3.182711  0.292937  3.952 7.74e-05 ***
+cell4  0.325645  1.384923  0.276680  1.177  0.23921    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+      exp(coef) exp(-coef) lower .95 upper .95
+Karn     0.9694     1.0315    0.9596    0.9793
+cell2    2.0449     0.4890    1.2462    3.3555
+cell3    3.1827     0.3142    1.7925    5.6513
+cell4    1.3849     0.7221    0.8052    2.3820
+
+Concordance= 0.734  (se = 0.023 )
+Likelihood ratio test= 59.37  on 4 df,   p=4e-12
+Wald test            = 61.26  on 4 df,   p=2e-12
+Score (logrank) test = 63.94  on 4 df,   p=4e-13</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Using anova with Likelihood ratio test</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(cox.mod3, cox.mod2, <span class="at">test=</span><span class="st">"LRT"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Deviance Table
+ Cox model: response is  Surv(stime, status)
+ Model 1: ~ Karn + cell
+ Model 2: ~ treat + Karn + cell
+   loglik  Chisq Df Pr(&gt;|Chi|)
+1 -475.76                     
+2 -474.91 1.6974  1     0.1926</code></pre>
+</div>
+</div>
+<p>With the other variables removed, we will check if treatment is now a significant variable in the model using another ANOVA test. Based on the ANOVA test, we can also remove treatment from the model</p>
+<p><span class="math display">\[ h(t) = {h_0(t)} \times exp(-0.031X_{Karn}+0.715X_{cell-small}+1.16X_{cell-adeno}+0.325X_{cell-large}) \]</span></p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(cox.mod3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call:
+coxph(formula = Surv(stime, status) ~ Karn + cell, data = VA)
+
+  n= 137, number of events= 128 
+
+           coef exp(coef)  se(coef)      z Pr(&gt;|z|)    
+Karn  -0.031057  0.969421  0.005177 -5.999 1.99e-09 ***
+cell2  0.715334  2.044870  0.252686  2.831  0.00464 ** 
+cell3  1.157733  3.182711  0.292937  3.952 7.74e-05 ***
+cell4  0.325645  1.384923  0.276680  1.177  0.23921    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+      exp(coef) exp(-coef) lower .95 upper .95
+Karn     0.9694     1.0315    0.9596    0.9793
+cell2    2.0449     0.4890    1.2462    3.3555
+cell3    3.1827     0.3142    1.7925    5.6513
+cell4    1.3849     0.7221    0.8052    2.3820
+
+Concordance= 0.734  (se = 0.023 )
+Likelihood ratio test= 59.37  on 4 df,   p=4e-12
+Wald test            = 61.26  on 4 df,   p=2e-12
+Score (logrank) test = 63.94  on 4 df,   p=4e-13</code></pre>
+</div>
+</div>
+<section id="interpretations" class="level4">
+<h4 class="anchored" data-anchor-id="interpretations">Interpretations</h4>
+<p>At a given instant of time, the probability of dying for a male VA patient as Karnofsky score increases by 1 point is 0.969 times less (or 3.15% lower) after adjusting for cell type.</p>
+<p>At a given instant of time, the probability of dying for a male VA patient with small cell is 2.04 times more than a male VA patient with squamous cell type after adjusting for Karnofsky score.</p>
+<p>At a given instant of time, the probability of dying for a male VA patient with adeno cell is 3.18 times more than a male VA patient with squamous cell type after adjusting for Karnofsky score.</p>
+<p>At a given instant of time, the probability of dying for a male VA patient with large cell is 1.38 times more than a male VA patient with squamous cell type after adjusting for Karnofsky score.</p>
+</section>
+<section id="testing-proportional-assumption" class="level4">
+<h4 class="anchored" data-anchor-id="testing-proportional-assumption">Testing Proportional Assumption</h4>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Using cox.zph() to test for proportional-hazards assumption</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cox.zph</span>(cox.mod3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>       chisq df       p
+Karn    14.4  1 0.00015
+cell    14.1  3 0.00282
+GLOBAL  23.6  4 9.4e-05</code></pre>
+</div>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting graphs of Schoenfield residuals vs time</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">cox.zph</span>(cox.mod3))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Our current model fails the proportional hazard assumption based on p-values less than 0.05 and can be observed visually.</p>
+</section>
 </section>
 <section id="conclusion" class="level3">
 <h3 class="anchored" data-anchor-id="conclusion">Conclusion</h3>

@@ -231,10 +231,87 @@ library(MASS)
 # Load Data
 data(VA)
 kable(head(VA))
-
 ```
 
+```{r}
+# Must leave status as numeric instead of converting to factor
+summary(VA)
+```
+
+
 ### Statistical Modeling
+
+We will start by using all the variables in the inital Cox PH model.
+```{r}
+# Import Survival package with Cox proportional-hazard model
+library(survival)
+
+# Fit model with all variables.
+# stime and status are the output values
+cox.mod <- coxph(Surv(stime, status) ~ treat + age + Karn + diag.time + cell + prior, data=VA)
+
+# Concordance Index or Harrel's C (model evaluation: higher is better. 50% is equivalent to guessing.)
+
+# Likelihood ratio useful comparing nested models
+summary(cox.mod)
+```
+
+Some of the variables had p-values less than the significant level. We will check if we can drop age, diag.time, and prior from the model without reducint accuracy. 
+
+```{r}
+# Can we drop age, diag.time, and prior
+cox.mod2 <- coxph(Surv(stime, status) ~ treat + Karn + cell, data=VA)
+
+summary(cox.mod2)
+```
+We will use ANOVA with the Likelihood Ratio test to determine if we can simplify the model. Since the difference in Likelihood ratio test is insignificant, we can simplify the model to treat + Karn + cell.
+
+```{r}
+# Using anova with Likelihood ratio test
+anova(cox.mod2, cox.mod, test="LRT")
+
+```
+```{r}
+# Can we also remove treat from the model
+cox.mod3 <- coxph(Surv(stime, status) ~ Karn + cell, data=VA)
+
+summary(cox.mod3)
+
+# Using anova with Likelihood ratio test
+anova(cox.mod3, cox.mod2, test="LRT")
+```
+
+With the other variables removed, we will check if treatment is now a significant variable in the model using another ANOVA test. Based on the ANOVA test, we can also remove treatment from the model 
+
+$$ h(t) = {h_0(t)} \times exp(-0.031X_{Karn}+0.715X_{cell-small}+1.16X_{cell-adeno}+0.325X_{cell-large}) $$
+
+```{r}
+summary(cox.mod3)
+```
+
+#### Interpretations
+At a given instant of time, the probability of dying for a male VA patient as Karnofsky score increases by 1 point is 0.969 times less (or 3.15% lower) after adjusting for cell type.
+
+At a given instant of time, the probability of dying for a male VA patient with small cell is 2.04 times more than a male VA patient with squamous cell type after adjusting for Karnofsky score.
+
+At a given instant of time, the probability of dying for a male VA patient with adeno cell is 3.18 times more than a male VA patient with squamous cell type after adjusting for Karnofsky score.
+
+At a given instant of time, the probability of dying for a male VA patient with large cell is 1.38 times more than a male VA patient with squamous cell type after adjusting for Karnofsky score.
+
+#### Testing Proportional Assumption
+
+```{r}
+# Using cox.zph() to test for proportional-hazards assumption
+cox.zph(cox.mod3)
+```
+
+```{r}
+# Plotting graphs of Schoenfield residuals vs time
+par(mfrow=c(1,2))
+plot(cox.zph(cox.mod3))
+```
+Our current model fails the proportional hazard assumption based on p-values less than 0.05 and can be observed visually.
+
 
 ### Conclusion
 
