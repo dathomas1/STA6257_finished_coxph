@@ -377,6 +377,6 @@ p-values less than 0.05 and can be observed visually.
 
 ## 6. Conclusion
 
-Lorem Ipsum
+The Cox Proportional Hazards model is a incredibly versatile tool for data analysis. With its semiparametric nature and achieving comparable results to that of its parametric counterparts, it is a useful tool to analyze covariates in the healthcare field. With this model, researchers are able to accurately determine which risk factors may play a part in the survival time of a patient. In this paper, we were able to review which variables were significant in terms of impact on survival time. While it is preferable to conduct a study with more available data, the Cox Proportional Hazards model allows some room for censored and missing information while not losing much accuracy.
 
 ## 7. References
