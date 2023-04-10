@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Edwin Alvarado, Darnell Thomas, and Michael Ho">
-<meta name="dcterms.date" content="2023-04-09">
+<meta name="dcterms.date" content="2023-04-10">
 
 <title>Cox Proportional Hazards Model Group Project</title>
 <style>
@@ -147,7 +147,7 @@ div.csl-indent {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">April 9, 2023</p>
+      <p class="date">April 10, 2023</p>
     </div>
   </div>
     
@@ -202,7 +202,7 @@ div.csl-indent {
 <h2 class="anchored" data-anchor-id="analysis-and-results-need-to-update-for-our-model-and-analysis">Analysis and Results [[NEED TO UPDATE FOR OUR MODEL AND ANALYSIS]]</h2>
 <section id="data-and-vizualisation" class="level3">
 <h3 class="anchored" data-anchor-id="data-and-vizualisation">Data and Vizualisation</h3>
-<p>The data used is from a Veteran’s Administrative lung cancer trial of 137 male patients with advanced inoperable lung cancer. (Kalbfleisch &amp; Prentice FIX CITATION) The data set is available through the MASS package in R.</p>
+<p>The data used is from a Veteran’s Administrative lung cancer trial of 137 male patients with advanced inoperable lung cancer. <span class="citation" data-cites="kalbfleisch2011statistical">Kalbfleisch and Prentice (<a href="#ref-kalbfleisch2011statistical" role="doc-biblioref">2011</a>)</span> The data set is available through the MASS package in R.</p>
 <p>Variables:</p>
 <ul>
 <li>stime: survival or follow-up time in days</li>
@@ -214,6 +214,7 @@ div.csl-indent {
 <li>cell: one of four cell types; 1 (squamous), 2 (small cell), 3 (adeno), 4 (large)</li>
 <li>prior: denotes prior therapy; 10 (yes), 0 (no)</li>
 </ul>
+<p>Per the National Cancer Institute, the Karnofsky score is standard way to measure how well a patient can perform ordinary tasks. A higher score indicates a higher ability to do these tasks, in our study this score is taken at the start of the study.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -447,7 +448,7 @@ div.csl-indent {
 <p><img src="index_files/figure-html/data%20viz-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>This plot shows a scatterplot matrix of the variables of Survival Time, Age, Karnofsky Score, and Diagnosis Time where the lower half is a typical scatter plot between the two variables in the cell, the diagonal shows a density plot, and the upper diagonal shows a correlation coefficient between the two variables with significance indicators. The plots are grouped/colored by the treatment groups, with those receiving chemotherapy in red. The only variable significantly correlated with Survival Time is the Karnofsky score.</p>
+<p>This plot shows a scatterplot matrix of the variables of Survival Time, Age, Karnofsky Score, and Diagnosis Time where the lower half is a typical scatter plot between the two variables in the cell, the diagonal shows a density plot, and the upper diagonal shows a correlation coefficient between the two variables with significance indicators. The plots are grouped/colored by the treatment groups, with those receiving chemotherapy in red. The only variable significantly correlated with Survival Time is the Karnofsky score, at the alpha 0.05 level. Looking at the density plots, the standard group’s plot in blue is more concentrated to the left of the group receiving chemotherapy which indicates a lower survival time for those in the standard treatment group. In general survival time seems to be positively correlated with the other variables, but the strength of this correlation is not apparent from the graphs.</p>
 </section>
 <section id="statistical-modeling" class="level3">
 <h3 class="anchored" data-anchor-id="statistical-modeling">Statistical Modeling</h3>
@@ -700,6 +701,9 @@ Fox, John. 2002. <em>An r and s-Plus Companion to Applied Regression</em>. Sage.
 </div>
 <div id="ref-hendry2014data" class="csl-entry" role="doc-biblioentry">
 Hendry, David J. 2014. <span>“Data Generation for the Cox Proportional Hazards Model with Time-Dependent Covariates: A Method for Medical Researchers.”</span> <em>Statistics in Medicine</em> 33 (3): 436–54.
+</div>
+<div id="ref-kalbfleisch2011statistical" class="csl-entry" role="doc-biblioentry">
+Kalbfleisch, John D, and Ross L Prentice. 2011. <em>The Statistical Analysis of Failure Time Data</em>. John Wiley &amp; Sons.
 </div>
 <div id="ref-mclernon2023assessing" class="csl-entry" role="doc-biblioentry">
 McLernon, David J, Daniele Giardiello, Ben Van Calster, Laure Wynants, Nan van Geloven, Maarten van Smeden, Terry Therneau, Ewout W Steyerberg, topic groups 6, and 8 of the STRATOS Initiative. 2023. <span>“Assessing Performance and Clinical Usefulness in Prediction Models with Survival Outcomes: Practical Guidance for Cox Proportional Hazards Models.”</span> <em>Annals of Internal Medicine</em> 176 (1): 105–14.

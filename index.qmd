@@ -202,8 +202,7 @@ treatment, survival time, and so on.
 ### Data and Vizualisation
 
 The data used is from a Veteran's Administrative lung cancer trial of
-137 male patients with advanced inoperable lung cancer. (Kalbfleisch &
-Prentice FIX CITATION) The data set is available through the MASS
+137 male patients with advanced inoperable lung cancer. @kalbfleisch2011statistical The data set is available through the MASS
 package in R.
 
 Variables:
@@ -216,6 +215,8 @@ Variables:
 *   diag.time: patient's time since diagnosis, measured at time of entry to trial, in months
 *   cell: one of four cell types; 1 (squamous), 2 (small cell), 3 (adeno), 4 (large)
 *   prior: denotes prior therapy; 10 (yes), 0 (no)
+
+Per the National Cancer Institute, the Karnofsky score is standard way to measure how well a patient can perform ordinary tasks. A higher score indicates a higher ability to do these tasks, in our study this score is taken at the start of the study.
 
 
 
@@ -259,7 +260,7 @@ ggpairs(va_subset, title = "Scatterplot Matrix of VA Lung Trial Data",
   scale_color_manual(values = c("#00BFC4", "#F8766D"))
 ```
 
-This plot shows a scatterplot matrix of the variables of Survival Time, Age, Karnofsky Score, and Diagnosis Time where the lower half is a typical scatter plot between the two variables in the cell, the diagonal shows a density plot, and the upper diagonal shows a correlation coefficient between the two variables with significance indicators. The plots are grouped/colored by the treatment groups, with those receiving chemotherapy in red. The only variable significantly correlated with Survival Time is the Karnofsky score. 
+This plot shows a scatterplot matrix of the variables of Survival Time, Age, Karnofsky Score, and Diagnosis Time where the lower half is a typical scatter plot between the two variables in the cell, the diagonal shows a density plot, and the upper diagonal shows a correlation coefficient between the two variables with significance indicators. The plots are grouped/colored by the treatment groups, with those receiving chemotherapy in red. The only variable significantly correlated with Survival Time is the Karnofsky score, at the alpha 0.05 level. Looking at the density plots, the standard group's plot in blue is more concentrated to the left of the group receiving chemotherapy which indicates a lower survival time for those in the standard treatment group. In general survival time seems to be positively correlated with the other variables, but the strength of this correlation is not apparent from the graphs.  
 
 ### Statistical Modeling
 
