@@ -225,17 +225,32 @@ library(ggthemes)
 library(ggrepel)
 library(dslabs)
 library(MASS)
+library(GGally)
 ```
 
 ```{r, warning=FALSE, echo=TRUE}
 # Load Data
 data(VA)
-kable(head(VA))
+#look at first few rows
+kable(head(VA, 3), caption = "Sample Rows from VA Lung Trial Data")
+
+summary_stats <- summary(VA[, c("stime", "status", "age", "Karn", "diag.time")])
+
+#Convert summary statistics to a table
+kable(summary_stats, caption = "Summary Statistics for VA Lung Trial Data")
+
+#second prop summary
+summary_stats2 <- summary(VA[, c("status", "treat", "cell", "prior")])
+
+#Convert summary statistics to a table
+kable(summary_stats2, caption = "Summary Count Statistics for VA Lung Trial Data")
 ```
 
-```{r}
-# Must leave status as numeric instead of converting to factor
-summary(VA)
+```{r data viz}
+#Create a scatter plot matrix using the GGally package
+va_subset <- VA[, c("stime", "age", "Karn", "diag.time")]
+
+ggpairs(va_subset, title = "Scatterplot Matrix of VA Lung Trial Data")
 ```
 
 
