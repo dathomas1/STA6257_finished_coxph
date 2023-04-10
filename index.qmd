@@ -11,6 +11,8 @@ bibliography: references.bib # file contains bibtex for references
 editor: 
   markdown: 
     wrap: 72
+editor_options: 
+  chunk_output_type: console
 ---
 
 ## Introduction
@@ -248,11 +250,16 @@ kable(summary_stats2, caption = "Summary Count Statistics for VA Lung Trial Data
 
 ```{r data viz}
 #Create a scatter plot matrix using the GGally package
-va_subset <- VA[, c("stime", "age", "Karn", "diag.time")]
+va_subset <- VA[, c("stime", "age", "Karn", "diag.time", "treat")]
 
-ggpairs(va_subset, title = "Scatterplot Matrix of VA Lung Trial Data")
+ggpairs(va_subset, title = "Scatterplot Matrix of VA Lung Trial Data", 
+        columns = c("stime", "age", "Karn", "diag.time"), ggplot2::aes(color = treat),
+        lower = list(continuous = "points", combo = "dot_no_facet", mapping = ggplot2::aes(color=treat, alpha = 0.8)),
+        diag = list(continuous = wrap("densityDiag"), mapping = ggplot2::aes(color = treat, alpha = 0.1))) +
+  scale_color_manual(values = c("#00BFC4", "#F8766D"))
 ```
 
+This plot shows a scatterplot matrix of the variables of Survival Time, Age, Karnofsky Score, and Diagnosis Time where the lower half is a typical scatter plot between the two variables in the cell, the diagonal shows a density plot, and the upper diagonal shows a correlation coefficient between the two variables with significance indicators. The plots are grouped/colored by the treatment groups, with those receiving chemotherapy in red. The only variable significantly correlated with Survival Time is the Karnofsky score. 
 
 ### Statistical Modeling
 
