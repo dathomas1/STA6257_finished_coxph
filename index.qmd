@@ -302,7 +302,7 @@ summary(cox.mod)
 
 Some of the variables had p-values less than the significant level. We
 will check if we can drop age, diag.time, and prior from the model
-without reducint accuracy.
+without reducing accuracy.
 
 ```{r}
 # Can we drop age, diag.time, and prior
