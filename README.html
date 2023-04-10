@@ -380,29 +380,31 @@ treatment, age, gender, height, and so on. Another key factor in the
 CPH’s popularity in survival analysis is its semiparametric nature
 (Kleinbaum, D. G., &amp; Klein, M. (2011)). The composition of the model
 is as follows:</p>
-<p><img src="data:image/jpeg;base64,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" /></p>
-<p>Where H_0 (t) is considered to be the baseline hazard function of the
-model. If in the event all other variables X are equal to zero, the
-formula reduces to H_0 (t) ; hence, it is the baseline hazard function.
-It is due to the hazard function being unspecified that the CPH model
-can be considered semiparametric. In other words, it is semiparametric
-because there is no assumption about the distribution of survival times,
-but rather assumes that the effects of different variables that affect
-survival are constant over time, hence the composition of its formula
-(Samar Abd ElHafeez, Graziella D’Arrigo, Daniela Leonardis, Maria
-Fusaro, Giovanni Tripepi, Stefanos Roumeliotis (2021)). Where parametric
-models have completely specified functional forms, the unspecified
-nature of the baseline hazard function allows the CPH model to be
-naturally more flexible. Another reason for its popularity is that even
-with an unspecified hazard function, the CPH model is robust, being able
-to obtain favorable results such as good estimates of regression
-coefficients, hazard ratios of interest, and adjusted survival curves
-(Kleinbaum, D. G., &amp; Klein, M. (2011)). As a robust model, the CPH
-method can obtain results comparable to those of a parametric model.
-While parametric methods are still preferred over the CPH models in
-cases where the correct method is clearly indicated, the CPH model
-demonstrates its versatility by being both semiparametric in nature as
-well as attaining comparable results to its parametric counterparts.</p>
+<p><span class="math display">\[H(t)=H_0(t)*exp[{b_1 x_1 + b_2 x_2 + ...
+b_k x_k}]) \]</span></p>
+<p>Where <span class="math inline">\(H_0 (t)\)</span> is considered to
+be the baseline hazard function of the model. If in the event all other
+variables X are equal to zero, the formula reduces to <span class="math inline">\(H_0 (t)\)</span> ; hence, it is the baseline
+hazard function. It is due to the hazard function being unspecified that
+the CPH model can be considered semiparametric. In other words, it is
+semiparametric because there is no assumption about the distribution of
+survival times, but rather assumes that the effects of different
+variables that affect survival are constant over time, hence the
+composition of its formula (Samar Abd ElHafeez, Graziella D’Arrigo,
+Daniela Leonardis, Maria Fusaro, Giovanni Tripepi, Stefanos Roumeliotis
+(2021)). Where parametric models have completely specified functional
+forms, the unspecified nature of the baseline hazard function allows the
+CPH model to be naturally more flexible. Another reason for its
+popularity is that even with an unspecified hazard function, the CPH
+model is robust, being able to obtain favorable results such as good
+estimates of regression coefficients, hazard ratios of interest, and
+adjusted survival curves (Kleinbaum, D. G., &amp; Klein, M. (2011)). As
+a robust model, the CPH method can obtain results comparable to those of
+a parametric model. While parametric methods are still preferred over
+the CPH models in cases where the correct method is clearly indicated,
+the CPH model demonstrates its versatility by being both semiparametric
+in nature as well as attaining comparable results to its parametric
+counterparts.</p>
 </div>
 <div id="method" class="section level2">
 <h2>Method</h2>
@@ -490,8 +492,8 @@ and identifying relationships between predictors and survival times, and
 is commonly used in the medical research field but has also been applied
 in fields like finance and the social sciences. (Hendry) In medical
 research it is used to identify factors that influence patient outcomes,
-e.g. death or other health status. For example, Thiruvengadam et al.
-(2020) used the Cox model to analyze the factors that determine the
+e.g. death or other health status. For example, Thiruvengadam et
+al. (2020) used the Cox model to analyze the factors that determine the
 length of stay for COVID-19 patients, using different demographic and
 health information to find connections to the length of stay or even
 death of patients. (Thiruvengadam) Other medical research often mirrors
