@@ -199,7 +199,7 @@ studying a veteran's probability of survival from lung cancer. It
 contains relevant covariates in a standard Cox model, such as age,
 treatment, survival time, and so on.
 
-## 5. Analysis and Results \[\[NEED TO UPDATE FOR OUR MODEL AND ANALYSIS\]\]
+## 5. Analysis and Results 
 
 ### 5.1. Data and Vizualisation
 
