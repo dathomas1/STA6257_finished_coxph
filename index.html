@@ -122,10 +122,30 @@ div.csl-indent {
 
 </head>
 
-<body class="fullcontent">
+<body>
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">1. Introduction</a></li>
+  <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">2. Methods</a></li>
+  <li><a href="#application" id="toc-application" class="nav-link" data-scroll-target="#application">3. Application</a></li>
+  <li><a href="#our-dataset" id="toc-our-dataset" class="nav-link" data-scroll-target="#our-dataset">4. Our Dataset</a></li>
+  <li><a href="#analysis-and-results-need-to-update-for-our-model-and-analysis" id="toc-analysis-and-results-need-to-update-for-our-model-and-analysis" class="nav-link" data-scroll-target="#analysis-and-results-need-to-update-for-our-model-and-analysis">5. Analysis and Results [[NEED TO UPDATE FOR OUR MODEL AND ANALYSIS]]</a>
+  <ul class="collapse">
+  <li><a href="#data-and-vizualisation" id="toc-data-and-vizualisation" class="nav-link" data-scroll-target="#data-and-vizualisation">5.1. Data and Vizualisation</a></li>
+  <li><a href="#statistical-modeling" id="toc-statistical-modeling" class="nav-link" data-scroll-target="#statistical-modeling">5.2. Statistical Modeling</a></li>
+  <li><a href="#interpretations" id="toc-interpretations" class="nav-link" data-scroll-target="#interpretations">5.3. Interpretations</a></li>
+  <li><a href="#testing-proportional-assumption" id="toc-testing-proportional-assumption" class="nav-link" data-scroll-target="#testing-proportional-assumption">5.4. Testing Proportional Assumption</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">6. Conclusion</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">7. References</a></li>
+  </ul>
+</nav>
+</div>
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
@@ -157,13 +177,13 @@ div.csl-indent {
 </header>
 
 <section id="introduction" class="level2">
-<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>The Cox Proportional Hazards (CPH) model is a method used for performing survival analyses, namely in the medical field. It is used to relate several risk factors simultaneously against survival time and is widely considered to be one of the most popular methods in survival analyses. One of the key reasons why it is popular in survival analysis is due to its ability to handle censored time-to-event data <span class="citation" data-cites="fisher1999time">(<a href="#ref-fisher1999time" role="doc-biblioref">Fisher and Lin 1999</a>)</span>. “Censored” in this case would mean that some observed units were recorded for various lengths of time, but the event of interest did not occur during those studies. With this, Sir David Cox, the inventor of the model, considered such predictors and covariates when creating the Cox method. The risks, or “hazards,” were thought of as proportional to the probability of an event occurring at any particular time. Some of the risk factors used in its analyses include covariates – independent variables that can influence the outcome of an event but are not of direct interest in a study - such as treatment, age, gender, height, and so on. Another key factor in the CPH’s popularity in survival analysis is its semiparametric nature (Kleinbaum, D. G., &amp; Klein, M. (2011)). The composition of the model is as follows:</p>
+<h2 class="anchored" data-anchor-id="introduction">1. Introduction</h2>
+<p>The Cox Proportional Hazards (CPH) model is a method used for performing survival analyses, namely in the medical field. It is used to relate several risk factors simultaneously against survival time and is widely considered to be one of the most popular methods in survival analyses. One of the key reasons why it is popular in survival analysis is due to its ability to handle censored time-to-event data <span class="citation" data-cites="fisher1999time">(<a href="#ref-fisher1999time" role="doc-biblioref">Fisher and Lin 1999</a>)</span>. “Censored” in this case would mean that some observed units were recorded for various lengths of time, but the event of interest did not occur during those studies. With this, Sir David Cox, the inventor of the model, considered such predictors and covariates when creating the Cox method. The risks, or “hazards,” were thought of as proportional to the probability of an event occurring at any particular time. Some of the risk factors used in its analyses include covariates – independent variables that can influence the outcome of an event but are not of direct interest in a study - such as treatment, age, gender, height, and so on. Another key factor in the CPH’s popularity in survival analysis is its semiparametric nature <span class="citation" data-cites="kleinbaum2012cox">(<a href="#ref-kleinbaum2012cox" role="doc-biblioref">Kleinbaum et al. 2012</a>)</span>. The composition of the model is as follows:</p>
 <p><span class="math display">\[ H(t) = H_0(t) \times exp(b_1x_1 + b_2x_2 + ... + b_kx_k) \]</span></p>
-<p>Where <span class="math inline">\(H_0 (t)\)</span> is considered to be the baseline hazard function of the model. If in the event all other variables X are equal to zero, the formula reduces to <span class="math inline">\(H_0 (t)\)</span> ; hence, it is the baseline hazard function. It is due to the hazard function being unspecified that the CPH model can be considered semiparametric. In other words, it is semiparametric because there is no assumption about the distribution of survival times, but rather assumes that the effects of different variables that affect survival are constant over time, hence the composition of its formula <span class="citation" data-cites="d2021methods">(<a href="#ref-d2021methods" role="doc-biblioref">D’Arrigo et al. 2021</a>)</span>. Where parametric models have completely specified functional forms, the unspecified nature of the baseline hazard function allows the CPH model to be naturally more flexible. Another reason for its popularity is that even with an unspecified hazard function, the CPH model is robust, being able to obtain favorable results such as good estimates of regression coefficients, hazard ratios of interest, and adjusted survival curves (Kleinbaum, D. G., &amp; Klein, M. (2011)). As a robust model, the CPH method can obtain results comparable to those of a parametric model. While parametric methods are still preferred over the CPH models in cases where the correct method is clearly indicated, the CPH model demonstrates its versatility by being both semiparametric in nature as well as attaining comparable results to its parametric counterparts.</p>
+<p>Where <span class="math inline">\(H_0 (t)\)</span> is considered to be the baseline hazard function of the model. If in the event all other variables X are equal to zero, the formula reduces to <span class="math inline">\(H_0 (t)\)</span> ; hence, it is the baseline hazard function. It is due to the hazard function being unspecified that the CPH model can be considered semiparametric. In other words, it is semiparametric because there is no assumption about the distribution of survival times, but rather assumes that the effects of different variables that affect survival are constant over time, hence the composition of its formula <span class="citation" data-cites="d2021methods">(<a href="#ref-d2021methods" role="doc-biblioref">D’Arrigo et al. 2021</a>)</span>. Where parametric models have completely specified functional forms, the unspecified nature of the baseline hazard function allows the CPH model to be naturally more flexible. Another reason for its popularity is that even with an unspecified hazard function, the CPH model is robust, being able to obtain favorable results such as good estimates of regression coefficients, hazard ratios of interest, and adjusted survival curves <span class="citation" data-cites="kleinbaum2012cox">(<a href="#ref-kleinbaum2012cox" role="doc-biblioref">Kleinbaum et al. 2012</a>)</span>. As a robust model, the CPH method can obtain results comparable to those of a parametric model. While parametric methods are still preferred over the CPH models in cases where the correct method is clearly indicated, the CPH model demonstrates its versatility by being both semiparametric in nature as well as attaining comparable results to its parametric counterparts.</p>
 </section>
 <section id="methods" class="level2">
-<h2 class="anchored" data-anchor-id="methods">Methods</h2>
+<h2 class="anchored" data-anchor-id="methods">2. Methods</h2>
 <p>The Cox PH model proposed in 1972 allows the estimation of regression coefficients of a hazard function without specifying the baseline hazard <span class="citation" data-cites="cox1972regression">(<a href="#ref-cox1972regression" role="doc-biblioref">D. R. Cox 1972</a>)</span> The hazard function is the instantaneous risk of failure at time (t). The hazard function for other survival distributions such as Weibull take the form below:</p>
 <p><span class="math display">\[h_i(t)= exp \times (α+ Z_iβ) \]</span></p>
 <p>where</p>
@@ -190,18 +210,18 @@ div.csl-indent {
 <p>This allows the use of Cox PH for non-constant HR if the covariate is time-dependent. In general, the log hazard and covariates are assumed to be linear in the Cox PH model <span class="citation" data-cites="fox2002r">(<a href="#ref-fox2002r" role="doc-biblioref">Fox 2002</a>)</span>. The Cox model also assumes that the failure time of an individual is independent of the other individuals. This means that if one participant in a study dies that no other participants are affected. The Cox PH also assumes that censored individuals have a failure time that exceeds the censoring time <span class="citation" data-cites="cox1972regression">(<a href="#ref-cox1972regression" role="doc-biblioref">D. R. Cox 1972</a>)</span>. For example, a participant is still alive at the end of the study and is right-censored. The assumptions of proportional HR, independent individuals and right-censoring also applies to other exponential survival distributions <span class="citation" data-cites="fox2002r">(<a href="#ref-fox2002r" role="doc-biblioref">Fox 2002</a>)</span> <span class="citation" data-cites="hendry2014data">(<a href="#ref-hendry2014data" role="doc-biblioref">Hendry 2014</a>)</span>. A key downside of Cox PH is that the survival function cannot be calculated since the baseline hazard is unknown. This hinders clinicians in determining the net benefit of treatments <span class="citation" data-cites="mclernon2023assessing">(<a href="#ref-mclernon2023assessing" role="doc-biblioref">McLernon et al. 2023</a>)</span>.</p>
 </section>
 <section id="application" class="level2">
-<h2 class="anchored" data-anchor-id="application">Application</h2>
+<h2 class="anchored" data-anchor-id="application">3. Application</h2>
 <p>The Cox Proportional Hazard model is used for modeling survival data and identifying relationships between predictors and survival times, and is commonly used in the medical research field but has also been applied in fields like finance and the social sciences. <span class="citation" data-cites="hendry2014data">(<a href="#ref-hendry2014data" role="doc-biblioref">Hendry 2014</a>)</span> In medical research it is used to identify factors that influence patient outcomes, e.g.&nbsp;death or other health status. For example, <span class="citation" data-cites="thiruvengadam2021study">(<a href="#ref-thiruvengadam2021study" role="doc-biblioref">Thiruvengadam, Lakshmi, and Ramanujam 2021</a>)</span> used the Cox model to analyze the factors that determine the length of stay for COVID-19 patients, using different demographic and health information to find connections to the length of stay or even death of patients. <span class="citation" data-cites="thiruvengadam2021study">(<a href="#ref-thiruvengadam2021study" role="doc-biblioref">Thiruvengadam, Lakshmi, and Ramanujam 2021</a>)</span> Other medical research often mirrors this structure and the model has also been applied in the context of clinical trials. For example, researchers used the model to determine treatment risks and treatment effectiveness for those in a systolic blood pressure intervention trial, finding a 25% lower hazard rate for those receiving intensive treatment. <span class="citation" data-cites="stensrud2019limitations">(<a href="#ref-stensrud2019limitations" role="doc-biblioref">Stensrud et al. 2019</a>)</span> The Cox proportional hazard model excels at modeling this type of scenario, using survival data that can be censored, i.e.&nbsp;as in the case where patients have died or left the study. Although commonly used for medical research, the application is straightforward in other fields with some research looking at the duration of events like marriages, recidivism, and bank failures. For example, researchers examining the factors leading to bank failure used the 2008 recession as a case study to determine and predict what factors, e.g.&nbsp;asset ratios and loan amounts, are indicators of failure. <span class="citation" data-cites="cox2017proportional">(<a href="#ref-cox2017proportional" role="doc-biblioref">R. A. Cox, Kimmel, and Wang 2017</a>)</span> The model has some limitations especially when not including time dependent structure in the model. In that case, the model assumes the hazard ratio is the same across the time sample, which is often not the case in medical research. This shortcoming is identified in <span class="citation" data-cites="stensrud2020test">(<a href="#ref-stensrud2020test" role="doc-biblioref">Stensrud and Hernán 2020</a>)</span>, which highlights how treatment effects may not be constant over a whole sample and in some cases may have no effect for months and then a drastic effect after some time. This has led to the use of models which can include time dependent variables.</p>
 </section>
 <section id="our-dataset" class="level2">
-<h2 class="anchored" data-anchor-id="our-dataset">Our Dataset</h2>
+<h2 class="anchored" data-anchor-id="our-dataset">4. Our Dataset</h2>
 <p>We decided to use a dataset named VA: <a href="https://vincentarelbundock.github.io/Rdatasets/doc/MASS/VA.html" class="uri">https://vincentarelbundock.github.io/Rdatasets/doc/MASS/VA.html</a></p>
 <p>The reason for this is because we believe the dataset fulfills the criteria necessary to conduct a survival analysis - in this case, studying a veteran’s probability of survival from lung cancer. It contains relevant covariates in a standard Cox model, such as age, treatment, survival time, and so on.</p>
 </section>
 <section id="analysis-and-results-need-to-update-for-our-model-and-analysis" class="level2">
-<h2 class="anchored" data-anchor-id="analysis-and-results-need-to-update-for-our-model-and-analysis">Analysis and Results [[NEED TO UPDATE FOR OUR MODEL AND ANALYSIS]]</h2>
+<h2 class="anchored" data-anchor-id="analysis-and-results-need-to-update-for-our-model-and-analysis">5. Analysis and Results [[NEED TO UPDATE FOR OUR MODEL AND ANALYSIS]]</h2>
 <section id="data-and-vizualisation" class="level3">
-<h3 class="anchored" data-anchor-id="data-and-vizualisation">Data and Vizualisation</h3>
+<h3 class="anchored" data-anchor-id="data-and-vizualisation">5.1. Data and Vizualisation</h3>
 <p>The data used is from a Veteran’s Administrative lung cancer trial of 137 male patients with advanced inoperable lung cancer. <span class="citation" data-cites="kalbfleisch2011statistical">Kalbfleisch and Prentice (<a href="#ref-kalbfleisch2011statistical" role="doc-biblioref">2011</a>)</span> The data set is available through the MASS package in R.</p>
 <p>Variables:</p>
 <ul>
@@ -451,7 +471,7 @@ div.csl-indent {
 <p>This plot shows a scatterplot matrix of the variables of Survival Time, Age, Karnofsky Score, and Diagnosis Time where the lower half is a typical scatter plot between the two variables in the cell, the diagonal shows a density plot, and the upper diagonal shows a correlation coefficient between the two variables with significance indicators. The plots are grouped/colored by the treatment groups, with those receiving chemotherapy in red. The only variable significantly correlated with Survival Time is the Karnofsky score, at the alpha 0.05 level. Looking at the density plots, the standard group’s plot in blue is more concentrated to the left of the group receiving chemotherapy which indicates a lower survival time for those in the standard treatment group. In general survival time seems to be positively correlated with the other variables, but the strength of this correlation is not apparent from the graphs.</p>
 </section>
 <section id="statistical-modeling" class="level3">
-<h3 class="anchored" data-anchor-id="statistical-modeling">Statistical Modeling</h3>
+<h3 class="anchored" data-anchor-id="statistical-modeling">5.2. Statistical Modeling</h3>
 <p>We will start by using all the variables in the inital Cox PH model.</p>
 <div class="cell">
 <details>
@@ -503,7 +523,7 @@ Wald test            = 62.37  on 8 df,   p=2e-10
 Score (logrank) test = 66.74  on 8 df,   p=2e-11</code></pre>
 </div>
 </div>
-<p>Some of the variables had p-values less than the significant level. We will check if we can drop age, diag.time, and prior from the model without reducint accuracy.</p>
+<p>Some of the variables had p-values less than the significant level. We will check if we can drop age, diag.time, and prior from the model without reducing accuracy.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -638,15 +658,16 @@ Wald test            = 61.26  on 4 df,   p=2e-12
 Score (logrank) test = 63.94  on 4 df,   p=4e-13</code></pre>
 </div>
 </div>
-<section id="interpretations" class="level4">
-<h4 class="anchored" data-anchor-id="interpretations">Interpretations</h4>
+</section>
+<section id="interpretations" class="level3">
+<h3 class="anchored" data-anchor-id="interpretations">5.3. Interpretations</h3>
 <p>At a given instant of time, the probability of dying for a male VA patient as Karnofsky score increases by 1 point is 0.969 times less (or 3.15% lower) after adjusting for cell type.</p>
 <p>At a given instant of time, the probability of dying for a male VA patient with small cell is 2.04 times more than a male VA patient with squamous cell type after adjusting for Karnofsky score.</p>
 <p>At a given instant of time, the probability of dying for a male VA patient with adeno cell is 3.18 times more than a male VA patient with squamous cell type after adjusting for Karnofsky score.</p>
 <p>At a given instant of time, the probability of dying for a male VA patient with large cell is 1.38 times more than a male VA patient with squamous cell type after adjusting for Karnofsky score.</p>
 </section>
-<section id="testing-proportional-assumption" class="level4">
-<h4 class="anchored" data-anchor-id="testing-proportional-assumption">Testing Proportional Assumption</h4>
+<section id="testing-proportional-assumption" class="level3">
+<h3 class="anchored" data-anchor-id="testing-proportional-assumption">5.4. Testing Proportional Assumption</h3>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -674,48 +695,51 @@ GLOBAL  23.6  4 9.4e-05</code></pre>
 <p>Our current model fails the proportional hazard assumption based on p-values less than 0.05 and can be observed visually.</p>
 </section>
 </section>
-<section id="conclusion" class="level3">
-<h3 class="anchored" data-anchor-id="conclusion">Conclusion</h3>
-</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">6. Conclusion</h2>
+<p>The Cox Proportional Hazards model is a incredibly versatile tool for data analysis. With its semiparametric nature and achieving comparable results to that of its parametric counterparts, it is a useful tool to analyze covariates in the healthcare field. With this model, researchers are able to accurately determine which risk factors may play a part in the survival time of a patient. In this paper, we were able to review which variables were significant in terms of impact on survival time. In our example, we determined that some cell variables and the Karnofsky score of patients were significant as opposed to treatment, which was surprisingly deemed insignificant in our testing. Another observation that was noted during the review was that the PH assumption was violated, meaning that there could be biased effect estimates in our dataset. A way to adjust for this in future projects would be to introduce time-dependent covariates. While it is preferable to conduct a study with more available data, the Cox Proportional Hazards model allows some room for censored and missing information while not compromising much in terms of accuracy.</p>
 </section>
 <section id="references" class="level2 unnumbered">
 
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">7. References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
 <div id="ref-cox1972regression" class="csl-entry" role="doc-biblioentry">
-Cox, David R. 1972. <span>“Regression Models and Life-Tables.”</span> <em>Journal of the Royal Statistical Society: Series B (Methodological)</em> 34 (2): 187–202.
+Cox, David R. 1972. <span>“Regression Models and Life-Tables.”</span> <em>Journal of the Royal Statistical Society: Series B (Methodological)</em> 34 (2): 187–202. <a href="https://doi.org/10.1111/j.2517-6161.1972.tb00899.x">https://doi.org/10.1111/j.2517-6161.1972.tb00899.x</a>.
 </div>
 <div id="ref-cox2017proportional" class="csl-entry" role="doc-biblioentry">
-Cox, Raymond AK, Randall K Kimmel, and Grace WY Wang. 2017. <span>“Proportional Hazards Model of Bank Failure: Evidence from USA.”</span> <em>Journal of Economic &amp; Financial Studies</em> 5 (3): 35–45.
+Cox, Raymond AK, Randall K Kimmel, and Grace WY Wang. 2017. <span>“Proportional Hazards Model of Bank Failure: Evidence from USA.”</span> <em>Journal of Economic &amp; Financial Studies</em> 5 (3): 35–45. <a href="https://doi.org/10.18533/jefs.v5i3.290">https://doi.org/10.18533/jefs.v5i3.290</a>.
 </div>
 <div id="ref-d2021methods" class="csl-entry" role="doc-biblioentry">
-D’Arrigo, Graziella, Daniela Leonardis, Samar Abd ElHafeez, Maria Fusaro, Giovanni Tripepi, and Stefanos Roumeliotis. 2021. <span>“Methods to Analyse Time-to-Event Data: The Kaplan-Meier Survival Curve.”</span> <em>Oxidative Medicine and Cellular Longevity</em> 2021.
+D’Arrigo, Graziella, Daniela Leonardis, Samar Abd ElHafeez, Maria Fusaro, Giovanni Tripepi, and Stefanos Roumeliotis. 2021. <span>“Methods to Analyse Time-to-Event Data: The Kaplan-Meier Survival Curve.”</span> <em>Oxidative Medicine and Cellular Longevity</em> 2021. <a href="https://doi.org/10.1155/2021/2290120">https://doi.org/10.1155/2021/2290120</a>.
 </div>
 <div id="ref-fisher1999time" class="csl-entry" role="doc-biblioentry">
-Fisher, Lloyd D, and Danyu Y Lin. 1999. <span>“Time-Dependent Covariates in the Cox Proportional-Hazards Regression Model.”</span> <em>Annual Review of Public Health</em> 20 (1): 145–57.
+Fisher, Lloyd D, and Danyu Y Lin. 1999. <span>“Time-Dependent Covariates in the Cox Proportional-Hazards Regression Model.”</span> <em>Annual Review of Public Health</em> 20 (1): 145–57. <a href="https://doi.org/10.1146/annurev.publhealth.20.1.145">https://doi.org/10.1146/annurev.publhealth.20.1.145</a>.
 </div>
 <div id="ref-fox2002r" class="csl-entry" role="doc-biblioentry">
 Fox, John. 2002. <em>An r and s-Plus Companion to Applied Regression</em>. Sage.
 </div>
 <div id="ref-hendry2014data" class="csl-entry" role="doc-biblioentry">
-Hendry, David J. 2014. <span>“Data Generation for the Cox Proportional Hazards Model with Time-Dependent Covariates: A Method for Medical Researchers.”</span> <em>Statistics in Medicine</em> 33 (3): 436–54.
+Hendry, David J. 2014. <span>“Data Generation for the Cox Proportional Hazards Model with Time-Dependent Covariates: A Method for Medical Researchers.”</span> <em>Statistics in Medicine</em> 33 (3): 436–54. <a href="https://doi.org/10.1002/sim.5945">https://doi.org/10.1002/sim.5945</a>.
 </div>
 <div id="ref-kalbfleisch2011statistical" class="csl-entry" role="doc-biblioentry">
 Kalbfleisch, John D, and Ross L Prentice. 2011. <em>The Statistical Analysis of Failure Time Data</em>. John Wiley &amp; Sons.
 </div>
+<div id="ref-kleinbaum2012cox" class="csl-entry" role="doc-biblioentry">
+Kleinbaum, David G, Mitchel Klein, David G Kleinbaum, and Mitchel Klein. 2012. <span>“The Cox Proportional Hazards Model and Its Characteristics.”</span> <em>Survival Analysis: A Self-Learning Text</em>, 97–159. <a href="https://doi.org/10.1007/978-1-4419-6646-9_3">https://doi.org/10.1007/978-1-4419-6646-9_3</a>.
+</div>
 <div id="ref-mclernon2023assessing" class="csl-entry" role="doc-biblioentry">
-McLernon, David J, Daniele Giardiello, Ben Van Calster, Laure Wynants, Nan van Geloven, Maarten van Smeden, Terry Therneau, Ewout W Steyerberg, topic groups 6, and 8 of the STRATOS Initiative. 2023. <span>“Assessing Performance and Clinical Usefulness in Prediction Models with Survival Outcomes: Practical Guidance for Cox Proportional Hazards Models.”</span> <em>Annals of Internal Medicine</em> 176 (1): 105–14.
+McLernon, David J, Daniele Giardiello, Ben Van Calster, Laure Wynants, Nan van Geloven, Maarten van Smeden, Terry Therneau, Ewout W Steyerberg, topic groups 6, and 8 of the STRATOS Initiative. 2023. <span>“Assessing Performance and Clinical Usefulness in Prediction Models with Survival Outcomes: Practical Guidance for Cox Proportional Hazards Models.”</span> <em>Annals of Internal Medicine</em> 176 (1): 105–14. <a href="https://doi.org/10.7326/M22-0844">https://doi.org/10.7326/M22-0844</a>.
 </div>
 <div id="ref-stensrud2019limitations" class="csl-entry" role="doc-biblioentry">
-Stensrud, Mats J, John M Aalen, Odd O Aalen, and Morten Valberg. 2019. <span>“Limitations of Hazard Ratios in Clinical Trials.”</span> <em>European Heart Journal</em>.
+Stensrud, Mats J, John M Aalen, Odd O Aalen, and Morten Valberg. 2019. <span>“Limitations of Hazard Ratios in Clinical Trials.”</span> <em>European Heart Journal</em>. <a href="https://doi.org/10.1093/eurheartj/ehy770">https://doi.org/10.1093/eurheartj/ehy770</a>.
 </div>
 <div id="ref-stensrud2020test" class="csl-entry" role="doc-biblioentry">
-Stensrud, Mats J, and Miguel A Hernán. 2020. <span>“Why Test for Proportional Hazards?”</span> <em>Jama</em> 323 (14): 1401–2.
+Stensrud, Mats J, and Miguel A Hernán. 2020. <span>“Why Test for Proportional Hazards?”</span> <em>Jama</em> 323 (14): 1401–2. <a href="https://doi.org/10.1001/jama.2020.1267">https://doi.org/10.1001/jama.2020.1267</a>.
 </div>
 <div id="ref-thiruvengadam2021study" class="csl-entry" role="doc-biblioentry">
-Thiruvengadam, Gayathri, Marappa Lakshmi, and Ravanan Ramanujam. 2021. <span>“A Study of Factors Affecting the Length of Hospital Stay of COVID-19 Patients by Cox-Proportional Hazard Model in a South Indian Tertiary Care Hospital.”</span> <em>Journal of Primary Care &amp; Community Health</em> 12: 21501327211000231.
+Thiruvengadam, Gayathri, Marappa Lakshmi, and Ravanan Ramanujam. 2021. <span>“A Study of Factors Affecting the Length of Hospital Stay of COVID-19 Patients by Cox-Proportional Hazard Model in a South Indian Tertiary Care Hospital.”</span> <em>Journal of Primary Care &amp; Community Health</em> 12: 21501327211000231. <a href="https://doi.org/10.1177/21501327211000231">https://doi.org/10.1177/21501327211000231</a>.
 </div>
 </div></section></div></main>
 <!-- /main column -->
