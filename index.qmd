@@ -284,12 +284,33 @@ apparent from the graphs.
 
 ### 5.2. Statistical Modeling
 
-We will start by using all the variables in the inital Cox PH model.
 
+#### Treatment Only Cox PH Model
 ```{r}
 # Import Survival package with Cox proportional-hazard model
 library(survival)
 
+# Fit model with treatment only
+cox.unimod <- coxph(Surv(stime, status) ~ treat, data=VA)
+
+summary(cox.unimod)
+```
+
+
+```{r}
+# Using cox.zph() to test for proportional-hazards assumption
+cox.zph(cox.unimod)
+```
+
+
+```{r}
+# Plotting graphs of Schoenfield residuals vs time
+plot(cox.zph(cox.unimod))
+```
+
+#### Multiple Cox PH Model
+Now, we will use all the variables in the multiple Cox PH model.
+```{r}
 # Fit model with all variables.
 # stime and status are the output values
 cox.mod <- coxph(Surv(stime, status) ~ treat + age + Karn + diag.time + cell + prior, data=VA)
