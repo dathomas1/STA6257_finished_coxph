@@ -14,7 +14,7 @@ editor:
   markdown: 
     wrap: 72
 editor_options: 
-  chunk_output_type: console
+  chunk_output_type: inline
 ---
 
 ## 1. Introduction
@@ -307,6 +307,18 @@ cox.zph(cox.unimod)
 # Plotting graphs of Schoenfield residuals vs time
 plot(cox.zph(cox.unimod))
 ```
+
+```{r}
+# Plotting graph of Kaplan-Meier curve
+# Notice how Test treatment is less effective in the beginning but better at the end.
+kmfit = survfit(Surv(stime, status) ~ treat, data=VA)
+
+plot(kmfit, lty = c("solid", "dashed"), col=c("black","grey"),
+xlab="survival time",ylab="survival probabilities")
+legend("topright", c("Standard","Test"), lty=c("solid","dashed"),
+col=c("black","grey"))
+```
+
 
 #### Multiple Cox PH Model
 Now, we will use all the variables in the multiple Cox PH model.
