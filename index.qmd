@@ -268,7 +268,7 @@ kable(summary_stats2, caption = "Table 4: Summary Count Statistics for VA Lung T
 #Create a scatter plot matrix using the GGally package
 va_subset <- VA[, c("stime", "age", "Karn", "diag.time", "treat")]
 
-ggpairs(va_subset, title = "Scatterplot Matrix of VA Lung Trial Data", 
+ggpairs(va_subset, title = "Figure 1: Scatterplot Matrix of VA Lung Trial Data", 
         columns = c("stime", "age", "Karn", "diag.time"), ggplot2::aes(color = treat),
         lower = list(continuous = "points", combo = "dot_no_facet", mapping = ggplot2::aes(color=treat, alpha = 0.8)),
         diag = list(continuous = wrap("densityDiag"), mapping = ggplot2::aes(color = treat, alpha = 0.1))) +
@@ -322,7 +322,8 @@ cox.unimod <- coxph(Y ~ treat, data=VA)
 cox.unimod %>% tbl_regression(exponentiate = T) %>% 
 add_glance_table(
   include = c(logLik, concordance)
-)
+) %>%
+  modify_caption("**Table 5: Treatment Only Model**") 
 
 ```
 
