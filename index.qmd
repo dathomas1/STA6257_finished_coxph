@@ -337,7 +337,7 @@ The Cox PH model found that the treatment type only is insignificant. A key assu
 ```{r}
 # Plotting graphs of Schoenfield residuals vs time
 phtest.unimod = cox.zph(cox.unimod, transform = rank)
-plot(phtest.unimod)
+plot(phtest.unimod, main = "Figure 2: Schoenfield Residuals Over Time")
 abline(h=0)
 ```
 
@@ -374,7 +374,8 @@ col=c("black","grey"))
 tbl_survfit(kmfit, 
             times=c(15, 30, 90,180,360),
             label_header="**{time} Days**"
-            )
+            ) %>%
+  modify_caption("**Table 6: Treatment Only Model**") 
 ```
 
 From the two plot, we observe that the effectiveness of test treatment is less effective in the beginning. Then, the test treatment becomes more effective than the standard treatment towards the end. With Kaplan-Meier survival curves, we are able to visualize survival probabilities for both treatment groups. Since the hazard function is the rate of change in the survival curve, we can use the Kaplan-Meier to also validate the proportional hazard assumption. The survival curves would be parallel if the hazard was proportional. However, the curves cross multiple time which informs us that the proportional hazard assumption is actually invalid.
@@ -391,7 +392,8 @@ cox.mod <- coxph(Y ~ treat + age + Karn + diag.time + cell + prior, data=VA)
 cox.mod %>% tbl_regression(exponentiate = T) %>% 
 add_glance_table(
   include = c(logLik, concordance)
-)
+) %>%
+  modify_caption("**Table 7: Treatment Only Model**") 
 ```
 
 ```{r}
