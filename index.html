@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Edwin Alvarado, Darnell Thomas, and Michael Ho">
-<meta name="dcterms.date" content="2023-04-14">
+<meta name="dcterms.date" content="2023-04-15">
 
 <title>Cox Proportional Hazards Model Group Project</title>
 <style>
@@ -118,6 +118,9 @@ div.csl-indent {
 <link href="index_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="index_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
+<script src="index_files/libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="index_files/libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
@@ -130,18 +133,20 @@ div.csl-indent {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">1. Introduction</a></li>
-  <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">2. Methods</a></li>
-  <li><a href="#application" id="toc-application" class="nav-link" data-scroll-target="#application">3. Application</a></li>
-  <li><a href="#our-dataset" id="toc-our-dataset" class="nav-link" data-scroll-target="#our-dataset">4. Our Dataset</a></li>
-  <li><a href="#analysis-and-results" id="toc-analysis-and-results" class="nav-link" data-scroll-target="#analysis-and-results">5. Analysis and Results</a>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">1. Introduction</a>
   <ul class="collapse">
-  <li><a href="#data-and-vizualisation" id="toc-data-and-vizualisation" class="nav-link" data-scroll-target="#data-and-vizualisation">5.1. Data and Vizualisation</a></li>
-  <li><a href="#statistical-modeling" id="toc-statistical-modeling" class="nav-link" data-scroll-target="#statistical-modeling">5.2. Statistical Modeling</a></li>
-  <li><a href="#interpretations-need-to-revisit" id="toc-interpretations-need-to-revisit" class="nav-link" data-scroll-target="#interpretations-need-to-revisit">5.3. Interpretations [Need to revisit]</a></li>
+  <li><a href="#application" id="toc-application" class="nav-link" data-scroll-target="#application">1.1. Application</a></li>
   </ul></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">6. Conclusion</a></li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">7. References</a></li>
+  <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">2. Methods</a></li>
+  <li><a href="#analysis-and-results" id="toc-analysis-and-results" class="nav-link" data-scroll-target="#analysis-and-results">3. Analysis and Results</a>
+  <ul class="collapse">
+  <li><a href="#data-description" id="toc-data-description" class="nav-link" data-scroll-target="#data-description">3.1. Data Description</a></li>
+  <li><a href="#data-visualization" id="toc-data-visualization" class="nav-link" data-scroll-target="#data-visualization">3.2. Data Visualization</a></li>
+  <li><a href="#statistical-modeling" id="toc-statistical-modeling" class="nav-link" data-scroll-target="#statistical-modeling">3.3. Statistical Modeling</a></li>
+  <li><a href="#interpretations-need-to-revisit" id="toc-interpretations-need-to-revisit" class="nav-link" data-scroll-target="#interpretations-need-to-revisit">3.4. Interpretations [Need to revisit]</a></li>
+  </ul></li>
+  <li><a href="#conclusion-need-to-finalize" id="toc-conclusion-need-to-finalize" class="nav-link" data-scroll-target="#conclusion-need-to-finalize">4. Conclusion [Need to finalize]</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">5. References</a></li>
   </ul>
 </nav>
 </div>
@@ -166,7 +171,7 @@ div.csl-indent {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">April 14, 2023</p>
+      <p class="date">April 15, 2023</p>
     </div>
   </div>
     
@@ -177,9 +182,13 @@ div.csl-indent {
 
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">1. Introduction</h2>
-<p>The Cox Proportional Hazards (CPH) model is a method used for performing survival analyses, namely in the medical field. It is used to relate several risk factors simultaneously against survival time and is widely considered to be one of the most popular methods in survival analyses. One of the key reasons why it is popular in survival analysis is due to its ability to handle censored time-to-event data <span class="citation" data-cites="fisher1999time">(<a href="#ref-fisher1999time" role="doc-biblioref">Fisher and Lin 1999</a>)</span>. “Censored” in this case would mean that some observed units were recorded for various lengths of time, but the event of interest did not occur during those studies. With this, Sir David Cox, the inventor of the model, considered such predictors and covariates when creating the Cox method. The risks, or “hazards,” were thought of as proportional to the probability of an event occurring at any particular time. Some of the risk factors used in its analyses include covariates – independent variables that can influence the outcome of an event but are not of direct interest in a study - such as treatment, age, gender, height, and so on. Another key factor in the CPH’s popularity in survival analysis is its semiparametric nature <span class="citation" data-cites="kleinbaum2012cox">(<a href="#ref-kleinbaum2012cox" role="doc-biblioref">Kleinbaum et al. 2012</a>)</span>. The composition of the model is as follows:</p>
+<p>The Cox Proportional Hazards (CPH) model is a method used for performing survival analyses, often in the medical field. It is used to relate several risk factors simultaneously against survival time and is widely considered to be one of the most popular methods in survival analyses. One of the key reasons why it is popular in survival analysis is due to its ability to handle censored time-to-event data <span class="citation" data-cites="fisher1999time">(<a href="#ref-fisher1999time" role="doc-biblioref">Fisher and Lin 1999</a>)</span>. “Censored” in this case would mean that some observed units were recorded for various lengths of time, but the event of interest did not occur during those studies. With this, Sir David Cox, the inventor of the model, considered such predictors and covariates when creating the Cox method. The risks, or “hazards,” were thought of as proportional to the probability of an event occurring at any particular time. Some of the risk factors used in its analyses include covariates – independent variables that can influence the outcome of an event but are not of direct interest in a study - such as treatment, age, gender, height, and so on. Another key factor in the CPH’s popularity in survival analysis is its semiparametric nature <span class="citation" data-cites="kleinbaum2012cox">(<a href="#ref-kleinbaum2012cox" role="doc-biblioref">Kleinbaum et al. 2012</a>)</span>. The composition of the model is as follows:</p>
 <p><span class="math display">\[ H(t) = H_0(t) \times exp(b_1x_1 + b_2x_2 + ... + b_kx_k) \]</span></p>
 <p>Where <span class="math inline">\(H_0 (t)\)</span> is considered to be the baseline hazard function of the model. If in the event all other variables X are equal to zero, the formula reduces to <span class="math inline">\(H_0 (t)\)</span> ; hence, it is the baseline hazard function. It is due to the hazard function being unspecified that the CPH model can be considered semiparametric. In other words, it is semiparametric because there is no assumption about the distribution of survival times, but rather assumes that the effects of different variables that affect survival are constant over time, hence the composition of its formula <span class="citation" data-cites="d2021methods">(<a href="#ref-d2021methods" role="doc-biblioref">D’Arrigo et al. 2021</a>)</span>. Where parametric models have completely specified functional forms, the unspecified nature of the baseline hazard function allows the CPH model to be naturally more flexible. Another reason for its popularity is that even with an unspecified hazard function, the CPH model is robust, being able to obtain favorable results such as good estimates of regression coefficients, hazard ratios of interest, and adjusted survival curves <span class="citation" data-cites="kleinbaum2012cox">(<a href="#ref-kleinbaum2012cox" role="doc-biblioref">Kleinbaum et al. 2012</a>)</span>. As a robust model, the CPH method can obtain results comparable to those of a parametric model. While parametric methods are still preferred over the CPH models in cases where the correct method is clearly indicated, the CPH model demonstrates its versatility by being both semiparametric in nature as well as attaining comparable results to its parametric counterparts.</p>
+<section id="application" class="level3">
+<h3 class="anchored" data-anchor-id="application">1.1. Application</h3>
+<p>While the Cox Proportional Hazard model is mainly used for modeling survival data and identifying relationships between predictors and survival times, and is commonly used in the medical research field, it has also been applied in fields like finance and the social sciences. <span class="citation" data-cites="hendry2014data">(<a href="#ref-hendry2014data" role="doc-biblioref">Hendry 2014</a>)</span> In medical research it is used to identify factors that influence patient outcomes, e.g.&nbsp;death or other health status. For example, <span class="citation" data-cites="thiruvengadam2021study">(<a href="#ref-thiruvengadam2021study" role="doc-biblioref">Thiruvengadam, Lakshmi, and Ramanujam 2021</a>)</span> used the Cox model to analyze the factors that determine the length of stay for COVID-19 patients, using different demographic and health information to find connections to the length of stay or even death of patients. <span class="citation" data-cites="thiruvengadam2021study">(<a href="#ref-thiruvengadam2021study" role="doc-biblioref">Thiruvengadam, Lakshmi, and Ramanujam 2021</a>)</span> Other medical research often mirrors this structure and the model has also been applied in the context of clinical trials. For example, researchers used the model to determine treatment risks and treatment effectiveness for those in a systolic blood pressure intervention trial, finding a 25% lower hazard rate for those receiving intensive treatment. <span class="citation" data-cites="stensrud2019limitations">(<a href="#ref-stensrud2019limitations" role="doc-biblioref">Stensrud et al. 2019</a>)</span> The Cox proportional hazard model excels at modeling this type of scenario, using survival data that can be censored, i.e.&nbsp;as in the case where patients have died or left the study. Although commonly used for medical research, the application is straightforward in other fields with some research looking at the duration of events like marriages, recidivism, and bank failures. For example, researchers examining the factors leading to bank failure used the 2008 recession as a case study to determine and predict what factors, e.g.&nbsp;asset ratios and loan amounts, are indicators of failure. <span class="citation" data-cites="cox2017proportional">(<a href="#ref-cox2017proportional" role="doc-biblioref">R. A. Cox, Kimmel, and Wang 2017</a>)</span> The model has some limitations especially when not including time dependent structure in the model. In that case, the model assumes the hazard ratio is the same across the time sample, which is often not the case in medical research. This shortcoming is identified in <span class="citation" data-cites="stensrud2020test">(<a href="#ref-stensrud2020test" role="doc-biblioref">Stensrud and Hernán 2020</a>)</span>, which highlights how treatment effects may not be constant over a whole sample and in some cases may have no effect for months and then a drastic effect after some time. This has led to the use of models which can include time dependent variables.</p>
+</section>
 </section>
 <section id="methods" class="level2">
 <h2 class="anchored" data-anchor-id="methods">2. Methods</h2>
@@ -208,32 +217,71 @@ div.csl-indent {
 <p><span class="math display">\[ {h_0(t) \times exp(Z_i(t)β) \over h_0(t) \times exp(Z_j(t)β)} =  {exp(Z_i(t)β) \over exp(Z_j(t)β)} \]</span></p>
 <p>This allows the use of Cox PH for non-constant HR if the covariate is time-dependent. In general, the log hazard and covariates are assumed to be linear in the Cox PH model <span class="citation" data-cites="fox2002r">(<a href="#ref-fox2002r" role="doc-biblioref">Fox 2002</a>)</span>. The Cox model also assumes that the failure time of an individual is independent of the other individuals. This means that if one participant in a study dies that no other participants are affected. The Cox PH also assumes that censored individuals have a failure time that exceeds the censoring time <span class="citation" data-cites="cox1972regression">(<a href="#ref-cox1972regression" role="doc-biblioref">D. R. Cox 1972</a>)</span>. For example, a participant is still alive at the end of the study and is right-censored. The assumptions of proportional HR, independent individuals and right-censoring also applies to other exponential survival distributions <span class="citation" data-cites="fox2002r">(<a href="#ref-fox2002r" role="doc-biblioref">Fox 2002</a>)</span> <span class="citation" data-cites="hendry2014data">(<a href="#ref-hendry2014data" role="doc-biblioref">Hendry 2014</a>)</span>. A key downside of Cox PH is that the survival function cannot be calculated since the baseline hazard is unknown. This hinders clinicians in determining the net benefit of treatments <span class="citation" data-cites="mclernon2023assessing">(<a href="#ref-mclernon2023assessing" role="doc-biblioref">McLernon et al. 2023</a>)</span>.</p>
 </section>
-<section id="application" class="level2">
-<h2 class="anchored" data-anchor-id="application">3. Application</h2>
-<p>The Cox Proportional Hazard model is used for modeling survival data and identifying relationships between predictors and survival times, and is commonly used in the medical research field but has also been applied in fields like finance and the social sciences. <span class="citation" data-cites="hendry2014data">(<a href="#ref-hendry2014data" role="doc-biblioref">Hendry 2014</a>)</span> In medical research it is used to identify factors that influence patient outcomes, e.g.&nbsp;death or other health status. For example, <span class="citation" data-cites="thiruvengadam2021study">(<a href="#ref-thiruvengadam2021study" role="doc-biblioref">Thiruvengadam, Lakshmi, and Ramanujam 2021</a>)</span> used the Cox model to analyze the factors that determine the length of stay for COVID-19 patients, using different demographic and health information to find connections to the length of stay or even death of patients. <span class="citation" data-cites="thiruvengadam2021study">(<a href="#ref-thiruvengadam2021study" role="doc-biblioref">Thiruvengadam, Lakshmi, and Ramanujam 2021</a>)</span> Other medical research often mirrors this structure and the model has also been applied in the context of clinical trials. For example, researchers used the model to determine treatment risks and treatment effectiveness for those in a systolic blood pressure intervention trial, finding a 25% lower hazard rate for those receiving intensive treatment. <span class="citation" data-cites="stensrud2019limitations">(<a href="#ref-stensrud2019limitations" role="doc-biblioref">Stensrud et al. 2019</a>)</span> The Cox proportional hazard model excels at modeling this type of scenario, using survival data that can be censored, i.e.&nbsp;as in the case where patients have died or left the study. Although commonly used for medical research, the application is straightforward in other fields with some research looking at the duration of events like marriages, recidivism, and bank failures. For example, researchers examining the factors leading to bank failure used the 2008 recession as a case study to determine and predict what factors, e.g.&nbsp;asset ratios and loan amounts, are indicators of failure. <span class="citation" data-cites="cox2017proportional">(<a href="#ref-cox2017proportional" role="doc-biblioref">R. A. Cox, Kimmel, and Wang 2017</a>)</span> The model has some limitations especially when not including time dependent structure in the model. In that case, the model assumes the hazard ratio is the same across the time sample, which is often not the case in medical research. This shortcoming is identified in <span class="citation" data-cites="stensrud2020test">(<a href="#ref-stensrud2020test" role="doc-biblioref">Stensrud and Hernán 2020</a>)</span>, which highlights how treatment effects may not be constant over a whole sample and in some cases may have no effect for months and then a drastic effect after some time. This has led to the use of models which can include time dependent variables.</p>
-</section>
-<section id="our-dataset" class="level2">
-<h2 class="anchored" data-anchor-id="our-dataset">4. Our Dataset</h2>
-<p>We decided to use a dataset named VA: <a href="https://vincentarelbundock.github.io/Rdatasets/doc/MASS/VA.html" class="uri">https://vincentarelbundock.github.io/Rdatasets/doc/MASS/VA.html</a></p>
-<p>The reason for this is because we believe the dataset fulfills the criteria necessary to conduct a survival analysis - in this case, studying a veteran’s probability of survival from lung cancer. It contains relevant covariates in a standard Cox model, such as age, treatment, survival time, and so on.</p>
-</section>
 <section id="analysis-and-results" class="level2">
-<h2 class="anchored" data-anchor-id="analysis-and-results">5. Analysis and Results</h2>
-<section id="data-and-vizualisation" class="level3">
-<h3 class="anchored" data-anchor-id="data-and-vizualisation">5.1. Data and Vizualisation</h3>
+<h2 class="anchored" data-anchor-id="analysis-and-results">3. Analysis and Results</h2>
+<section id="data-description" class="level3">
+<h3 class="anchored" data-anchor-id="data-description">3.1. Data Description</h3>
 <p>The data used is from a Veteran’s Administrative lung cancer trial of 137 male patients with advanced inoperable lung cancer. <span class="citation" data-cites="kalbfleisch2011statistical">Kalbfleisch and Prentice (<a href="#ref-kalbfleisch2011statistical" role="doc-biblioref">2011</a>)</span> The data set is available through the MASS package in R.</p>
-<p>Variables:</p>
-<ul>
-<li>stime: survival or follow-up time in days</li>
-<li>status: dead or alive/censored; 0 (alive), 1 (dead)</li>
-<li>treat: treatment, either standard or test (chemotherapy); 1 (standard), 2 (test)</li>
-<li>age: patient’s age in years</li>
-<li>Karn: Karnofsky score of patient’s performance on scale of 0 to 100</li>
-<li>diag.time: patient’s time since diagnosis, measured at time of entry to trial, in months</li>
-<li>cell: one of four cell types; 1 (squamous), 2 (small cell), 3 (adeno), 4 (large)</li>
-<li>prior: denotes prior therapy; 10 (yes), 0 (no)</li>
-</ul>
+<div class="cell-output-display">
+
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<caption>Data Definition</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;font-weight: bold;color: white !important;background-color: #666666 !important;"> Attribute </th>
+   <th style="text-align:center;font-weight: bold;color: white !important;background-color: #666666 !important;"> Type </th>
+   <th style="text-align:left;font-weight: bold;color: white !important;background-color: #666666 !important;"> Description </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> stime </td>
+   <td style="text-align:center;"> Numeric </td>
+   <td style="text-align:left;"> survival or follow-up time, in days </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> status </td>
+   <td style="text-align:center;"> Numeric </td>
+   <td style="text-align:left;"> dead or alive/censored; 0 (alive), 1 (dead) </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> treat </td>
+   <td style="text-align:center;"> Nominal </td>
+   <td style="text-align:left;"> treatment, either standard or test (chemotherapy); 1 (standard), 2 (test) </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> age </td>
+   <td style="text-align:center;"> Numeric </td>
+   <td style="text-align:left;"> patient age in years </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Karn </td>
+   <td style="text-align:center;"> Numeric </td>
+   <td style="text-align:left;"> Karnofsky score of patient performance, on scale of 0 to 100 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> diag </td>
+   <td style="text-align:center;"> Numeric </td>
+   <td style="text-align:left;"> patient time since diagnosis, measured at time of entry to trial, in months </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> cell </td>
+   <td style="text-align:center;"> Nominal </td>
+   <td style="text-align:left;"> one of four cell types; 1 (squamous), 2 (small cell), 3 (adeno), 4 (large) </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> prior </td>
+   <td style="text-align:center;"> Nominal </td>
+   <td style="text-align:left;"> denotes prior therapy; 10 (yes), 0 (no) </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
 <p>Per the National Cancer Institute, the Karnofsky score is standard way to measure how well a patient can perform ordinary tasks. A higher score indicates a higher ability to do these tasks, in our study this score is taken at the start of the study.</p>
+</section>
+<section id="data-visualization" class="level3">
+<h3 class="anchored" data-anchor-id="data-visualization">3.2. Data Visualization</h3>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -257,53 +305,55 @@ div.csl-indent {
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(VA, <span class="dv">3</span>), <span class="at">caption =</span> <span class="st">"Sample Rows from VA Lung Trial Data"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<table class="table table-sm table-striped">
+
+<table>
 <caption>Sample Rows from VA Lung Trial Data</caption>
-<thead>
-<tr class="header">
-<th style="text-align: right;">stime</th>
-<th style="text-align: right;">status</th>
-<th style="text-align: left;">treat</th>
-<th style="text-align: right;">age</th>
-<th style="text-align: right;">Karn</th>
-<th style="text-align: right;">diag.time</th>
-<th style="text-align: left;">cell</th>
-<th style="text-align: left;">prior</th>
-</tr>
-</thead>
+ <thead>
+  <tr>
+   <th style="text-align:right;"> stime </th>
+   <th style="text-align:right;"> status </th>
+   <th style="text-align:left;"> treat </th>
+   <th style="text-align:right;"> age </th>
+   <th style="text-align:right;"> Karn </th>
+   <th style="text-align:right;"> diag.time </th>
+   <th style="text-align:left;"> cell </th>
+   <th style="text-align:left;"> prior </th>
+  </tr>
+ </thead>
 <tbody>
-<tr class="odd">
-<td style="text-align: right;">72</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: right;">69</td>
-<td style="text-align: right;">60</td>
-<td style="text-align: right;">7</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">0</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">411</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: right;">64</td>
-<td style="text-align: right;">70</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">10</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">228</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: right;">38</td>
-<td style="text-align: right;">60</td>
-<td style="text-align: right;">3</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">0</td>
-</tr>
+  <tr>
+   <td style="text-align:right;"> 72 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:right;"> 69 </td>
+   <td style="text-align:right;"> 60 </td>
+   <td style="text-align:right;"> 7 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 0 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 411 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:right;"> 64 </td>
+   <td style="text-align:right;"> 70 </td>
+   <td style="text-align:right;"> 5 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 10 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 228 </td>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:right;"> 38 </td>
+   <td style="text-align:right;"> 60 </td>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 0 </td>
+  </tr>
 </tbody>
 </table>
+
 </div>
 <details>
 <summary>Code</summary>
@@ -313,77 +363,71 @@ div.csl-indent {
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(summary_stats, <span class="at">caption =</span> <span class="st">"Summary Statistics for VA Lung Trial Data"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<table class="table table-sm table-striped">
+
+<table>
 <caption>Summary Statistics for VA Lung Trial Data</caption>
-<colgroup>
-<col style="width: 4%">
-<col style="width: 18%">
-<col style="width: 20%">
-<col style="width: 18%">
-<col style="width: 18%">
-<col style="width: 20%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;"></th>
-<th style="text-align: left;">stime</th>
-<th style="text-align: left;">status</th>
-<th style="text-align: left;">age</th>
-<th style="text-align: left;">Karn</th>
-<th style="text-align: left;">diag.time</th>
-</tr>
-</thead>
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:left;">     stime </th>
+   <th style="text-align:left;">     status </th>
+   <th style="text-align:left;">      age </th>
+   <th style="text-align:left;">      Karn </th>
+   <th style="text-align:left;">   diag.time </th>
+  </tr>
+ </thead>
 <tbody>
-<tr class="odd">
-<td style="text-align: left;"></td>
-<td style="text-align: left;">Min. : 1.0</td>
-<td style="text-align: left;">Min. :0.0000</td>
-<td style="text-align: left;">Min. :34.00</td>
-<td style="text-align: left;">Min. :10.00</td>
-<td style="text-align: left;">Min. : 1.000</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"></td>
-<td style="text-align: left;">1st Qu.: 25.0</td>
-<td style="text-align: left;">1st Qu.:1.0000</td>
-<td style="text-align: left;">1st Qu.:51.00</td>
-<td style="text-align: left;">1st Qu.:40.00</td>
-<td style="text-align: left;">1st Qu.: 3.000</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"></td>
-<td style="text-align: left;">Median : 80.0</td>
-<td style="text-align: left;">Median :1.0000</td>
-<td style="text-align: left;">Median :62.00</td>
-<td style="text-align: left;">Median :60.00</td>
-<td style="text-align: left;">Median : 5.000</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"></td>
-<td style="text-align: left;">Mean :121.6</td>
-<td style="text-align: left;">Mean :0.9343</td>
-<td style="text-align: left;">Mean :58.31</td>
-<td style="text-align: left;">Mean :58.57</td>
-<td style="text-align: left;">Mean : 8.774</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"></td>
-<td style="text-align: left;">3rd Qu.:144.0</td>
-<td style="text-align: left;">3rd Qu.:1.0000</td>
-<td style="text-align: left;">3rd Qu.:66.00</td>
-<td style="text-align: left;">3rd Qu.:75.00</td>
-<td style="text-align: left;">3rd Qu.:11.000</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"></td>
-<td style="text-align: left;">Max. :999.0</td>
-<td style="text-align: left;">Max. :1.0000</td>
-<td style="text-align: left;">Max. :81.00</td>
-<td style="text-align: left;">Max. :99.00</td>
-<td style="text-align: left;">Max. :87.000</td>
-</tr>
+  <tr>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> Min.   :  1.0 </td>
+   <td style="text-align:left;"> Min.   :0.0000 </td>
+   <td style="text-align:left;"> Min.   :34.00 </td>
+   <td style="text-align:left;"> Min.   :10.00 </td>
+   <td style="text-align:left;"> Min.   : 1.000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> 1st Qu.: 25.0 </td>
+   <td style="text-align:left;"> 1st Qu.:1.0000 </td>
+   <td style="text-align:left;"> 1st Qu.:51.00 </td>
+   <td style="text-align:left;"> 1st Qu.:40.00 </td>
+   <td style="text-align:left;"> 1st Qu.: 3.000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> Median : 80.0 </td>
+   <td style="text-align:left;"> Median :1.0000 </td>
+   <td style="text-align:left;"> Median :62.00 </td>
+   <td style="text-align:left;"> Median :60.00 </td>
+   <td style="text-align:left;"> Median : 5.000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> Mean   :121.6 </td>
+   <td style="text-align:left;"> Mean   :0.9343 </td>
+   <td style="text-align:left;"> Mean   :58.31 </td>
+   <td style="text-align:left;"> Mean   :58.57 </td>
+   <td style="text-align:left;"> Mean   : 8.774 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> 3rd Qu.:144.0 </td>
+   <td style="text-align:left;"> 3rd Qu.:1.0000 </td>
+   <td style="text-align:left;"> 3rd Qu.:66.00 </td>
+   <td style="text-align:left;"> 3rd Qu.:75.00 </td>
+   <td style="text-align:left;"> 3rd Qu.:11.000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> Max.   :999.0 </td>
+   <td style="text-align:left;"> Max.   :1.0000 </td>
+   <td style="text-align:left;"> Max.   :81.00 </td>
+   <td style="text-align:left;"> Max.   :99.00 </td>
+   <td style="text-align:left;"> Max.   :87.000 </td>
+  </tr>
 </tbody>
 </table>
+
 </div>
 <details>
 <summary>Code</summary>
@@ -394,62 +438,64 @@ div.csl-indent {
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(summary_stats2, <span class="at">caption =</span> <span class="st">"Summary Count Statistics for VA Lung Trial Data"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<table class="table table-sm table-striped">
+
+<table>
 <caption>Summary Count Statistics for VA Lung Trial Data</caption>
-<thead>
-<tr class="header">
-<th style="text-align: left;"></th>
-<th style="text-align: left;">status</th>
-<th style="text-align: left;">treat</th>
-<th style="text-align: left;">cell</th>
-<th style="text-align: left;">prior</th>
-</tr>
-</thead>
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:left;">     status </th>
+   <th style="text-align:left;"> treat </th>
+   <th style="text-align:left;"> cell </th>
+   <th style="text-align:left;"> prior </th>
+  </tr>
+ </thead>
 <tbody>
-<tr class="odd">
-<td style="text-align: left;"></td>
-<td style="text-align: left;">Min. :0.0000</td>
-<td style="text-align: left;">1:69</td>
-<td style="text-align: left;">1:35</td>
-<td style="text-align: left;">0 :97</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"></td>
-<td style="text-align: left;">1st Qu.:1.0000</td>
-<td style="text-align: left;">2:68</td>
-<td style="text-align: left;">2:48</td>
-<td style="text-align: left;">10:40</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"></td>
-<td style="text-align: left;">Median :1.0000</td>
-<td style="text-align: left;">NA</td>
-<td style="text-align: left;">3:27</td>
-<td style="text-align: left;">NA</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"></td>
-<td style="text-align: left;">Mean :0.9343</td>
-<td style="text-align: left;">NA</td>
-<td style="text-align: left;">4:27</td>
-<td style="text-align: left;">NA</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"></td>
-<td style="text-align: left;">3rd Qu.:1.0000</td>
-<td style="text-align: left;">NA</td>
-<td style="text-align: left;">NA</td>
-<td style="text-align: left;">NA</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"></td>
-<td style="text-align: left;">Max. :1.0000</td>
-<td style="text-align: left;">NA</td>
-<td style="text-align: left;">NA</td>
-<td style="text-align: left;">NA</td>
-</tr>
+  <tr>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> Min.   :0.0000 </td>
+   <td style="text-align:left;"> 1:69 </td>
+   <td style="text-align:left;"> 1:35 </td>
+   <td style="text-align:left;"> 0 :97 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> 1st Qu.:1.0000 </td>
+   <td style="text-align:left;"> 2:68 </td>
+   <td style="text-align:left;"> 2:48 </td>
+   <td style="text-align:left;"> 10:40 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> Median :1.0000 </td>
+   <td style="text-align:left;"> NA </td>
+   <td style="text-align:left;"> 3:27 </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> Mean   :0.9343 </td>
+   <td style="text-align:left;"> NA </td>
+   <td style="text-align:left;"> 4:27 </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> 3rd Qu.:1.0000 </td>
+   <td style="text-align:left;"> NA </td>
+   <td style="text-align:left;"> NA </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;">  </td>
+   <td style="text-align:left;"> Max.   :1.0000 </td>
+   <td style="text-align:left;"> NA </td>
+   <td style="text-align:left;"> NA </td>
+   <td style="text-align:left;"> NA </td>
+  </tr>
 </tbody>
 </table>
+
 </div>
 </div>
 <div class="cell">
@@ -471,7 +517,7 @@ div.csl-indent {
 <p>This plot shows a scatterplot matrix of the variables of Survival Time, Age, Karnofsky Score, and Diagnosis Time where the lower half is a typical scatter plot between the two variables in the cell, the diagonal shows a density plot, and the upper diagonal shows a correlation coefficient between the two variables with significance indicators. The plots are grouped/colored by the treatment groups, with those receiving chemotherapy in red. The only variable significantly correlated with Survival Time is the Karnofsky score, at the alpha 0.05 level. Looking at the density plots, the standard group’s plot in blue is more concentrated to the left of the group receiving chemotherapy which indicates a lower survival time for those in the standard treatment group. In general survival time seems to be positively correlated with the other variables, but the strength of this correlation is not apparent from the graphs.</p>
 </section>
 <section id="statistical-modeling" class="level3">
-<h3 class="anchored" data-anchor-id="statistical-modeling">5.2. Statistical Modeling</h3>
+<h3 class="anchored" data-anchor-id="statistical-modeling">3.3. Statistical Modeling</h3>
 <section id="treatment-only-cox-ph-model" class="level4">
 <h4 class="anchored" data-anchor-id="treatment-only-cox-ph-model">Treatment Only Cox PH Model</h4>
 <div class="cell">
@@ -511,26 +557,14 @@ div.csl-indent {
 </details>
 <div class="cell-output-display">
 
-<div id="zhefcisvbx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#zhefcisvbx table {
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+<div id="rxsxwjwbsz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#zhefcisvbx thead, #zhefcisvbx tbody, #zhefcisvbx tfoot, #zhefcisvbx tr, #zhefcisvbx td, #zhefcisvbx th {
-  border-style: none;
-}
-
-#zhefcisvbx p {
-  margin: 0;
-  padding: 0;
-}
-
-#zhefcisvbx .gt_table {
+:where(#rxsxwjwbsz) .gt_table {
   display: table;
   border-collapse: collapse;
-  line-height: normal;
   margin-left: auto;
   margin-right: auto;
   color: #333333;
@@ -553,36 +587,7 @@ div.csl-indent {
   border-left-color: #D3D3D3;
 }
 
-#zhefcisvbx .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#zhefcisvbx .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#zhefcisvbx .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#zhefcisvbx .gt_heading {
+:where(#rxsxwjwbsz) .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -594,13 +599,42 @@ div.csl-indent {
   border-right-color: #D3D3D3;
 }
 
-#zhefcisvbx .gt_bottom_border {
+:where(#rxsxwjwbsz) .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+:where(#rxsxwjwbsz) .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+:where(#rxsxwjwbsz) .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+:where(#rxsxwjwbsz) .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#zhefcisvbx .gt_col_headings {
+:where(#rxsxwjwbsz) .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -615,7 +649,7 @@ div.csl-indent {
   border-right-color: #D3D3D3;
 }
 
-#zhefcisvbx .gt_col_heading {
+:where(#rxsxwjwbsz) .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -635,7 +669,7 @@ div.csl-indent {
   overflow-x: hidden;
 }
 
-#zhefcisvbx .gt_column_spanner_outer {
+:where(#rxsxwjwbsz) .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -647,15 +681,15 @@ div.csl-indent {
   padding-right: 4px;
 }
 
-#zhefcisvbx .gt_column_spanner_outer:first-child {
+:where(#rxsxwjwbsz) .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#zhefcisvbx .gt_column_spanner_outer:last-child {
+:where(#rxsxwjwbsz) .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#zhefcisvbx .gt_column_spanner {
+:where(#rxsxwjwbsz) .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -667,11 +701,7 @@ div.csl-indent {
   width: 100%;
 }
 
-#zhefcisvbx .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#zhefcisvbx .gt_group_heading {
+:where(#rxsxwjwbsz) .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -697,7 +727,7 @@ div.csl-indent {
   text-align: left;
 }
 
-#zhefcisvbx .gt_empty_group_heading {
+:where(#rxsxwjwbsz) .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -712,15 +742,15 @@ div.csl-indent {
   vertical-align: middle;
 }
 
-#zhefcisvbx .gt_from_md > :first-child {
+:where(#rxsxwjwbsz) .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#zhefcisvbx .gt_from_md > :last-child {
+:where(#rxsxwjwbsz) .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#zhefcisvbx .gt_row {
+:where(#rxsxwjwbsz) .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -739,7 +769,7 @@ div.csl-indent {
   overflow-x: hidden;
 }
 
-#zhefcisvbx .gt_stub {
+:where(#rxsxwjwbsz) .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -752,7 +782,7 @@ div.csl-indent {
   padding-right: 5px;
 }
 
-#zhefcisvbx .gt_stub_row_group {
+:where(#rxsxwjwbsz) .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -766,15 +796,11 @@ div.csl-indent {
   vertical-align: top;
 }
 
-#zhefcisvbx .gt_row_group_first td {
+:where(#rxsxwjwbsz) .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#zhefcisvbx .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#zhefcisvbx .gt_summary_row {
+:where(#rxsxwjwbsz) .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -784,16 +810,16 @@ div.csl-indent {
   padding-right: 5px;
 }
 
-#zhefcisvbx .gt_first_summary_row {
+:where(#rxsxwjwbsz) .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#zhefcisvbx .gt_first_summary_row.thick {
+:where(#rxsxwjwbsz) .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#zhefcisvbx .gt_last_summary_row {
+:where(#rxsxwjwbsz) .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -803,7 +829,7 @@ div.csl-indent {
   border-bottom-color: #D3D3D3;
 }
 
-#zhefcisvbx .gt_grand_summary_row {
+:where(#rxsxwjwbsz) .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -813,7 +839,7 @@ div.csl-indent {
   padding-right: 5px;
 }
 
-#zhefcisvbx .gt_first_grand_summary_row {
+:where(#rxsxwjwbsz) .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -823,21 +849,11 @@ div.csl-indent {
   border-top-color: #D3D3D3;
 }
 
-#zhefcisvbx .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #D3D3D3;
-}
-
-#zhefcisvbx .gt_striped {
+:where(#rxsxwjwbsz) .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#zhefcisvbx .gt_table_body {
+:where(#rxsxwjwbsz) .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -846,7 +862,7 @@ div.csl-indent {
   border-bottom-color: #D3D3D3;
 }
 
-#zhefcisvbx .gt_footnotes {
+:where(#rxsxwjwbsz) .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -860,16 +876,16 @@ div.csl-indent {
   border-right-color: #D3D3D3;
 }
 
-#zhefcisvbx .gt_footnote {
+:where(#rxsxwjwbsz) .gt_footnote {
   margin: 0px;
   font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
+  padding-left: 4px;
+  padding-right: 4px;
   padding-left: 5px;
   padding-right: 5px;
 }
 
-#zhefcisvbx .gt_sourcenotes {
+:where(#rxsxwjwbsz) .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -883,7 +899,7 @@ div.csl-indent {
   border-right-color: #D3D3D3;
 }
 
-#zhefcisvbx .gt_sourcenote {
+:where(#rxsxwjwbsz) .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -891,73 +907,74 @@ div.csl-indent {
   padding-right: 5px;
 }
 
-#zhefcisvbx .gt_left {
+:where(#rxsxwjwbsz) .gt_left {
   text-align: left;
 }
 
-#zhefcisvbx .gt_center {
+:where(#rxsxwjwbsz) .gt_center {
   text-align: center;
 }
 
-#zhefcisvbx .gt_right {
+:where(#rxsxwjwbsz) .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#zhefcisvbx .gt_font_normal {
+:where(#rxsxwjwbsz) .gt_font_normal {
   font-weight: normal;
 }
 
-#zhefcisvbx .gt_font_bold {
+:where(#rxsxwjwbsz) .gt_font_bold {
   font-weight: bold;
 }
 
-#zhefcisvbx .gt_font_italic {
+:where(#rxsxwjwbsz) .gt_font_italic {
   font-style: italic;
 }
 
-#zhefcisvbx .gt_super {
+:where(#rxsxwjwbsz) .gt_super {
   font-size: 65%;
 }
 
-#zhefcisvbx .gt_footnote_marks {
+:where(#rxsxwjwbsz) .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
-  position: initial;
 }
 
-#zhefcisvbx .gt_asterisk {
+:where(#rxsxwjwbsz) .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#zhefcisvbx .gt_indent_1 {
+:where(#rxsxwjwbsz) .gt_indent_1 {
   text-indent: 5px;
 }
 
-#zhefcisvbx .gt_indent_2 {
+:where(#rxsxwjwbsz) .gt_indent_2 {
   text-indent: 10px;
 }
 
-#zhefcisvbx .gt_indent_3 {
+:where(#rxsxwjwbsz) .gt_indent_3 {
   text-indent: 15px;
 }
 
-#zhefcisvbx .gt_indent_4 {
+:where(#rxsxwjwbsz) .gt_indent_4 {
   text-indent: 20px;
 }
 
-#zhefcisvbx .gt_indent_5 {
+:where(#rxsxwjwbsz) .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-  <thead>
-    
-    <tr class="gt_col_headings">
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="<strong>Characteristic</strong>"><strong>Characteristic</strong></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>HR</strong><span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>HR</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>95% CI</strong><span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>95% CI</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>HR</strong><sup class=&quot;gt_footnote_marks&quot;>1</sup>"><strong>HR</strong><sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>95% CI</strong><sup class=&quot;gt_footnote_marks&quot;>1</sup>"><strong>95% CI</strong><sup class="gt_footnote_marks">1</sup></th>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>p-value</strong>"><strong>p-value</strong></th>
     </tr>
   </thead>
@@ -986,7 +1003,7 @@ div.csl-indent {
   
   <tfoot class="gt_footnotes">
     <tr>
-      <td class="gt_footnote" colspan="4"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span> HR = Hazard Ratio, CI = Confidence Interval</td>
+      <td class="gt_footnote" colspan="4"><sup class="gt_footnote_marks">1</sup> HR = Hazard Ratio, CI = Confidence Interval</td>
     </tr>
   </tfoot>
 </table>
@@ -1058,26 +1075,14 @@ GLOBAL  3.53  1 0.06</code></pre>
 </details>
 <div class="cell-output-display">
 
-<div id="pnumgxotwv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#pnumgxotwv table {
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+<div id="ivccrwwvwl" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#pnumgxotwv thead, #pnumgxotwv tbody, #pnumgxotwv tfoot, #pnumgxotwv tr, #pnumgxotwv td, #pnumgxotwv th {
-  border-style: none;
-}
-
-#pnumgxotwv p {
-  margin: 0;
-  padding: 0;
-}
-
-#pnumgxotwv .gt_table {
+:where(#ivccrwwvwl) .gt_table {
   display: table;
   border-collapse: collapse;
-  line-height: normal;
   margin-left: auto;
   margin-right: auto;
   color: #333333;
@@ -1100,36 +1105,7 @@ GLOBAL  3.53  1 0.06</code></pre>
   border-left-color: #D3D3D3;
 }
 
-#pnumgxotwv .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#pnumgxotwv .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#pnumgxotwv .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#pnumgxotwv .gt_heading {
+:where(#ivccrwwvwl) .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1141,13 +1117,42 @@ GLOBAL  3.53  1 0.06</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#pnumgxotwv .gt_bottom_border {
+:where(#ivccrwwvwl) .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+:where(#ivccrwwvwl) .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+:where(#ivccrwwvwl) .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+:where(#ivccrwwvwl) .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#pnumgxotwv .gt_col_headings {
+:where(#ivccrwwvwl) .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1162,7 +1167,7 @@ GLOBAL  3.53  1 0.06</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#pnumgxotwv .gt_col_heading {
+:where(#ivccrwwvwl) .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1182,7 +1187,7 @@ GLOBAL  3.53  1 0.06</code></pre>
   overflow-x: hidden;
 }
 
-#pnumgxotwv .gt_column_spanner_outer {
+:where(#ivccrwwvwl) .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1194,15 +1199,15 @@ GLOBAL  3.53  1 0.06</code></pre>
   padding-right: 4px;
 }
 
-#pnumgxotwv .gt_column_spanner_outer:first-child {
+:where(#ivccrwwvwl) .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#pnumgxotwv .gt_column_spanner_outer:last-child {
+:where(#ivccrwwvwl) .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#pnumgxotwv .gt_column_spanner {
+:where(#ivccrwwvwl) .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1214,11 +1219,7 @@ GLOBAL  3.53  1 0.06</code></pre>
   width: 100%;
 }
 
-#pnumgxotwv .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#pnumgxotwv .gt_group_heading {
+:where(#ivccrwwvwl) .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1244,7 +1245,7 @@ GLOBAL  3.53  1 0.06</code></pre>
   text-align: left;
 }
 
-#pnumgxotwv .gt_empty_group_heading {
+:where(#ivccrwwvwl) .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1259,15 +1260,15 @@ GLOBAL  3.53  1 0.06</code></pre>
   vertical-align: middle;
 }
 
-#pnumgxotwv .gt_from_md > :first-child {
+:where(#ivccrwwvwl) .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#pnumgxotwv .gt_from_md > :last-child {
+:where(#ivccrwwvwl) .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#pnumgxotwv .gt_row {
+:where(#ivccrwwvwl) .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1286,7 +1287,7 @@ GLOBAL  3.53  1 0.06</code></pre>
   overflow-x: hidden;
 }
 
-#pnumgxotwv .gt_stub {
+:where(#ivccrwwvwl) .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1299,7 +1300,7 @@ GLOBAL  3.53  1 0.06</code></pre>
   padding-right: 5px;
 }
 
-#pnumgxotwv .gt_stub_row_group {
+:where(#ivccrwwvwl) .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1313,15 +1314,11 @@ GLOBAL  3.53  1 0.06</code></pre>
   vertical-align: top;
 }
 
-#pnumgxotwv .gt_row_group_first td {
+:where(#ivccrwwvwl) .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#pnumgxotwv .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#pnumgxotwv .gt_summary_row {
+:where(#ivccrwwvwl) .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1331,16 +1328,16 @@ GLOBAL  3.53  1 0.06</code></pre>
   padding-right: 5px;
 }
 
-#pnumgxotwv .gt_first_summary_row {
+:where(#ivccrwwvwl) .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#pnumgxotwv .gt_first_summary_row.thick {
+:where(#ivccrwwvwl) .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#pnumgxotwv .gt_last_summary_row {
+:where(#ivccrwwvwl) .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1350,7 +1347,7 @@ GLOBAL  3.53  1 0.06</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#pnumgxotwv .gt_grand_summary_row {
+:where(#ivccrwwvwl) .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1360,7 +1357,7 @@ GLOBAL  3.53  1 0.06</code></pre>
   padding-right: 5px;
 }
 
-#pnumgxotwv .gt_first_grand_summary_row {
+:where(#ivccrwwvwl) .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1370,21 +1367,11 @@ GLOBAL  3.53  1 0.06</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#pnumgxotwv .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #D3D3D3;
-}
-
-#pnumgxotwv .gt_striped {
+:where(#ivccrwwvwl) .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#pnumgxotwv .gt_table_body {
+:where(#ivccrwwvwl) .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1393,7 +1380,7 @@ GLOBAL  3.53  1 0.06</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#pnumgxotwv .gt_footnotes {
+:where(#ivccrwwvwl) .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1407,16 +1394,16 @@ GLOBAL  3.53  1 0.06</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#pnumgxotwv .gt_footnote {
+:where(#ivccrwwvwl) .gt_footnote {
   margin: 0px;
   font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
+  padding-left: 4px;
+  padding-right: 4px;
   padding-left: 5px;
   padding-right: 5px;
 }
 
-#pnumgxotwv .gt_sourcenotes {
+:where(#ivccrwwvwl) .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1430,7 +1417,7 @@ GLOBAL  3.53  1 0.06</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#pnumgxotwv .gt_sourcenote {
+:where(#ivccrwwvwl) .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1438,70 +1425,71 @@ GLOBAL  3.53  1 0.06</code></pre>
   padding-right: 5px;
 }
 
-#pnumgxotwv .gt_left {
+:where(#ivccrwwvwl) .gt_left {
   text-align: left;
 }
 
-#pnumgxotwv .gt_center {
+:where(#ivccrwwvwl) .gt_center {
   text-align: center;
 }
 
-#pnumgxotwv .gt_right {
+:where(#ivccrwwvwl) .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#pnumgxotwv .gt_font_normal {
+:where(#ivccrwwvwl) .gt_font_normal {
   font-weight: normal;
 }
 
-#pnumgxotwv .gt_font_bold {
+:where(#ivccrwwvwl) .gt_font_bold {
   font-weight: bold;
 }
 
-#pnumgxotwv .gt_font_italic {
+:where(#ivccrwwvwl) .gt_font_italic {
   font-style: italic;
 }
 
-#pnumgxotwv .gt_super {
+:where(#ivccrwwvwl) .gt_super {
   font-size: 65%;
 }
 
-#pnumgxotwv .gt_footnote_marks {
+:where(#ivccrwwvwl) .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
-  position: initial;
 }
 
-#pnumgxotwv .gt_asterisk {
+:where(#ivccrwwvwl) .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#pnumgxotwv .gt_indent_1 {
+:where(#ivccrwwvwl) .gt_indent_1 {
   text-indent: 5px;
 }
 
-#pnumgxotwv .gt_indent_2 {
+:where(#ivccrwwvwl) .gt_indent_2 {
   text-indent: 10px;
 }
 
-#pnumgxotwv .gt_indent_3 {
+:where(#ivccrwwvwl) .gt_indent_3 {
   text-indent: 15px;
 }
 
-#pnumgxotwv .gt_indent_4 {
+:where(#ivccrwwvwl) .gt_indent_4 {
   text-indent: 20px;
 }
 
-#pnumgxotwv .gt_indent_5 {
+:where(#ivccrwwvwl) .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-  <thead>
-    
-    <tr class="gt_col_headings">
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="<strong>Characteristic</strong>"><strong>Characteristic</strong></th>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>15 Days</strong>"><strong>15 Days</strong></th>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>30 Days</strong>"><strong>30 Days</strong></th>
@@ -1555,26 +1543,14 @@ GLOBAL  3.53  1 0.06</code></pre>
 </details>
 <div class="cell-output-display">
 
-<div id="ppgkvlhkah" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ppgkvlhkah table {
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+<div id="xjncncygln" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#ppgkvlhkah thead, #ppgkvlhkah tbody, #ppgkvlhkah tfoot, #ppgkvlhkah tr, #ppgkvlhkah td, #ppgkvlhkah th {
-  border-style: none;
-}
-
-#ppgkvlhkah p {
-  margin: 0;
-  padding: 0;
-}
-
-#ppgkvlhkah .gt_table {
+:where(#xjncncygln) .gt_table {
   display: table;
   border-collapse: collapse;
-  line-height: normal;
   margin-left: auto;
   margin-right: auto;
   color: #333333;
@@ -1597,36 +1573,7 @@ GLOBAL  3.53  1 0.06</code></pre>
   border-left-color: #D3D3D3;
 }
 
-#ppgkvlhkah .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#ppgkvlhkah .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#ppgkvlhkah .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#ppgkvlhkah .gt_heading {
+:where(#xjncncygln) .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1638,13 +1585,42 @@ GLOBAL  3.53  1 0.06</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#ppgkvlhkah .gt_bottom_border {
+:where(#xjncncygln) .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+:where(#xjncncygln) .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+:where(#xjncncygln) .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+:where(#xjncncygln) .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ppgkvlhkah .gt_col_headings {
+:where(#xjncncygln) .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1659,7 +1635,7 @@ GLOBAL  3.53  1 0.06</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#ppgkvlhkah .gt_col_heading {
+:where(#xjncncygln) .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1679,7 +1655,7 @@ GLOBAL  3.53  1 0.06</code></pre>
   overflow-x: hidden;
 }
 
-#ppgkvlhkah .gt_column_spanner_outer {
+:where(#xjncncygln) .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1691,15 +1667,15 @@ GLOBAL  3.53  1 0.06</code></pre>
   padding-right: 4px;
 }
 
-#ppgkvlhkah .gt_column_spanner_outer:first-child {
+:where(#xjncncygln) .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ppgkvlhkah .gt_column_spanner_outer:last-child {
+:where(#xjncncygln) .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ppgkvlhkah .gt_column_spanner {
+:where(#xjncncygln) .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1711,11 +1687,7 @@ GLOBAL  3.53  1 0.06</code></pre>
   width: 100%;
 }
 
-#ppgkvlhkah .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#ppgkvlhkah .gt_group_heading {
+:where(#xjncncygln) .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1741,7 +1713,7 @@ GLOBAL  3.53  1 0.06</code></pre>
   text-align: left;
 }
 
-#ppgkvlhkah .gt_empty_group_heading {
+:where(#xjncncygln) .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1756,15 +1728,15 @@ GLOBAL  3.53  1 0.06</code></pre>
   vertical-align: middle;
 }
 
-#ppgkvlhkah .gt_from_md > :first-child {
+:where(#xjncncygln) .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ppgkvlhkah .gt_from_md > :last-child {
+:where(#xjncncygln) .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ppgkvlhkah .gt_row {
+:where(#xjncncygln) .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1783,7 +1755,7 @@ GLOBAL  3.53  1 0.06</code></pre>
   overflow-x: hidden;
 }
 
-#ppgkvlhkah .gt_stub {
+:where(#xjncncygln) .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1796,7 +1768,7 @@ GLOBAL  3.53  1 0.06</code></pre>
   padding-right: 5px;
 }
 
-#ppgkvlhkah .gt_stub_row_group {
+:where(#xjncncygln) .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1810,15 +1782,11 @@ GLOBAL  3.53  1 0.06</code></pre>
   vertical-align: top;
 }
 
-#ppgkvlhkah .gt_row_group_first td {
+:where(#xjncncygln) .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ppgkvlhkah .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#ppgkvlhkah .gt_summary_row {
+:where(#xjncncygln) .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1828,16 +1796,16 @@ GLOBAL  3.53  1 0.06</code></pre>
   padding-right: 5px;
 }
 
-#ppgkvlhkah .gt_first_summary_row {
+:where(#xjncncygln) .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ppgkvlhkah .gt_first_summary_row.thick {
+:where(#xjncncygln) .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ppgkvlhkah .gt_last_summary_row {
+:where(#xjncncygln) .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1847,7 +1815,7 @@ GLOBAL  3.53  1 0.06</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#ppgkvlhkah .gt_grand_summary_row {
+:where(#xjncncygln) .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1857,7 +1825,7 @@ GLOBAL  3.53  1 0.06</code></pre>
   padding-right: 5px;
 }
 
-#ppgkvlhkah .gt_first_grand_summary_row {
+:where(#xjncncygln) .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1867,21 +1835,11 @@ GLOBAL  3.53  1 0.06</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#ppgkvlhkah .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #D3D3D3;
-}
-
-#ppgkvlhkah .gt_striped {
+:where(#xjncncygln) .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ppgkvlhkah .gt_table_body {
+:where(#xjncncygln) .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1890,7 +1848,7 @@ GLOBAL  3.53  1 0.06</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#ppgkvlhkah .gt_footnotes {
+:where(#xjncncygln) .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1904,16 +1862,16 @@ GLOBAL  3.53  1 0.06</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#ppgkvlhkah .gt_footnote {
+:where(#xjncncygln) .gt_footnote {
   margin: 0px;
   font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
+  padding-left: 4px;
+  padding-right: 4px;
   padding-left: 5px;
   padding-right: 5px;
 }
 
-#ppgkvlhkah .gt_sourcenotes {
+:where(#xjncncygln) .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1927,7 +1885,7 @@ GLOBAL  3.53  1 0.06</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#ppgkvlhkah .gt_sourcenote {
+:where(#xjncncygln) .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1935,73 +1893,74 @@ GLOBAL  3.53  1 0.06</code></pre>
   padding-right: 5px;
 }
 
-#ppgkvlhkah .gt_left {
+:where(#xjncncygln) .gt_left {
   text-align: left;
 }
 
-#ppgkvlhkah .gt_center {
+:where(#xjncncygln) .gt_center {
   text-align: center;
 }
 
-#ppgkvlhkah .gt_right {
+:where(#xjncncygln) .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ppgkvlhkah .gt_font_normal {
+:where(#xjncncygln) .gt_font_normal {
   font-weight: normal;
 }
 
-#ppgkvlhkah .gt_font_bold {
+:where(#xjncncygln) .gt_font_bold {
   font-weight: bold;
 }
 
-#ppgkvlhkah .gt_font_italic {
+:where(#xjncncygln) .gt_font_italic {
   font-style: italic;
 }
 
-#ppgkvlhkah .gt_super {
+:where(#xjncncygln) .gt_super {
   font-size: 65%;
 }
 
-#ppgkvlhkah .gt_footnote_marks {
+:where(#xjncncygln) .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
-  position: initial;
 }
 
-#ppgkvlhkah .gt_asterisk {
+:where(#xjncncygln) .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ppgkvlhkah .gt_indent_1 {
+:where(#xjncncygln) .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ppgkvlhkah .gt_indent_2 {
+:where(#xjncncygln) .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ppgkvlhkah .gt_indent_3 {
+:where(#xjncncygln) .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ppgkvlhkah .gt_indent_4 {
+:where(#xjncncygln) .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ppgkvlhkah .gt_indent_5 {
+:where(#xjncncygln) .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-  <thead>
-    
-    <tr class="gt_col_headings">
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="<strong>Characteristic</strong>"><strong>Characteristic</strong></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>HR</strong><span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>HR</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>95% CI</strong><span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>95% CI</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>HR</strong><sup class=&quot;gt_footnote_marks&quot;>1</sup>"><strong>HR</strong><sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>95% CI</strong><sup class=&quot;gt_footnote_marks&quot;>1</sup>"><strong>95% CI</strong><sup class="gt_footnote_marks">1</sup></th>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>p-value</strong>"><strong>p-value</strong></th>
     </tr>
   </thead>
@@ -2074,7 +2033,7 @@ GLOBAL  3.53  1 0.06</code></pre>
   
   <tfoot class="gt_footnotes">
     <tr>
-      <td class="gt_footnote" colspan="4"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span> HR = Hazard Ratio, CI = Confidence Interval</td>
+      <td class="gt_footnote" colspan="4"><sup class="gt_footnote_marks">1</sup> HR = Hazard Ratio, CI = Confidence Interval</td>
     </tr>
   </tfoot>
 </table>
@@ -2293,15 +2252,15 @@ Score (logrank) test = 63.94  on 4 df,   p=4e-13</code></pre>
 </section>
 </section>
 <section id="interpretations-need-to-revisit" class="level3">
-<h3 class="anchored" data-anchor-id="interpretations-need-to-revisit">5.3. Interpretations [Need to revisit]</h3>
+<h3 class="anchored" data-anchor-id="interpretations-need-to-revisit">3.4. Interpretations [Need to revisit]</h3>
 <p>At a given instant of time, the probability of dying for a male VA patient as Karnofsky score increases by 1 point is 0.969 times less (or 3.15% lower) after adjusting for cell type.</p>
 <p>At a given instant of time, the probability of dying for a male VA patient with small cell is 2.04 times more than a male VA patient with squamous cell type after adjusting for Karnofsky score.</p>
 <p>At a given instant of time, the probability of dying for a male VA patient with adeno cell is 3.18 times more than a male VA patient with squamous cell type after adjusting for Karnofsky score.</p>
 <p>At a given instant of time, the probability of dying for a male VA patient with large cell is 1.38 times more than a male VA patient with squamous cell type after adjusting for Karnofsky score.</p>
 </section>
 </section>
-<section id="conclusion" class="level2">
-<h2 class="anchored" data-anchor-id="conclusion">6. Conclusion</h2>
+<section id="conclusion-need-to-finalize" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion-need-to-finalize">4. Conclusion [Need to finalize]</h2>
 <p>The Cox Proportional Hazards model is a incredibly versatile tool for data analysis. With its semiparametric nature and achieving comparable results to that of its parametric counterparts, it is a useful tool to analyze covariates in the healthcare field. With this model, researchers are able to accurately determine which risk factors may play a part in the survival time of a patient. In this paper, we were able to review which variables were significant in terms of impact on survival time. In our example, we determined that some cell variables and the Karnofsky score of patients were significant as opposed to treatment, which was surprisingly deemed insignificant in our testing. Another observation that was noted during the review was that the PH assumption was violated, meaning that there could be biased effect estimates in our dataset. A way to adjust for this in future projects would be to introduce time-dependent covariates. While it is preferable to conduct a study with more available data, the Cox Proportional Hazards model allows some room for censored and missing information while not compromising much in terms of accuracy.</p>
 </section>
 <section id="references" class="level2 unnumbered">
@@ -2309,7 +2268,7 @@ Score (logrank) test = 63.94  on 4 df,   p=4e-13</code></pre>
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">7. References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">5. References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
 <div id="ref-cox1972regression" class="csl-entry" role="doc-biblioentry">
 Cox, David R. 1972. <span>“Regression Models and Life-Tables.”</span> <em>Journal of the Royal Statistical Society: Series B (Methodological)</em> 34 (2): 187–202. <a href="https://doi.org/10.1111/j.2517-6161.1972.tb00899.x">https://doi.org/10.1111/j.2517-6161.1972.tb00899.x</a>.
 </div>

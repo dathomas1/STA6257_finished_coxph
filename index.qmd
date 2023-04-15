@@ -7,6 +7,7 @@ format:
     code-fold: true
 toc: true
 toc_float: true 
+fig_caption: yes 
 course: STA 6257 - Advance Statistical Modeling
 bibliography: references.bib # file contains bibtex for references
 #always_allow_html: true # this allows to get PDF with HTML features
@@ -20,7 +21,7 @@ editor_options:
 ## 1. Introduction
 
 The Cox Proportional Hazards (CPH) model is a method used for performing
-survival analyses, namely in the medical field. It is used to relate
+survival analyses, often in the medical field. It is used to relate
 several risk factors simultaneously against survival time and is widely
 considered to be one of the most popular methods in survival analyses.
 One of the key reasons why it is popular in survival analysis is due to
@@ -61,6 +62,42 @@ methods are still preferred over the CPH models in cases where the
 correct method is clearly indicated, the CPH model demonstrates its
 versatility by being both semiparametric in nature as well as attaining
 comparable results to its parametric counterparts.
+
+### 1.1. Application
+
+While the Cox Proportional Hazard model is mainly used for modeling survival data and
+identifying relationships between predictors and survival times, and is
+commonly used in the medical research field, it has also been applied in
+fields like finance and the social sciences. [@hendry2014data] In
+medical research it is used to identify factors that influence patient
+outcomes, e.g. death or other health status. For example,
+[@thiruvengadam2021study] used the Cox model to analyze the factors that
+determine the length of stay for COVID-19 patients, using different
+demographic and health information to find connections to the length of
+stay or even death of patients. [@thiruvengadam2021study] Other medical
+research often mirrors this structure and the model has also been
+applied in the context of clinical trials. For example, researchers used
+the model to determine treatment risks and treatment effectiveness for
+those in a systolic blood pressure intervention trial, finding a 25%
+lower hazard rate for those receiving intensive treatment.
+[@stensrud2019limitations] The Cox proportional hazard model excels at
+modeling this type of scenario, using survival data that can be
+censored, i.e. as in the case where patients have died or left the
+study. Although commonly used for medical research, the application is
+straightforward in other fields with some research looking at the
+duration of events like marriages, recidivism, and bank failures. For
+example, researchers examining the factors leading to bank failure used
+the 2008 recession as a case study to determine and predict what
+factors, e.g. asset ratios and loan amounts, are indicators of failure.
+[@cox2017proportional] The model has some limitations especially when
+not including time dependent structure in the model. In that case, the
+model assumes the hazard ratio is the same across the time sample, which
+is often not the case in medical research. This shortcoming is
+identified in [@stensrud2020test], which highlights how treatment
+effects may not be constant over a whole sample and in some cases may
+have no effect for months and then a drastic effect after some time.
+This has led to the use of models which can include time dependent
+variables.
 
 ## 2. Methods
 
@@ -152,45 +189,9 @@ downside of Cox PH is that the survival function cannot be calculated
 since the baseline hazard is unknown. This hinders clinicians in
 determining the net benefit of treatments [@mclernon2023assessing].
 
-## 3. Application
+## 3. Analysis and Results 
 
-The Cox Proportional Hazard model is used for modeling survival data and
-identifying relationships between predictors and survival times, and is
-commonly used in the medical research field but has also been applied in
-fields like finance and the social sciences. [@hendry2014data] In
-medical research it is used to identify factors that influence patient
-outcomes, e.g. death or other health status. For example,
-[@thiruvengadam2021study] used the Cox model to analyze the factors that
-determine the length of stay for COVID-19 patients, using different
-demographic and health information to find connections to the length of
-stay or even death of patients. [@thiruvengadam2021study] Other medical
-research often mirrors this structure and the model has also been
-applied in the context of clinical trials. For example, researchers used
-the model to determine treatment risks and treatment effectiveness for
-those in a systolic blood pressure intervention trial, finding a 25%
-lower hazard rate for those receiving intensive treatment.
-[@stensrud2019limitations] The Cox proportional hazard model excels at
-modeling this type of scenario, using survival data that can be
-censored, i.e. as in the case where patients have died or left the
-study. Although commonly used for medical research, the application is
-straightforward in other fields with some research looking at the
-duration of events like marriages, recidivism, and bank failures. For
-example, researchers examining the factors leading to bank failure used
-the 2008 recession as a case study to determine and predict what
-factors, e.g. asset ratios and loan amounts, are indicators of failure.
-[@cox2017proportional] The model has some limitations especially when
-not including time dependent structure in the model. In that case, the
-model assumes the hazard ratio is the same across the time sample, which
-is often not the case in medical research. This shortcoming is
-identified in [@stensrud2020test], which highlights how treatment
-effects may not be constant over a whole sample and in some cases may
-have no effect for months and then a drastic effect after some time.
-This has led to the use of models which can include time dependent
-variables.
-
-## 4. Analysis and Results 
-
-### 4.1. Data Description
+### 3.1. Data Description
 
 The data used is from a Veteran's Administrative lung cancer trial of
 137 male patients with advanced inoperable lung cancer.
@@ -225,7 +226,7 @@ to measure how well a patient can perform ordinary tasks. A higher score
 indicates a higher ability to do these tasks, in our study this score is
 taken at the start of the study.
 
-### 4.2. Data Visualization
+### 3.2. Data Visualization
 
 ```{r, warning=FALSE, echo=T, message=FALSE}
 # loading packages 
@@ -283,7 +284,7 @@ group. In general survival time seems to be positively correlated with
 the other variables, but the strength of this correlation is not
 apparent from the graphs.
 
-### 4.3. Statistical Modeling
+### 3.3. Statistical Modeling
 
 
 #### Treatment Only Cox PH Model
@@ -462,7 +463,7 @@ $$ h(t) = {h_0(t)} \times exp(-0.031X_{Karn}+0.715X_{cell-small}+1.16X_{cell-ade
 summary(cox.mod3)
 ```
 
-### 4.4. Interpretations [Need to revisit]
+### 3.4. Interpretations [Need to revisit]
 
 At a given instant of time, the probability of dying for a male VA
 patient as Karnofsky score increases by 1 point is 0.969 times less (or
@@ -481,8 +482,8 @@ patient with large cell is 1.38 times more than a male VA patient with
 squamous cell type after adjusting for Karnofsky score.
 
 
-## 5. Conclusion
+## 4. Conclusion [Need to finalize]
 
 The Cox Proportional Hazards model is a incredibly versatile tool for data analysis. With its semiparametric nature and achieving comparable results to that of its parametric counterparts, it is a useful tool to analyze covariates in the healthcare field. With this model, researchers are able to accurately determine which risk factors may play a part in the survival time of a patient. In this paper, we were able to review which variables were significant in terms of impact on survival time. In our example, we determined that some cell variables and the Karnofsky score of patients were significant as opposed to treatment, which was surprisingly deemed insignificant in our testing. Another observation that was noted during the review was that the PH assumption was violated, meaning that there could be biased effect estimates in our dataset. A way to adjust for this in future projects would be to introduce time-dependent covariates. While it is preferable to conduct a study with more available data, the Cox Proportional Hazards model allows some room for censored and missing information while not compromising much in terms of accuracy. 
 
-## 6. References
+## 5. References
