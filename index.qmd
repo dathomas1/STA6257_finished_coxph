@@ -14,7 +14,7 @@ editor:
   markdown: 
     wrap: 72
 editor_options: 
-  chunk_output_type: inline
+  chunk_output_type: console
 ---
 
 ## 1. Introduction
@@ -188,17 +188,6 @@ have no effect for months and then a drastic effect after some time.
 This has led to the use of models which can include time dependent
 variables.
 
-## 4. Our Dataset
-
-We decided to use a dataset named VA:
-<https://vincentarelbundock.github.io/Rdatasets/doc/MASS/VA.html>
-
-The reason for this is because we believe the dataset fulfills the
-criteria necessary to conduct a survival analysis - in this case,
-studying a veteran's probability of survival from lung cancer. It
-contains relevant covariates in a standard Cox model, such as age,
-treatment, survival time, and so on.
-
 ## 5. Analysis and Results 
 
 ### 5.1. Data and Vizualisation
@@ -208,19 +197,28 @@ The data used is from a Veteran's Administrative lung cancer trial of
 @kalbfleisch2011statistical The data set is available through the MASS
 package in R.
 
-Variables:
-
--   stime: survival or follow-up time in days
--   status: dead or alive/censored; 0 (alive), 1 (dead)
--   treat: treatment, either standard or test (chemotherapy); 1
-    (standard), 2 (test)
--   age: patient's age in years
--   Karn: Karnofsky score of patient's performance on scale of 0 to 100
--   diag.time: patient's time since diagnosis, measured at time of entry
-    to trial, in months
--   cell: one of four cell types; 1 (squamous), 2 (small cell), 3
-    (adeno), 4 (large)
--   prior: denotes prior therapy; 10 (yes), 0 (no)
+```{r data description, echo=FALSE, warning=FALSE, results = "asis"}
+library(kableExtra)
+a <- data.frame(vars = c('stime', 'status', 'treat', 'age', 'Karn', 'diag', 'cell', 'prior'),
+               
+                DataType = c('Numeric', 'Numeric', 'Nominal', 'Numeric', 'Numeric', 'Numeric','Nominal','Nominal'),
+                Description = c('survival or follow-up time, in days',
+    'dead or alive/censored; 0 (alive), 1 (dead)',
+    'treatment, either standard or test (chemotherapy); 1 (standard), 2 (test)',
+    'patient age in years',
+    'Karnofsky score of patient performance, on scale of 0 to 100',
+    'patient time since diagnosis, measured at time of entry to trial, in months',
+    'one of four cell types; 1 (squamous), 2 (small cell), 3 (adeno), 4 (large)',
+    'denotes prior therapy; 10 (yes), 0 (no)'),
+                stringsAsFactors = FALSE)
+ 
+kable(a,
+      caption = "Data Definition",
+      col.names = c("Attribute", "Type", "Description"),
+      align="lcl", escape = FALSE) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
+  row_spec(0, bold = T, background = "#666666", color = "white")
+```
 
 Per the National Cancer Institute, the Karnofsky score is standard way
 to measure how well a patient can perform ordinary tasks. A higher score
