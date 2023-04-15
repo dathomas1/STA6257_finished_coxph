@@ -195,7 +195,7 @@ variables.
 The data used is from a Veteran's Administrative lung cancer trial of
 137 male patients with advanced inoperable lung cancer.
 @kalbfleisch2011statistical The data set is available through the MASS
-package in R.
+package in R. This data is ideal for modeling with a Cox Proportional Hazard model with the survival time and treatment variables being of the most interest. The focus of this research is to find out if the treatment has a positive effect on survival time, and we will test if any of the other variables also have any significant effect on survival time.
 
 ```{r data description, echo=FALSE, warning=FALSE, results = "asis"}
 library(kableExtra)
