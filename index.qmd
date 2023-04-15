@@ -188,9 +188,9 @@ have no effect for months and then a drastic effect after some time.
 This has led to the use of models which can include time dependent
 variables.
 
-## 5. Analysis and Results 
+## 4. Analysis and Results 
 
-### 5.1. Data and Vizualisation
+### 4.2. Data and Vizualisation
 
 The data used is from a Veteran's Administrative lung cancer trial of
 137 male patients with advanced inoperable lung cancer.
@@ -281,7 +281,7 @@ group. In general survival time seems to be positively correlated with
 the other variables, but the strength of this correlation is not
 apparent from the graphs.
 
-### 5.2. Statistical Modeling
+### 4.3. Statistical Modeling
 
 
 #### Treatment Only Cox PH Model
@@ -460,7 +460,7 @@ $$ h(t) = {h_0(t)} \times exp(-0.031X_{Karn}+0.715X_{cell-small}+1.16X_{cell-ade
 summary(cox.mod3)
 ```
 
-### 5.3. Interpretations [Need to revisit]
+### 4.4. Interpretations [Need to revisit]
 
 At a given instant of time, the probability of dying for a male VA
 patient as Karnofsky score increases by 1 point is 0.969 times less (or
@@ -479,8 +479,8 @@ patient with large cell is 1.38 times more than a male VA patient with
 squamous cell type after adjusting for Karnofsky score.
 
 
-## 6. Conclusion
+## 5. Conclusion
 
 The Cox Proportional Hazards model is a incredibly versatile tool for data analysis. With its semiparametric nature and achieving comparable results to that of its parametric counterparts, it is a useful tool to analyze covariates in the healthcare field. With this model, researchers are able to accurately determine which risk factors may play a part in the survival time of a patient. In this paper, we were able to review which variables were significant in terms of impact on survival time. In our example, we determined that some cell variables and the Karnofsky score of patients were significant as opposed to treatment, which was surprisingly deemed insignificant in our testing. Another observation that was noted during the review was that the PH assumption was violated, meaning that there could be biased effect estimates in our dataset. A way to adjust for this in future projects would be to introduce time-dependent covariates. While it is preferable to conduct a study with more available data, the Cox Proportional Hazards model allows some room for censored and missing information while not compromising much in terms of accuracy. 
 
-## 7. References
+## 6. References
