@@ -214,7 +214,7 @@ a <- data.frame(vars = c('stime', 'status', 'treat', 'age', 'Karn', 'diag', 'cel
                 stringsAsFactors = FALSE)
  
 kable(a,
-      caption = "Data Definition",
+      caption = "Table 1: Data Definition",
       col.names = c("Attribute", "Type", "Description"),
       align="lcl", escape = FALSE) %>%
   kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
@@ -228,7 +228,7 @@ taken at the start of the study.
 
 ### 3.2. Data Visualization
 
-```{r, warning=FALSE, echo=T, message=FALSE}
+```{r load libraries, warning=FALSE, echo=F, message=FALSE}
 # loading packages 
 library(tidyverse)
 library(knitr)
@@ -244,18 +244,24 @@ library(gtsummary)
 # Load Data
 data(VA)
 #look at first few rows
-kable(head(VA, 3), caption = "Sample Rows from VA Lung Trial Data")
+kable(head(VA, 3), caption = "Table 2: Sample Rows from VA Lung Trial Data") %>%
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
+  row_spec(0, bold = T, background = "#666666", color = "white")
 
 summary_stats <- summary(VA[, c("stime", "status", "age", "Karn", "diag.time")])
 
 #Convert summary statistics to a table
-kable(summary_stats, caption = "Summary Statistics for VA Lung Trial Data")
+kable(summary_stats, caption = "Table 3: Summary Statistics for VA Lung Trial Data") %>%
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
+  row_spec(0, bold = T, background = "#666666", color = "white")
 
 #second prop summary
 summary_stats2 <- summary(VA[, c("status", "treat", "cell", "prior")])
 
 #Convert summary statistics to a table
-kable(summary_stats2, caption = "Summary Count Statistics for VA Lung Trial Data")
+kable(summary_stats2, caption = "Table 4: Summary Count Statistics for VA Lung Trial Data") %>%
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
+  row_spec(0, bold = T, background = "#666666", color = "white")
 ```
 
 ```{r data viz}
@@ -288,7 +294,7 @@ apparent from the graphs.
 
 
 #### Treatment Only Cox PH Model
-```{r}
+```{r, echo = FALSE}
 # Import Survival package with Cox proportional-hazard model
 library(survival)
 ```
