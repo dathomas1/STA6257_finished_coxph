@@ -83,13 +83,17 @@ lower hazard rate for those receiving intensive treatment.
 [@stensrud2019limitations] The Cox proportional hazard model excels at
 modeling this type of scenario, using survival data that can be
 censored, i.e. as in the case where patients have died or left the
-study. Although commonly used for medical research, the application is
+study. 
+
+Although commonly used for medical research, the application is
 straightforward in other fields with some research looking at the
 duration of events like marriages, recidivism, and bank failures. For
 example, researchers examining the factors leading to bank failure used
 the 2008 recession as a case study to determine and predict what
 factors, e.g. asset ratios and loan amounts, are indicators of failure.
-[@cox2017proportional] The model has some limitations especially when
+[@cox2017proportional] 
+
+The model has some limitations especially when
 not including time dependent structure in the model. In that case, the
 model assumes the hazard ratio is the same across the time sample, which
 is often not the case in medical research. This shortcoming is
