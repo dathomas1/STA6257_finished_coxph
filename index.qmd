@@ -190,7 +190,7 @@ variables.
 
 ## 4. Analysis and Results 
 
-### 4.2. Data and Vizualisation
+### 4.1. Data Description
 
 The data used is from a Veteran's Administrative lung cancer trial of
 137 male patients with advanced inoperable lung cancer.
@@ -224,6 +224,8 @@ Per the National Cancer Institute, the Karnofsky score is standard way
 to measure how well a patient can perform ordinary tasks. A higher score
 indicates a higher ability to do these tasks, in our study this score is
 taken at the start of the study.
+
+### 4.2. Data Visualization
 
 ```{r, warning=FALSE, echo=T, message=FALSE}
 # loading packages 
