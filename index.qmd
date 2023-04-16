@@ -15,7 +15,7 @@ editor:
   markdown: 
     wrap: 72
 editor_options: 
-  chunk_output_type: console
+  chunk_output_type: inline
 ---
 
 ## 1. Introduction
@@ -412,37 +412,51 @@ plot(phtest.mod[5])
 
 The significant variables of Karnofsky score and cell type were found to violate the proportional hazard assumption. In order to use them for analysis, we could implement a Stratified Cox model, or we could use an Extended Cox PH model for Time-Dependent variables.
 
-
-
-
-#### Don't leave in final report
-Unfortunately, we know that the hazards are not proportional since the curves cross. It would be unreliable for us to use the Cox PH across the entire time interval. For this analysis, we will run the Cox PH model over specific time intervals where the hazard ratio is constant. Before we can run the Cox PH across the intervals of 0-30, 31-60, and 60+ days, we must create a new "stop" column from the original dataset. 
+#### Statified Cox model
 
 ```{r}
-#VA.cp = survSplit(Surv(stime, status)  ~ ., data=VA, cut=30, episode="tgroup")
-#VA.cp$tgroup = as.factor(VA.cp$tgroup)
-
-#VA.cp = survSplit(VA, cut=30, start="tstart", end="stime", event="status", id="id")
-#VA.cp$treatment = as.integer(VA.cp$treat) + 1
-#VA.cp$hv1=VA.cp$treatment*(VA.cp$tstart<30)
-#VA.cp$hv2=VA.cp$treatment*(VA.cp$tstart>=30)
-#head(VA.cp)
-```
-
-```{r}
-#cox.interval <- coxph(Surv(tstart, stime, status) ~ treat:strata(tgroup), data=VA.cp)
-
-#cox.interval <- coxph(Surv(tstart, stime, status) ~ hv1 + hv2 + cluster(id), data=VA.cp)
-
-#summary(cox.interval)
+cox.mod1 <- coxph(Y ~ treat + age + Karn + diag.time + strata(cell) + prior, data=VA)
+summary(cox.mod1)
+cox.zph(cox.mod1, transform="rank")
 ```
 
 
+#### Extended Cox PH model for Time-Dependent
+It would be unreliable for us to use the Cox PH across the entire time interval. For this analysis, we will run the Cox PH model over specific time intervals where the hazard ratio is constant. Before we can run the Cox PH across the intervals of 0-90, 90-180, and 180+ days, we must create a new column from the original dataset.
+
 ```{r}
-# Can we drop age, diag.time, and prior
-cox.mod2 <- coxph(Surv(stime, status) ~ treat + Karn + cell, data=VA)
+VA.cp = survSplit(Surv(stime, status)  ~ ., data=VA, cut=c(90,180), episode="tgroup")
+
+#look at first few rows
+kable(head(VA.cp, 5), caption = "Table : Sample Rows with new column") %>%
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
+  row_spec(0, bold = T, background = "#666666", color = "white")
+```
+Note the addition of the "tstart" and "tgroup" columns in the new dataset
+
+```{r}
+cox.mod2 = coxph(Surv(tstart, stime, status) ~ treat + age + diag.time + cell + prior + Karn:strata(tgroup),
+                 data=VA.cp)
 
 summary(cox.mod2)
+cox.zph(cox.mod2, transform="rank")
+```
+
+```{r}
+cox.mod3 = coxph(Surv(tstart, stime, status) ~ treat + age + diag.time + strata(cell) + prior + Karn:strata(tgroup),
+                 data=VA.cp)
+
+summary(cox.mod3)
+cox.zph(cox.mod3, transform="rank")
+```
+
+
+```{r}
+cox.mod4 = coxph(Surv(tstart, stime, status) ~ treat + strata(cell) + Karn:strata(tgroup),
+                 data=VA.cp)
+
+summary(cox.mod4)
+cox.zph(cox.mod4, transform="rank")
 ```
 
 We will use ANOVA with the Likelihood Ratio test to determine if we can
@@ -451,20 +465,10 @@ insignificant, we can simplify the model to treat + Karn + cell.
 
 ```{r}
 # Using anova with Likelihood ratio test
-anova(cox.mod2, cox.mod, test="LRT")
+anova(cox.mod4, cox.mod3, test="LRT")
 
-cox.zph(cox.mod2)
 ```
 
-```{r}
-# Can we also remove treat from the model
-cox.mod3 <- coxph(Surv(stime, status) ~ Karn + cell, data=VA)
-
-summary(cox.mod3)
-
-# Using anova with Likelihood ratio test
-anova(cox.mod3, cox.mod2, test="LRT")
-```
 
 With the other variables removed, we will check if treatment is now a
 significant variable in the model using another ANOVA test. Based on the
