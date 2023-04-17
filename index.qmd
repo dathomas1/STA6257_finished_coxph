@@ -331,7 +331,7 @@ add_glance_table(
 
 ```
 
-The Cox PH model found that the treatment type only is insignificant. A key assumption of the Cox PH model is that the hazard is proportional (i.e. the HR is constant across time). To validate the proportional hazard assumption, we will use the scaled Schoenfield's residuals to compare the difference between the estimated coefficient for treatment and a proportional hazard based model. If the HR is constant, the smoothed residual curve will stay around 0 as time increases, which validates the proportional hazard assumption.
+The Cox PH model found that the treatment type only is insignificant. A key assumption of the Cox PH model is that the hazard is proportional (i.e. the HR is constant across time). To validate the proportional hazard assumption, we will use the scaled Schoenfield's residuals to compare the difference between the estimated coefficient for treatment and a proportional hazard based model. If the HR is constant, the smoothed residual curve will stay around 0 as time increases, which validates the proportional hazard assumption. [@therneau2017using]
 
 
 ```{r}
@@ -445,13 +445,13 @@ simplify the model.
 cox.mod180.r <- coxph(Surv(stime, status) ~ treat + diag.time, data=VA.180)
 
 anova(cox.mod180.r, cox.mod180, test="LRT")
-
+cox.mod1 = cox.mod180
 ```
 Although we may be tempted to remove the insignificant variables, the model performs worse with the reduced model having a significantly lower Log Likelihood. Below is the final model using this method.
 
 
 
-$$h(t) = {h_0(t)} \times \exp(-0.317\text{(treat_test)}+0.012\text{(age)}-0.0087\text{(Karn)}+0.112\text{(diag.time)}-0.502\text{(cell_small)}+0.965\text{(cell_large)}-0.642\text{(prior_no)})$$
+$$h(t) = {h_0(t)} \times \exp(-0.317 \text{(treat-test)}+0.012 \text{(age)}-0.0087 \text{(Karn)}+0.112\text{(diag.time)}-0.502 \text{(cell-small)}+0.965 \text{(cell-large)}-0.642 \text{(prior-no)})$$
 
 ```{r}
 # Using cox.zph() to test for proportional-hazards assumption
@@ -482,10 +482,11 @@ anova(cox.modstrat, cox.modstratI, test="LRT")
 Based on the Likelihood Ratio test, we can assume that the no-interaction stratified Cox model is sufficient. Below is the final model:
 
 
-$$h_g(t) = {h_{0g}(t)} \times \exp(0.286\text{(treat_test)}-0.012\text{(age)}-0.0383\text{(Karn)}-0.0034\text{(diag.time)}+0.169\text{(prior_no)})$$
-where $$g = 1, 2, 3, 4 \text{ (# of cell types)}$$ 
+$$h_g(t) = {h_{0g}(t)} \times \exp(0.286\text{(treat-test)}-0.012\text{(age)}-0.0383\text{(Karn)}-0.0034\text{(diag.time)}+0.169\text{(prior-no)})$$
+where $$g = 1, 2, 3, 4 \text{ (number of cell types)}$$ 
 
 ```{r}
+cox.mod2 = cox.modstrat
 cox.zph(cox.modstrat, transform="rank")
 ```
 The Karnofsky's score still violates the proportional hazards assumption. If we wanted to stratify it, we would first need to group the continuous scores into categorical bins. If we grouped Karnofsky's scores into high, medium, and low bins, that would result in 12 different curves. We will not apply stratification to Karnofsky's score in this paper. Below are survival curves for cell type based the stratified Cox model.
@@ -541,6 +542,9 @@ cox.modse_r = coxph(Surv(tstart, stime, status) ~ treat + strata(cell) + Karn:st
                  data=VA.cp)
 # Using anova with Likelihood ratio test
 anova(cox.modse_r, cox.modse, test="LRT")
+cox.mod3 = cox.modse_r
+
+# Final models are stored as cox.mod1, cox.mod2, and cox.mod3 respectively
 ```
 
 Since the difference in Likelihood ratio test is
@@ -555,12 +559,12 @@ add_glance_table(
 ```
 
 
-$$h_g(t) = {h_{0g}(t)} \times \exp(0.0988\text{(treat_test)}-0.0464\text{(Karn*tgroup_1)}+0.0097\text{(Karn*tgroup_2)}-0.0179\text{(Karn*tgroup_3)}$$
-where $$g = 1, 2, 3, 4 \text{ (# of cell types)}$$
+$$h_g(t) = {h_{0g}(t)} \times \exp(0.0988\text{(treat-test)}-0.0464\text{(Karn*tgroup1)}+0.0097\text{(Karn*tgroup2)}-0.0179\text{(Karn*tgroup3)}$$
+where $$g = 1, 2, 3, 4 \text{ (number of cell types)}$$
 
-and tgroup_1 = 1 if $ 0 \le t < 90 $,
- tgroup_2 = 1 if $ 90 \le t < 180 $,
- tgroup_3 = 1 if $ t \ge $
+and tgroup1 = 1 if $ 0 \le t < 90 $,
+ tgroup2 = 1 if $ 90 \le t < 180 $,
+ tgroup3 = 1 if $ t \ge $
 
 ### 3.4. Interpretations
 
