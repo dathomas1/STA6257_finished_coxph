@@ -449,13 +449,8 @@ cox.mod1 = cox.mod180
 ```
 Although we may be tempted to remove the insignificant variables, the model performs worse with the reduced model having a significantly lower Log Likelihood. Below is the final model using this method.
 
-
-
-<<<<<<< HEAD
 $$h(t) = {h_0(t)} \times \exp(-0.317 \text{(treat-test)}+0.012 \text{(age)}-0.0087 \text{(Karn)}+0.112\text{(diag.time)}-0.502 \text{(cell-small)}+0.965 \text{(cell-large)}-0.642 \text{(prior-no)})$$
-=======
-$$h(t) = {h_0(t)} \times \exp(-0.317 \text{(treat_test)}+0.012 \text{(age)}-0.0087 \text{(Karn)}+0.112\text{(diag.time)}-0.502 \text{(cell_small)}+0.965 \text{(cell_large)}-0.642 \text{(prior_no)})$$
->>>>>>> 91627392ef317334dbe40160fc0d1a15a1965ab0
+
 
 ```{r}
 # Using cox.zph() to test for proportional-hazards assumption
@@ -566,9 +561,9 @@ add_glance_table(
 $$h_g(t) = {h_{0g}(t)} \times \exp(0.0988\text{(treat-test)}-0.0464\text{(Karn*tgroup1)}+0.0097\text{(Karn*tgroup2)}-0.0179\text{(Karn*tgroup3)}$$
 where $$g = 1, 2, 3, 4 \text{ (number of cell types)}$$
 
-and tgroup1 = 1 if $ 0 \le t < 90 $,
- tgroup2 = 1 if $ 90 \le t < 180 $,
- tgroup3 = 1 if $ t \ge $
+and $$tgroup1 = 1 \text{ if  } 0 \le t < 90 $$,
+ $$tgroup2 = 1 \text{ if  } 90 \le t < 180 $$,
+ $$tgroup3 = 1 \text{ if  } t \ge 180$$
 
 ### 3.4. Interpretations
 
