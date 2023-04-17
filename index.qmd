@@ -375,7 +375,7 @@ tbl_survfit(kmfit,
             times=c(15, 30, 90,180,360),
             label_header="**{time} Days**"
             ) %>%
-  modify_caption("**Table 6: Treatment Only Model**") 
+  modify_caption("**Table 6: Survival Probability for Particular Days for Treatment Only Model**") 
 ```
 
 From the two plot, we observe that the effectiveness of test treatment is less effective in the beginning. Then, the test treatment becomes more effective than the standard treatment towards the end. With Kaplan-Meier survival curves, we are able to visualize survival probabilities for both treatment groups. Since the hazard function is the rate of change in the survival curve, we can use the Kaplan-Meier to also validate the proportional hazard assumption. The survival curves would be parallel if the hazard was proportional. However, the curves cross multiple time which informs us that the proportional hazard assumption is actually invalid.
@@ -410,19 +410,96 @@ plot(phtest.mod[5])
 
 ```
 
-The significant variables of Karnofsky score and cell type were found to violate the proportional hazard assumption. In order to use them for analysis, we could implement a Stratified Cox model, or we could use an Extended Cox PH model for Time-Dependent variables.
+The significant variables of Karnofsky score and cell type were found to violate the proportional hazard assumption. In order to use them for analysis, we could only use Cox PH for a portion of the data, implement a Stratified Cox model, or use an Extended Cox PH model for Time-Varying Coefficients.
 
-#### Statified Cox model
+#### Cox PH Model on events after 180 days
+We try to filter the data to events greater than 180 days and run the Cox PH model for that time interval only. The idea is that the hazard ratio will be constant over that time period.
 
 ```{r}
-cox.mod1 <- coxph(Y ~ treat + age + Karn + diag.time + strata(cell) + prior, data=VA)
-summary(cox.mod1)
-cox.zph(cox.mod1, transform="rank")
+#Filter to only include events after 180 days
+VA.180 = filter(VA, stime >= 180)
+tbl_summary(VA.180)
+
+summary_stats3 <- summary(VA.180[, c("stime", "status", "age", "Karn", "diag.time")])
+```
+
+After limiting the dataset to only greater 180 days, we are only left with 27 events. This sample size is too small to make any definitive conclusions as you will see in the test statistics below.
+
+
+```{r}
+# Fit model with all variables.
+# stime and status are the output values
+cox.mod180 <- coxph(Surv(stime, status) ~ treat + age + Karn + diag.time + cell + prior, data=VA.180)
+
+cox.mod180 %>% tbl_regression(exponentiate = T) %>% 
+add_glance_table(
+  include = c(logLik, concordance)
+) %>%
+  modify_caption("**Table : Events after 180 days Model**") 
+```
+
+We will use ANOVA with the Likelihood Ratio test to determine if we can
+simplify the model. 
+
+```{r}
+cox.mod180.r <- coxph(Surv(stime, status) ~ treat + diag.time, data=VA.180)
+
+anova(cox.mod180.r, cox.mod180, test="LRT")
+
+```
+Although we may be tempted to remove the insignificant variables, the model performs worse with the reduced model having a significantly lower Log Likelihood. Below is the final model using this method.
+
+
+
+$$h(t) = {h_0(t)} \times \exp(-0.317\text{(treat_test)}+0.012\text{(age)}-0.0087\text{(Karn)}+0.112\text{(diag.time)}-0.502\text{(cell_small)}+0.965\text{(cell_large)}-0.642\text{(prior_no)})$$
+
+```{r}
+# Using cox.zph() to test for proportional-hazards assumption
+phtest.mod = cox.zph(cox.mod180, transform = "rank")
+phtest.mod
+```
+
+Since this model is not likely to produce significant results, we will look at using the Stratified Cox model on the full dataset.
+
+#### Stratified Cox model
+
+The stratified Cox model assumes a different baseline hazard function for each categorical variable that does not meet the proportional hazard assumption. We can stratify on the non-proportional cell type, which will estimate the effects of the other variables for each cell type. The downside is that we cannot compare the effect of each cell type on survival.
+
+```{r}
+cox.modstrat <- coxph(Y ~ treat + age + Karn + diag.time + strata(cell) + prior, data=VA)
+cox.modstrat %>% tbl_regression(exponentiate = T) %>% 
+add_glance_table(
+  include = c(logLik, concordance)
+) %>%
+  modify_caption("**Table : Stratified Cox Model**") 
+```
+This form of the stratified Cox model assumes that the coefficients are the same across each of the four (4) cell types. We can also run a stratified Cox model where the coefficients can vary between strata by using interaction terms.
+
+```{r}
+cox.modstratI <- coxph(Y ~ treat + age + Karn + diag.time + prior + treat:cell + age:cell + Karn:cell + diag.time:cell +strata(cell) + prior:cell, data=VA)
+anova(cox.modstrat, cox.modstratI, test="LRT")
+```
+Based on the Likelihood Ratio test, we can assume that the no-interaction stratified Cox model is sufficient. Below is the final model:
+
+
+$$h_g(t) = {h_{0g}(t)} \times \exp(0.286\text{(treat_test)}-0.012\text{(age)}-0.0383\text{(Karn)}-0.0034\text{(diag.time)}+0.169\text{(prior_no)})$$
+where $$g = 1, 2, 3, 4 \text{ (# of cell types)}$$ 
+
+```{r}
+cox.zph(cox.modstrat, transform="rank")
+```
+The Karnofsky's score still violates the proportional hazards assumption. If we wanted to stratify it, we would first need to group the continuous scores into categorical bins. If we grouped Karnofsky's scores into high, medium, and low bins, that would result in 12 different curves. We will not apply stratification to Karnofsky's score in this paper. Below are survival curves for cell type based the stratified Cox model.
+
+```{r}
+plot(survfit(cox.modstrat), lty = c("solid","dashed", "dotted","longdash"), col=c("black","grey","blue","orange"),
+xlab="survival time",ylab="survival probabilities")
+legend("topright", c("1-squamous","2-small cell", "3-adeno", "4-large"), lty=c("solid","dashed", "dotted","longdash"),
+col=c("black","grey","blue","orange"))
 ```
 
 
-#### Extended Cox PH model for Time-Dependent
-It would be unreliable for us to use the Cox PH across the entire time interval. For this analysis, we will run the Cox PH model over specific time intervals where the hazard ratio is constant. Before we can run the Cox PH across the intervals of 0-90, 90-180, and 180+ days, we must create a new column from the original dataset.
+#### Extended Cox PH model for Time-Varying Coefficients
+Another approach to variables with nonproportional hazard ratios is specify a function for the coefficients that change with time. This function could be linear, logarithmic, or a step function. For this analysis, we will run the Cox PH model over specific time intervals using a step function for the Karnofsky's score. Before we can run the Cox PH across the intervals of 0-90, 90-180, and 180+ days, we must create a new column from the original dataset.
 
 ```{r}
 VA.cp = survSplit(Surv(stime, status)  ~ ., data=VA, cut=c(90,180), episode="tgroup")
@@ -435,68 +512,65 @@ kable(head(VA.cp, 5), caption = "Table : Sample Rows with new column") %>%
 Note the addition of the "tstart" and "tgroup" columns in the new dataset
 
 ```{r}
-cox.mod2 = coxph(Surv(tstart, stime, status) ~ treat + age + diag.time + cell + prior + Karn:strata(tgroup),
+cox.modextend = coxph(Surv(tstart, stime, status) ~ treat + age + diag.time + cell + prior + Karn:strata(tgroup),
                  data=VA.cp)
 
-summary(cox.mod2)
-cox.zph(cox.mod2, transform="rank")
+cox.modextend %>% tbl_regression(exponentiate = T) %>% 
+add_glance_table(
+  include = c(logLik, concordance)
+) %>%
+  modify_caption("**Table : Extended Cox Model**") 
 ```
 
 ```{r}
-cox.mod3 = coxph(Surv(tstart, stime, status) ~ treat + age + diag.time + strata(cell) + prior + Karn:strata(tgroup),
-                 data=VA.cp)
-
-summary(cox.mod3)
-cox.zph(cox.mod3, transform="rank")
+cox.zph(cox.modextend, transform="rank")
 ```
-
+To address the nonproportional hazard of the cell type, we will also stratify on the cell type to create an stratified-extended Cox model. [@ratnaningsih2019stratified]
 
 ```{r}
-cox.mod4 = coxph(Surv(tstart, stime, status) ~ treat + strata(cell) + Karn:strata(tgroup),
+cox.modse = coxph(Surv(tstart, stime, status) ~ treat + age + diag.time + strata(cell) + prior + Karn:strata(tgroup),
                  data=VA.cp)
 
-summary(cox.mod4)
-cox.zph(cox.mod4, transform="rank")
+cox.zph(cox.modse, transform="rank")
 ```
 
-We will use ANOVA with the Likelihood Ratio test to determine if we can
-simplify the model. Since the difference in Likelihood ratio test is
+This model satisfies the proportional hazard assumption. We will now check if we can remove some of the insignificant variables.
+
+```{r}
+cox.modse_r = coxph(Surv(tstart, stime, status) ~ treat + strata(cell) + Karn:strata(tgroup),
+                 data=VA.cp)
+# Using anova with Likelihood ratio test
+anova(cox.modse_r, cox.modse, test="LRT")
+```
+
+Since the difference in Likelihood ratio test is
 insignificant, we can simplify the model to treat + Karn + cell.
 
 ```{r}
-# Using anova with Likelihood ratio test
-anova(cox.mod4, cox.mod3, test="LRT")
-
+cox.modse_r %>% tbl_regression(exponentiate = T) %>% 
+add_glance_table(
+  include = c(logLik, concordance)
+) %>%
+  modify_caption("**Table : Stratified-Extended Cox Model**") 
 ```
 
 
-With the other variables removed, we will check if treatment is now a
-significant variable in the model using another ANOVA test. Based on the
-ANOVA test, we can also remove treatment from the model
+$$h_g(t) = {h_{0g}(t)} \times \exp(0.0988\text{(treat_test)}-0.0464\text{(Karn*tgroup_1)}+0.0097\text{(Karn*tgroup_2)}-0.0179\text{(Karn*tgroup_3)}$$
+where $$g = 1, 2, 3, 4 \text{ (# of cell types)}$$
 
-$$ h(t) = {h_0(t)} \times exp(-0.031X_{Karn}+0.715X_{cell-small}+1.16X_{cell-adeno}+0.325X_{cell-large}) $$
+and tgroup_1 = 1 if $ 0 \le t < 90 $,
+ tgroup_2 = 1 if $ 90 \le t < 180 $,
+ tgroup_3 = 1 if $ t \ge $
 
-```{r}
-summary(cox.mod3)
-```
+### 3.4. Interpretations
 
-### 3.4. Interpretations [Need to revisit]
+Based on Cox PH for after 180 days, the test treatment is 0.73 times the hazard of than the standard treatment. In other words, a male VA patient receiving the standard treatment is 37% more likely to die than one receiving the test treatment when adjusting for the other predictors. However, these results are insignificant especially when considering the small sample size.
 
-At a given instant of time, the probability of dying for a male VA
-patient as Karnofsky score increases by 1 point is 0.969 times less (or
-3.15% lower) after adjusting for cell type.
+Based on the Cox model stratified on cell type, the test treatment is 33% more likely to die than a male VA patient receiving the standard treatment, but these treatment results are insignificant.
 
-At a given instant of time, the probability of dying for a male VA
-patient with small cell is 2.04 times more than a male VA patient with
-squamous cell type after adjusting for Karnofsky score.
+Using the Stratified-Extended Cox model, a patient test treatment is 10% more likely to die than one receiving the standard when adjusting for cell type and Karnofsky's score. However, the treatment results are insignificant. The model also showed that the probability of dying for a male VA patient with a 1-point lower Karnofsky's score is 5% more likely to die than a patient with a 1-point higher score for the first 90 days. The Karnofsky's scores for other time intervals are insignificant.  
 
-At a given instant of time, the probability of dying for a male VA
-patient with adeno cell is 3.18 times more than a male VA patient with
-squamous cell type after adjusting for Karnofsky score.
-
-At a given instant of time, the probability of dying for a male VA
-patient with large cell is 1.38 times more than a male VA patient with
-squamous cell type after adjusting for Karnofsky score.
+Overall, it seems that Karnofsky's scores and cell type types are the strongest predictors of survival. The initial Karnofsky's score have significant predictive effects at the beginning of study but the effect diminishes as time increases. The effect of cell type also varies as time increases. Treatment seems insignificant based on the multiple attempted models in this analysis. 
 
 
 ## 4. Conclusion [Need to finalize]
