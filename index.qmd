@@ -15,7 +15,7 @@ editor:
   markdown: 
     wrap: 72
 editor_options: 
-  chunk_output_type: inline
+  chunk_output_type: console
 ---
 
 ## 1. Introduction
@@ -350,7 +350,9 @@ From the plot, we can see that the confidence interval for the residuals stay ar
 
 ```{r}
 # Using Scheonfeld to test for proportional-hazards assumption
-phtest.unimod
+kable(phtest.unimod$table, caption = "Table 6: Scheonfeld Test for Proportional-Hazards Assumption") %>%
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
+  row_spec(0, bold = T, background = "#666666", color = "white")
 ```
 Based on the p-value for treatment, we fail to reject the null hypothesis that the proportional hazard assumption is valid. Since the p-value is very close to the cutoff, we will use a graphical method based the survival probability curve.
 
@@ -360,7 +362,7 @@ While the Cox PH model can inform us of a variable's effect, we are unable to de
 # Plotting graph of Kaplan-Meier curve
 kmfit = survfit(Y ~ treat, data=VA)
 
-plot(kmfit, lty = c("solid", "dashed"), col=c("black","grey"),
+plot(kmfit, main = "Figure 3: Kaplan-Meier Curve", lty = c("solid", "dashed"), col=c("black","grey"),
 xlab="survival time",ylab="survival probabilities")
 legend("topright", c("Standard","Test"), lty=c("solid","dashed"),
 col=c("black","grey"))
@@ -369,7 +371,8 @@ col=c("black","grey"))
 
 ```{r}
 #Log log of survival curve
-plot(kmfit,fun="cloglog", lty = c("solid", "dashed"), col=c("black","grey") ,xlab="time",ylab="log-log survival", main="log-log curves")
+plot(kmfit,fun="cloglog", lty = c("solid", "dashed"), col=c("black","grey") ,xlab="time",ylab="log-log survival", 
+     main="Figure 4: Log-Log Curves")
 legend("topleft", c("Standard","Test"), lty=c("solid","dashed"),
 col=c("black","grey"))
 ```
@@ -379,7 +382,7 @@ tbl_survfit(kmfit,
             times=c(15, 30, 90,180,360),
             label_header="**{time} Days**"
             ) %>%
-  modify_caption("**Table 6: Survival Probability for Particular Days for Treatment Only Model**") 
+  modify_caption("**Table 7: Survival Probability for Particular Days for Treatment Only Model**") 
 ```
 
 From the two plot, we observe that the effectiveness of test treatment is less effective in the beginning. Then, the test treatment becomes more effective than the standard treatment towards the end. With Kaplan-Meier survival curves, we are able to visualize survival probabilities for both treatment groups. Since the hazard function is the rate of change in the survival curve, we can use the Kaplan-Meier to also validate the proportional hazard assumption. The survival curves would be parallel if the hazard was proportional. However, the curves cross multiple time which informs us that the proportional hazard assumption is actually invalid.
@@ -397,13 +400,17 @@ cox.mod %>% tbl_regression(exponentiate = T) %>%
 add_glance_table(
   include = c(logLik, concordance)
 ) %>%
-  modify_caption("**Table 7: Treatment Only Model**") 
+  modify_caption("**Table 8: Treatment Only Model**") 
 ```
 
 ```{r}
 # Using cox.zph() to test for proportional-hazards assumption
 phtest.mod = cox.zph(cox.mod, transform = "rank")
-phtest.mod
+#phtest.mod
+
+kable(phtest.mod$table, caption = "Table 9: Proportional-Hazards Assumption Test") %>%
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
+  row_spec(0, bold = T, background = "#666666", color = "white")
 ```
 
 ```{r}
@@ -411,6 +418,7 @@ phtest.mod
 par(mfrow=c(1,2))
 plot(phtest.mod[3])
 plot(phtest.mod[5])
+mtext("Figure 5: Schoenfield Residuals Over Time", side = 3, line = -3, outer = TRUE)
 
 ```
 
@@ -422,7 +430,8 @@ We try to filter the data to events greater than 180 days and run the Cox PH mod
 ```{r}
 #Filter to only include events after 180 days
 VA.180 = filter(VA, stime >= 180)
-tbl_summary(VA.180)
+tbl_summary(VA.180) %>%
+  modify_caption("**Table 10: Summary Statistics For Stime Over 180 Days**")
 
 summary_stats3 <- summary(VA.180[, c("stime", "status", "age", "Karn", "diag.time")])
 ```
@@ -439,7 +448,7 @@ cox.mod180 %>% tbl_regression(exponentiate = T) %>%
 add_glance_table(
   include = c(logLik, concordance)
 ) %>%
-  modify_caption("**Table : Events after 180 days Model**") 
+  modify_caption("**Table 11: Events after 180 days Model**") 
 ```
 
 We will use ANOVA with the Likelihood Ratio test to determine if we can
@@ -448,7 +457,9 @@ simplify the model.
 ```{r}
 cox.mod180.r <- coxph(Surv(stime, status) ~ treat + diag.time, data=VA.180)
 
-anova(cox.mod180.r, cox.mod180, test="LRT")
+kable(anova(cox.mod180.r, cox.mod180, test="LRT"), caption = "Table 12: ANOVA Test On >180 Days Models") %>%
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
+  row_spec(0, bold = T, background = "#666666", color = "white")
 cox.mod1 = cox.mod180
 ```
 Although we may be tempted to remove the insignificant variables, the model performs worse with the reduced model having a significantly lower Log Likelihood. Below is the final model using this method.
@@ -459,7 +470,9 @@ $$h(t) = {h_0(t)} \times \exp(-0.317 \text{(treat-test)}+0.012 \text{(age)}-0.00
 ```{r}
 # Using cox.zph() to test for proportional-hazards assumption
 phtest.mod = cox.zph(cox.mod180, transform = "rank")
-phtest.mod
+kable(phtest.mod, caption = "Table 13: Proportional-Hazards Assumption Test On >180 Model") %>%
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
+  row_spec(0, bold = T, background = "#666666", color = "white")
 ```
 
 Since this model is not likely to produce significant results, we will look at using the Stratified Cox model on the full dataset.
