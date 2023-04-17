@@ -195,12 +195,16 @@ determining the net benefit of treatments [@mclernon2023assessing].
 
 ## 3. Analysis and Results 
 
-### 3.1. Data Description
+### 3.1. Purpose
+
+The focus of this research is to find out if the treatment has a positive effect on survival time, and we will test if any of the other variables also have any significant effect on survival time. The Proportional Hazards (PH) assumption must also remain valid to prevent biased effect estimates.  
+
+### 3.2. Data Description
 
 The data used is from a Veteran's Administrative lung cancer trial of
 137 male patients with advanced inoperable lung cancer.
 @kalbfleisch2011statistical The data set is available through the MASS
-package in R. This data is ideal for modeling with a Cox Proportional Hazard model with the survival time and treatment variables being of the most interest. The focus of this research is to find out if the treatment has a positive effect on survival time, and we will test if any of the other variables also have any significant effect on survival time.
+package in R. This data is ideal for modeling with a Cox Proportional Hazard model with the survival time and treatment variables being of the most interest. 
 
 ```{r data description, echo=FALSE, warning=FALSE, results = "asis"}
 library(kableExtra)
@@ -230,7 +234,7 @@ to measure how well a patient can perform ordinary tasks. A higher score
 indicates a higher ability to do these tasks, in our study this score is
 taken at the start of the study.
 
-### 3.2. Data Visualization
+### 3.3. Data Visualization
 
 ```{r load libraries, warning=FALSE, echo=F, message=FALSE}
 # loading packages 
@@ -294,7 +298,7 @@ group. In general survival time seems to be positively correlated with
 the other variables, but the strength of this correlation is not
 apparent from the graphs.
 
-### 3.3. Statistical Modeling
+### 3.4. Statistical Modeling
 
 
 #### Treatment Only Cox PH Model
@@ -570,7 +574,7 @@ and tgroup1 = 1 if $ 0 \le t < 90 $,
  tgroup2 = 1 if $ 90 \le t < 180 $,
  tgroup3 = 1 if $ t \ge $
 
-### 3.4. Interpretations
+### 3.5. Interpretations
 
 Based on Cox PH for after 180 days, the test treatment is 0.73 times the hazard of than the standard treatment. In other words, a male VA patient receiving the standard treatment is 37% more likely to die than one receiving the test treatment when adjusting for the other predictors. However, these results are insignificant especially when considering the small sample size.
 
