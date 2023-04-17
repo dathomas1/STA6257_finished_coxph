@@ -451,7 +451,11 @@ Although we may be tempted to remove the insignificant variables, the model perf
 
 
 
+<<<<<<< HEAD
 $$h(t) = {h_0(t)} \times \exp(-0.317 \text{(treat-test)}+0.012 \text{(age)}-0.0087 \text{(Karn)}+0.112\text{(diag.time)}-0.502 \text{(cell-small)}+0.965 \text{(cell-large)}-0.642 \text{(prior-no)})$$
+=======
+$$h(t) = {h_0(t)} \times \exp(-0.317 \text{(treat_test)}+0.012 \text{(age)}-0.0087 \text{(Karn)}+0.112\text{(diag.time)}-0.502 \text{(cell_small)}+0.965 \text{(cell_large)}-0.642 \text{(prior_no)})$$
+>>>>>>> 91627392ef317334dbe40160fc0d1a15a1965ab0
 
 ```{r}
 # Using cox.zph() to test for proportional-hazards assumption
