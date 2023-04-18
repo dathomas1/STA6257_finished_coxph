@@ -15,7 +15,7 @@ editor:
   markdown: 
     wrap: 72
 editor_options: 
-  chunk_output_type: console
+  chunk_output_type: inline
 ---
 
 ## 1. Introduction
@@ -405,8 +405,7 @@ add_glance_table(
 
 ```{r}
 # Using cox.zph() to test for proportional-hazards assumption
-phtest.mod = cox.zph(cox.mod, transform = "rank")
-#phtest.mod
+phtest.mod = cox.zph(cox.mod, transform = rank)
 
 kable(phtest.mod$table, caption = "Table 9: Proportional-Hazards Assumption Test") %>%
   kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
@@ -469,8 +468,9 @@ $$h(t) = {h_0(t)} \times \exp(-0.317 \text{(treat-test)}+0.012 \text{(age)}-0.00
 
 ```{r}
 # Using cox.zph() to test for proportional-hazards assumption
-phtest.mod = cox.zph(cox.mod180, transform = "rank")
-kable(phtest.mod, caption = "Table 13: Proportional-Hazards Assumption Test On >180 Model") %>%
+phtest.mod = cox.zph(cox.mod180, transform = rank)
+
+kable(phtest.mod$table, caption = "Table 13: Proportional-Hazards Assumption Test On >180 Model") %>%
   kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
   row_spec(0, bold = T, background = "#666666", color = "white")
 ```
@@ -506,7 +506,8 @@ where $$g = 1, 2, 3, 4 \text{ (number of cell types)}$$
 
 ```{r}
 cox.mod2 = cox.modstrat
-kable(cox.zph(cox.modstrat, transform="rank"), caption = "Table 16: Proportional-Hazards Assumption Test On >180 Model") %>%
+phtest.mod2 = cox.zph(cox.modstrat, transform=rank)
+kable(phtest.mod2$table, caption = "Table 16: Proportional-Hazards Assumption Test On Stratified Cox Model") %>%
   kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
   row_spec(0, bold = T, background = "#666666", color = "white")
 ```
@@ -546,7 +547,10 @@ add_glance_table(
 ```
 
 ```{r}
-cox.zph(cox.modextend, transform="rank")
+phtest.modex = cox.zph(cox.modextend, transform=rank)
+kable(phtest.modex$table, caption = "Table 19: Proportional-Hazards Assumption Test On Extended Cox Model") %>%
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
+  row_spec(0, bold = T, background = "#666666", color = "white")
 ```
 To address the nonproportional hazard of the cell type, we will also stratify on the cell type to create an stratified-extended Cox model. [@ratnaningsih2019stratified]
 
@@ -554,7 +558,10 @@ To address the nonproportional hazard of the cell type, we will also stratify on
 cox.modse = coxph(Surv(tstart, stime, status) ~ treat + age + diag.time + strata(cell) + prior + Karn:strata(tgroup),
                  data=VA.cp)
 
-cox.zph(cox.modse, transform="rank")
+phtest.modse = cox.zph(cox.modse, transform=rank)
+kable(phtest.modse$table, caption = "Table 20: Proportional-Hazards Assumption Test On Stratified-Extended Cox Model") %>%
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
+  row_spec(0, bold = T, background = "#666666", color = "white")
 ```
 
 This model satisfies the proportional hazard assumption. We will now check if we can remove some of the insignificant variables.
@@ -563,7 +570,9 @@ This model satisfies the proportional hazard assumption. We will now check if we
 cox.modse_r = coxph(Surv(tstart, stime, status) ~ treat + strata(cell) + Karn:strata(tgroup),
                  data=VA.cp)
 # Using anova with Likelihood ratio test
-anova(cox.modse_r, cox.modse, test="LRT")
+kable(anova(cox.modse_r, cox.modse, test="LRT"), caption = "Table 21: ANOVA Test On Stratified-Extended Cox Model") %>%
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
+  row_spec(0, bold = T, background = "#666666", color = "white")
 cox.mod3 = cox.modse_r
 
 # Final models are stored as cox.mod1, cox.mod2, and cox.mod3 respectively
@@ -577,15 +586,14 @@ cox.modse_r %>% tbl_regression(exponentiate = T) %>%
 add_glance_table(
   include = c(logLik, concordance)
 ) %>%
-  modify_caption("**Table : Stratified-Extended Cox Model**") 
+  modify_caption("**Table 22: Stratified-Extended Cox Model**") 
 ```
 
 
 $$h_g(t) = {h_{0g}(t)} \times \exp(0.0988\text{(treat-test)}-0.0464\text{(Karn*tgroup1)}+0.0097\text{(Karn*tgroup2)}-0.0179\text{(Karn*tgroup3)}$$
 where $$g = 1, 2, 3, 4 \text{ (number of cell types)}$$
-
-and $$tgroup1 = 1 \text{ if  } 0 \le t < 90 $$,
- $$tgroup2 = 1 \text{ if  } 90 \le t < 180 $$,
+ $$tgroup1 = 1 \text{ if  } 0 \le t < 90 $$
+ $$tgroup2 = 1 \text{ if  } 90 \le t < 180 $$
  $$tgroup3 = 1 \text{ if  } t \ge 180$$
 
 ### 3.5. Interpretations
