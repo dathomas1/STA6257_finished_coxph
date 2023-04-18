@@ -598,11 +598,11 @@ where $$g = 1, 2, 3, 4 \text{ (number of cell types)}$$
 
 ### 3.5. Interpretations
 
-Based on Cox PH for after 180 days, the test treatment is 0.73 times the hazard of than the standard treatment. In other words, a male VA patient receiving the standard treatment is 37% more likely to die than one receiving the test treatment when adjusting for the other predictors. However, these results are insignificant especially when considering the small sample size.
+Based on Cox PH for after 180 days, a patient receiving the test treatment has 0.73 times the hazard of a patient receiving the standard treatment. In other words, a male VA patient receiving the standard treatment is 37% more likely to die than one receiving the test treatment when adjusting for the other predictors. However, these results are insignificant especially when considering the small sample size.
 
-Based on the Cox model stratified on cell type, the test treatment is 33% more likely to die than a male VA patient receiving the standard treatment, but these treatment results are insignificant.
+Based on the Cox model stratified on cell type, a patient receiving the test treatment is 33% more likely to die than a patient receiving the standard treatment, but these treatment results are insignificant.
 
-Using the Stratified-Extended Cox model, a patient test treatment is 10% more likely to die than one receiving the standard when adjusting for cell type and Karnofsky's score. However, the treatment results are insignificant. The model also showed that the probability of dying for a male VA patient with a 1-point lower Karnofsky's score is 5% more likely to die than a patient with a 1-point higher score for the first 90 days. The Karnofsky's scores for other time intervals are insignificant.  
+Using the Stratified-Extended Cox model, a patient on the test treatment is 10% more likely to die than one receiving the standard when adjusting for cell type and Karnofsky's score. However, the treatment results are insignificant. The model also showed that the probability of dying for a male VA patient with a 1-point lower Karnofsky's score is 5% more likely to die than a patient with a 1-point higher score for the first 90 days. The Karnofsky's scores across the other time intervals are insignificant.  
 
 Overall, it seems that Karnofsky's scores and cell type types are the strongest predictors of survival. The initial Karnofsky's score have significant predictive effects at the beginning of study but the effect diminishes as time increases. The effect of cell type also varies as time increases. Treatment seems insignificant based on the multiple attempted models in this analysis. 
 
