@@ -345,7 +345,7 @@ plot(phtest.unimod, main = "Figure 2: Schoenfield Residuals Over Time")
 abline(h=0)
 ```
 
-From the plot, we can see that the confidence interval for the residuals stay around 0. We will also run a statistical test against the Scheonfeld residuals to determine if the residuals are correlated with time. A small p-value (less than 0.05) means there is a significant correlation between the residuals and time, which means the proportional hazard assumption is invalid.
+From the plot, we can see that the confidence interval for the residuals stay around 0. We will also run a statistical test against the Schoenfeld residuals to determine if the residuals are correlated with time. A small p-value (less than 0.05) means there is a significant correlation between the residuals and time, which means the proportional hazard assumption is invalid.
 
 
 ```{r}
@@ -599,8 +599,10 @@ Using the Stratified-Extended Cox model, a patient test treatment is 10% more li
 Overall, it seems that Karnofsky's scores and cell type types are the strongest predictors of survival. The initial Karnofsky's score have significant predictive effects at the beginning of study but the effect diminishes as time increases. The effect of cell type also varies as time increases. Treatment seems insignificant based on the multiple attempted models in this analysis. 
 
 
-## 4. Conclusion [Need to finalize]
+## 4. Conclusion 
 
-The Cox Proportional Hazards model is a incredibly versatile tool for data analysis. With its semiparametric nature and achieving comparable results to that of its parametric counterparts, it is a useful tool to analyze covariates in the healthcare field. With this model, researchers are able to accurately determine which risk factors may play a part in the survival time of a patient. In this paper, we were able to review which variables were significant in terms of impact on survival time. In our example, we determined that some cell variables and the Karnofsky score of patients were significant as opposed to treatment, which was surprisingly deemed insignificant in our testing. Another observation that was noted during the review was that the PH assumption was violated, meaning that there could be biased effect estimates in our dataset. A way to adjust for this in future projects would be to introduce time-dependent covariates. While it is preferable to conduct a study with more available data, the Cox Proportional Hazards model allows some room for censored and missing information while not compromising much in terms of accuracy. 
+The Cox Proportional Hazards model is a incredibly versatile tool for data analysis. With its semiparametric nature and achieving comparable results to that of its parametric counterparts, it is a useful tool to analyze covariates in the healthcare field. With this model, researchers are able to accurately determine which risk factors may play a part in the survival time of a patient. 
+
+In this paper, we were able to review which variables were significant in terms of impact on survival time while also ensuring that the Proportional Hazard (PH) Assumption was upheld. In our example, we tested various iterations of the Cox Proportional Hazard model to determine which variables, specifically treatment, were significant in the survival time of any given patient. The testing ranged from the standard Cox PH model itself, to utilizing Schoenfield’s residuals and the stratified methods, as well as removing certain variables. We determined overall that treatment was insignificant and instead found that the Karnofsky’s scores and cell types were stronger predictors of the survival time of any given patient. While it is preferable to conduct a study with more available data, the Cox Proportional Hazards model allows some room for censored and missing information while not compromising much in terms of accuracy.
 
 ## 5. References
