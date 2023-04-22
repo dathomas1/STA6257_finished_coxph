@@ -1,10 +1,11 @@
 ---
-title: "Slides"
+title: "Cox Proportional Hazards Model"
+author: "Edwin Alvarado, Darnell Thomas, and Michael Ho"
 format: revealjs
 editor: visual
 ---
 
-## Quarto
+## Introduction
 
 Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <https://quarto.org/docs/presentations/>.
 
@@ -22,3 +23,9 @@ When you click the **Render** button a presentation will be generated that inclu
 ```{r}
 1 + 1
 ```
+
+## Add Your Slides Separated by two "\##"
+
+Words and text/code go inside. You can save plots locally, .jpg/etc, or access the already made plots. To insert them, go into visual mode (see top left) and then click insert and select the image from there, you can resize in visual mode. See lecture if this doesn't make sense.
+
+![](index_files/figure-html/data%20viz-1.png){width="382"}
