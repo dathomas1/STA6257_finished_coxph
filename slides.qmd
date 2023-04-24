@@ -21,6 +21,61 @@ editor: visual
 
 -   Limitations concerning time dependent variables
 
+## Case Study: VA Lung Cancer Trial
+
+Goals
+
+-   Determine if treatment used in trial has positive effect on survival time
+-   Determine if any other variables have significant effect on survival time
+-   Properly test assumptions and fit the Cox Proportional Hazards Model
+
+## Case Study: VA Lung Cander Trial {.tabset}
+
+### Data Definition
+
+```{r, echo=FALSE}
+library(MASS)
+library(kableExtra)
+data(VA)
+VA$status <- as.factor(VA$status)
+
+a <- data.frame(vars = c('stime', 'status', 'treat', 'age', 'Karn', 'diag', 'cell', 'prior'),
+               
+                DataType = c('Numeric', 'Numeric', 'Nominal', 'Numeric', 'Numeric', 'Numeric','Nominal','Nominal'),
+                Description = c('survival or follow-up time, in days',
+    'dead or alive/censored; 0 (alive), 1 (dead)',
+    'treatment, either standard or test (chemotherapy); 1 (standard), 2 (test)',
+    'patient age in years',
+    'Karnofsky score of patient performance, on scale of 0 to 100',
+    'patient time since diagnosis, measured at time of entry to trial, in months',
+    'one of four cell types; 1 (squamous), 2 (small cell), 3 (adeno), 4 (large)',
+    'denotes prior therapy; 10 (yes), 0 (no)'),
+                stringsAsFactors = FALSE)
+ 
+kable(a,
+      caption = "Table 1: Data Definition",
+      col.names = c("Attribute", "Type", "Description"),
+      align="lcl", escape = FALSE) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
+  row_spec(0, bold = T, background = "#666666", color = "white")
+```
+
+### Data Preview
+
+```{r, echo=FALSE}
+kable(head(VA, 6), caption = "Table 2: Sample Rows from VA Lung Trial Data") %>%
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
+  row_spec(0, bold = T, background = "#666666", color = "white")
+```
+
+### Initial Remarks
+
+-   137 Observations of patients with inoperable lung cancer
+-   Includes Censored Data
+-   Per the National Cancer Institute, the Karnofsky score is standard way to measure how well a patient can perform ordinary tasks. A higher score indicates a higher ability to do these tasks
+
+
+
 ## Statistic Model
 
 The composition of the model is as follows:
