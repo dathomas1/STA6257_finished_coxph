@@ -256,7 +256,7 @@ kable(head(VA, 3), caption = "Table 2: Sample Rows from VA Lung Trial Data") %>%
   kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
   row_spec(0, bold = T, background = "#666666", color = "white")
 
-summary_stats <- summary(VA[, c("stime", "status", "age", "Karn", "diag.time")])
+summary_stats <- summary(VA[, c("stime", "age", "Karn", "diag.time")])
 
 #Convert summary statistics to a table
 kable(summary_stats, caption = "Table 3: Summary Statistics for VA Lung Trial Data") %>%
@@ -265,7 +265,7 @@ kable(summary_stats, caption = "Table 3: Summary Statistics for VA Lung Trial Da
 
 #second prop summary
 summary_stats2 <- summary(VA[, c("status", "treat", "cell", "prior")])
-
+summary_stats2$status <- as.factor(summary_stats2$status)
 #Convert summary statistics to a table
 kable(summary_stats2, caption = "Table 4: Summary Count Statistics for VA Lung Trial Data") %>%
   kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
