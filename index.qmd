@@ -18,6 +18,8 @@ editor_options:
   chunk_output_type: inline
 ---
 
+[Slides](https://rstudio.hmcse.uwf.edu/s/a8e1346173be2f14eec01/files/R/GitFolder/project-r-MX9471/STA6257/STA6257%20Capstone/STA6257_coxph/slides.html#/title-slide)
+
 ## 1. Introduction
 
 The Cox Proportional Hazards (CPH) model is a method used for performing
@@ -65,25 +67,25 @@ comparable results to its parametric counterparts.
 
 ### 1.1. Application
 
-While the Cox Proportional Hazard model is mainly used for modeling survival data and
-identifying relationships between predictors and survival times, and is
-commonly used in the medical research field, it has also been applied in
-fields like finance and the social sciences. [@hendry2014data] In
-medical research it is used to identify factors that influence patient
-outcomes, e.g. death or other health status. For example,
-[@thiruvengadam2021study] used the Cox model to analyze the factors that
-determine the length of stay for COVID-19 patients, using different
-demographic and health information to find connections to the length of
-stay or even death of patients. [@thiruvengadam2021study] Other medical
-research often mirrors this structure and the model has also been
-applied in the context of clinical trials. For example, researchers used
-the model to determine treatment risks and treatment effectiveness for
-those in a systolic blood pressure intervention trial, finding a 25%
-lower hazard rate for those receiving intensive treatment.
+While the Cox Proportional Hazard model is mainly used for modeling
+survival data and identifying relationships between predictors and
+survival times, and is commonly used in the medical research field, it
+has also been applied in fields like finance and the social sciences.
+[@hendry2014data] In medical research it is used to identify factors
+that influence patient outcomes, e.g. death or other health status. For
+example, [@thiruvengadam2021study] used the Cox model to analyze the
+factors that determine the length of stay for COVID-19 patients, using
+different demographic and health information to find connections to the
+length of stay or even death of patients. [@thiruvengadam2021study]
+Other medical research often mirrors this structure and the model has
+also been applied in the context of clinical trials. For example,
+researchers used the model to determine treatment risks and treatment
+effectiveness for those in a systolic blood pressure intervention trial,
+finding a 25% lower hazard rate for those receiving intensive treatment.
 [@stensrud2019limitations] The Cox proportional hazard model excels at
 modeling this type of scenario, using survival data that can be
 censored, i.e. as in the case where patients have died or left the
-study. 
+study.
 
 Although commonly used for medical research, the application is
 straightforward in other fields with some research looking at the
@@ -91,17 +93,16 @@ duration of events like marriages, recidivism, and bank failures. For
 example, researchers examining the factors leading to bank failure used
 the 2008 recession as a case study to determine and predict what
 factors, e.g. asset ratios and loan amounts, are indicators of failure.
-[@cox2017proportional] 
+[@cox2017proportional]
 
-The model has some limitations especially when
-not including time dependent structure in the model. In that case, the
-model assumes the hazard ratio is the same across the time sample, which
-is often not the case in medical research. This shortcoming is
-identified in [@stensrud2020test], which highlights how treatment
-effects may not be constant over a whole sample and in some cases may
-have no effect for months and then a drastic effect after some time.
-This has led to the use of models which can include time dependent
-variables.
+The model has some limitations especially when not including time
+dependent structure in the model. In that case, the model assumes the
+hazard ratio is the same across the time sample, which is often not the
+case in medical research. This shortcoming is identified in
+[@stensrud2020test], which highlights how treatment effects may not be
+constant over a whole sample and in some cases may have no effect for
+months and then a drastic effect after some time. This has led to the
+use of models which can include time dependent variables.
 
 ## 2. Methods
 
@@ -193,18 +194,24 @@ downside of Cox PH is that the survival function cannot be calculated
 since the baseline hazard is unknown. This hinders clinicians in
 determining the net benefit of treatments [@mclernon2023assessing].
 
-## 3. Analysis and Results 
+## 3. Analysis and Results
 
 ### 3.1. Purpose
 
-The focus of this research is to find out if the treatment has a positive effect on survival time, and we will test if any of the other variables also have any significant effect on survival time. The Proportional Hazards (PH) assumption must also remain valid to prevent biased effect estimates.  
+The focus of this research is to find out if the treatment has a
+positive effect on survival time, and we will test if any of the other
+variables also have any significant effect on survival time. The
+Proportional Hazards (PH) assumption must also remain valid to prevent
+biased effect estimates.
 
 ### 3.2. Data Description
 
 The data used is from a Veteran's Administrative lung cancer trial of
 137 male patients with advanced inoperable lung cancer.
 @kalbfleisch2011statistical The data set is available through the MASS
-package in R. This data is ideal for modeling with a Cox Proportional Hazard model with the survival time and treatment variables being of the most interest. 
+package in R. This data is ideal for modeling with a Cox Proportional
+Hazard model with the survival time and treatment variables being of the
+most interest.
 
 ```{r data description, echo=FALSE, warning=FALSE, results = "asis"}
 library(kableExtra)
@@ -300,8 +307,8 @@ apparent from the graphs.
 
 ### 3.4. Statistical Modeling
 
-
 #### Treatment Only Cox PH Model
+
 ```{r, echo = FALSE}
 # Import Survival package with Cox proportional-hazard model
 library(survival)
@@ -321,7 +328,9 @@ levels(VA$cell) = c("1-squamous", "2-small cell", "3-adeno", "4-large")
 levels(VA$prior) = c("yes", "no")
 ```
 
-Cox PH model allows us to determine the effect of variables by using the hazard ratio (HR). First, we will use treatment variable to determine if it is significant. 
+Cox PH model allows us to determine the effect of variables by using the
+hazard ratio (HR). First, we will use treatment variable to determine if
+it is significant.
 
 ```{r}
 # Fit model with treatment only
@@ -335,8 +344,15 @@ add_glance_table(
 
 ```
 
-The Cox PH model found that the treatment type only is insignificant. A key assumption of the Cox PH model is that the hazard is proportional (i.e. the HR is constant across time). To validate the proportional hazard assumption, we will use the scaled Schoenfield's residuals to compare the difference between the observed treatment value and the weighted-average of other individuals. [@grambsch1994proportional] If the HR is constant, the smoothed residual curve will stay around 0 as time increases, which validates the proportional hazard assumption. [@therneau2017using]
-
+The Cox PH model found that the treatment type only is insignificant. A
+key assumption of the Cox PH model is that the hazard is proportional
+(i.e. the HR is constant across time). To validate the proportional
+hazard assumption, we will use the scaled Schoenfield's residuals to
+compare the difference between the observed treatment value and the
+weighted-average of other individuals. [@grambsch1994proportional] If
+the HR is constant, the smoothed residual curve will stay around 0 as
+time increases, which validates the proportional hazard assumption.
+[@therneau2017using]
 
 ```{r}
 # Plotting graphs of Schoenfeld residuals vs time
@@ -345,8 +361,12 @@ plot(phtest.unimod, main = "Figure 2: Schoenfeld Residuals Over Time")
 abline(h=0)
 ```
 
-From the plot, we can see that the confidence interval for the residuals stay around 0. We will also run a statistical test against the Schoenfeld residuals to determine if the residuals are correlated with time. A small p-value (less than 0.05) means there is a significant correlation between the residuals and time, which means the proportional hazard assumption is invalid.
-
+From the plot, we can see that the confidence interval for the residuals
+stay around 0. We will also run a statistical test against the
+Schoenfeld residuals to determine if the residuals are correlated with
+time. A small p-value (less than 0.05) means there is a significant
+correlation between the residuals and time, which means the proportional
+hazard assumption is invalid.
 
 ```{r}
 # Using Scheonfeld to test for proportional-hazards assumption
@@ -354,9 +374,17 @@ kable(phtest.unimod$table, caption = "Table 6: Scheonfeld Test for Proportional-
   kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
   row_spec(0, bold = T, background = "#666666", color = "white")
 ```
-Based on the p-value for treatment, we fail to reject the null hypothesis that the proportional hazard assumption is valid. Since the p-value is very close to the cutoff, we will use a graphical method based the survival probability curve.
 
-We could use Cox PH to estimate survival probability curve based on fitted model. However, we will use the Kaplan-Meier method, which was does not depend on a fitted model, to estimate the probability of survival with respect to time. Using the Kaplan-Meier estimates, we can plot estimated survivor curves for both treatments. 
+Based on the p-value for treatment, we fail to reject the null
+hypothesis that the proportional hazard assumption is valid. Since the
+p-value is very close to the cutoff, we will use a graphical method
+based the survival probability curve.
+
+We could use Cox PH to estimate survival probability curve based on
+fitted model. However, we will use the Kaplan-Meier method, which was
+does not depend on a fitted model, to estimate the probability of
+survival with respect to time. Using the Kaplan-Meier estimates, we can
+plot estimated survivor curves for both treatments.
 
 ```{r}
 # Plotting graph of Kaplan-Meier curve
@@ -385,11 +413,22 @@ tbl_survfit(kmfit,
   modify_caption("**Table 7: Survival Probability for Particular Days for Treatment Only Model**") 
 ```
 
-From the two plot, we observe that the effectiveness of test treatment is less effective in the beginning. Then, the test treatment becomes more effective than the standard treatment towards the end. With Kaplan-Meier survival curves, we are able to visualize survival probabilities for both treatment groups. Since the hazard function is the rate of change in the survival curve, we can use the Kaplan-Meier to also validate the proportional hazard assumption. The survival curves would be parallel if the hazard was proportional. However, the curves cross multiple time which informs us that the proportional hazard assumption is actually invalid.
-
+From the two plot, we observe that the effectiveness of test treatment
+is less effective in the beginning. Then, the test treatment becomes
+more effective than the standard treatment towards the end. With
+Kaplan-Meier survival curves, we are able to visualize survival
+probabilities for both treatment groups. Since the hazard function is
+the rate of change in the survival curve, we can use the Kaplan-Meier to
+also validate the proportional hazard assumption. The survival curves
+would be parallel if the hazard was proportional. However, the curves
+cross multiple time which informs us that the proportional hazard
+assumption is actually invalid.
 
 #### Multiple Variable Cox PH Model
-Now, we will insert all the variables in the Cox PH model and use Schoenfeld residuals to determine which variables specifically violate the proportional hazard assumption.
+
+Now, we will insert all the variables in the Cox PH model and use
+Schoenfeld residuals to determine which variables specifically violate
+the proportional hazard assumption.
 
 ```{r}
 # Fit model with all variables.
@@ -421,10 +460,17 @@ mtext("Figure 5: Schoenfeld Residuals Over Time", side = 3, line = -3, outer = T
 
 ```
 
-The significant variables of Karnofsky score and cell type were found to violate the proportional hazard assumption. In order to use them for analysis, we could only use Cox PH for a portion of the data, implement a Stratified Cox model, or use an Extended Cox PH model for Time-Varying Coefficients.
+The significant variables of Karnofsky score and cell type were found to
+violate the proportional hazard assumption. In order to use them for
+analysis, we could only use Cox PH for a portion of the data, implement
+a Stratified Cox model, or use an Extended Cox PH model for Time-Varying
+Coefficients.
 
 #### Cox PH Model on events after 180 days
-We try to filter the data to events greater than 180 days and run the Cox PH model for that time interval only. The idea is that the hazard ratio will be constant over that time period.
+
+We try to filter the data to events greater than 180 days and run the
+Cox PH model for that time interval only. The idea is that the hazard
+ratio will be constant over that time period.
 
 ```{r}
 #Filter to only include events after 180 days
@@ -435,8 +481,9 @@ tbl_summary(VA.180) %>%
 summary_stats3 <- summary(VA.180[, c("stime", "status", "age", "Karn", "diag.time")])
 ```
 
-After limiting the dataset to only greater 180 days, we are only left with 27 events. This sample size is too small to make any definitive conclusions as you will see in the test statistics below.
-
+After limiting the dataset to only greater 180 days, we are only left
+with 27 events. This sample size is too small to make any definitive
+conclusions as you will see in the test statistics below.
 
 ```{r}
 # Fit model with all variables.
@@ -451,7 +498,7 @@ add_glance_table(
 ```
 
 We will use ANOVA with the Likelihood Ratio test to determine if we can
-simplify the model. 
+simplify the model.
 
 ```{r}
 cox.mod180.r <- coxph(Surv(stime, status) ~ treat + diag.time, data=VA.180)
@@ -461,10 +508,12 @@ kable(anova(cox.mod180.r, cox.mod180, test="LRT"), caption = "Table 12: ANOVA Te
   row_spec(0, bold = T, background = "#666666", color = "white")
 cox.mod1 = cox.mod180
 ```
-Although we may be tempted to remove the insignificant variables, the model performs worse with the reduced model having a significantly lower Log Likelihood. Below is the final model using this method.
+
+Although we may be tempted to remove the insignificant variables, the
+model performs worse with the reduced model having a significantly lower
+Log Likelihood. Below is the final model using this method.
 
 $$h(t) = {h_0(t)} \times \exp(-0.317 \text{(treat-test)}+0.012 \text{(age)}-0.0087 \text{(Karn)}+0.112\text{(diag.time)}-0.502 \text{(cell-small)}+0.965 \text{(cell-large)}-0.642 \text{(prior-no)})$$
-
 
 ```{r}
 # Using cox.zph() to test for proportional-hazards assumption
@@ -475,11 +524,17 @@ kable(phtest.mod$table, caption = "Table 13: Proportional-Hazards Assumption Tes
   row_spec(0, bold = T, background = "#666666", color = "white")
 ```
 
-Since this model is not likely to produce significant results, we will look at using the Stratified Cox model on the full dataset.
+Since this model is not likely to produce significant results, we will
+look at using the Stratified Cox model on the full dataset.
 
 #### Stratified Cox model
 
-The stratified Cox model assumes a different baseline hazard function for each categorical variable that does not meet the proportional hazard assumption. We can stratify on the non-proportional cell type, which will estimate the effects of the other variables for each cell type. The downside is that we cannot compare the effect of each cell type on survival using hazard ratios (HR).
+The stratified Cox model assumes a different baseline hazard function
+for each categorical variable that does not meet the proportional hazard
+assumption. We can stratify on the non-proportional cell type, which
+will estimate the effects of the other variables for each cell type. The
+downside is that we cannot compare the effect of each cell type on
+survival using hazard ratios (HR).
 
 ```{r}
 cox.modstrat <- coxph(Y ~ treat + age + Karn + diag.time + strata(cell) + prior, data=VA)
@@ -489,7 +544,11 @@ add_glance_table(
 ) %>%
   modify_caption("**Table 14: Stratified Cox Model**") 
 ```
-This form of the stratified Cox model assumes that the coefficients are the same across each of the four (4) cell types. We can also run a stratified Cox model where the coefficients can vary between strata by using interaction terms. [@kleinbaum2012cox]
+
+This form of the stratified Cox model assumes that the coefficients are
+the same across each of the four (4) cell types. We can also run a
+stratified Cox model where the coefficients can vary between strata by
+using interaction terms. [@kleinbaum2012cox]
 
 ```{r}
 cox.modstratI <- coxph(Y ~ treat + age + Karn + diag.time + prior + treat:cell + age:cell + Karn:cell + diag.time:cell +strata(cell) + prior:cell, data=VA)
@@ -498,11 +557,13 @@ kable(anova(cox.modstrat, cox.modstratI, test="LRT"), caption = "Table 15: ANOVA
   kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
   row_spec(0, bold = T, background = "#666666", color = "white")
 ```
-Based on the Likelihood Ratio test, we can assume that the no-interaction stratified Cox model is sufficient. Below is the final model:
 
+Based on the Likelihood Ratio test, we can assume that the
+no-interaction stratified Cox model is sufficient. Below is the final
+model:
 
 $$h_g(t) = {h_{0g}(t)} \times \exp(0.286\text{(treat-test)}-0.012\text{(age)}-0.0383\text{(Karn)}-0.0034\text{(diag.time)}+0.169\text{(prior-no)})$$
-where $$g = 1, 2, 3, 4 \text{ (number of cell types)}$$ 
+where $$g = 1, 2, 3, 4 \text{ (number of cell types)}$$
 
 ```{r}
 cox.mod2 = cox.modstrat
@@ -511,7 +572,14 @@ kable(phtest.mod2$table, caption = "Table 16: Proportional-Hazards Assumption Te
   kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
   row_spec(0, bold = T, background = "#666666", color = "white")
 ```
-The Karnofsky's score still violates the proportional hazards assumption. If we wanted to stratify it, we would first need to group the continuous scores into categorical bins. If we grouped Karnofsky's scores into high, medium, and low bins, that would result in 12 different curves. We will not apply stratification to Karnofsky's score in this paper. Below are survival curves for cell type based the stratified Cox model.
+
+The Karnofsky's score still violates the proportional hazards
+assumption. If we wanted to stratify it, we would first need to group
+the continuous scores into categorical bins. If we grouped Karnofsky's
+scores into high, medium, and low bins, that would result in 12
+different curves. We will not apply stratification to Karnofsky's score
+in this paper. Below are survival curves for cell type based the
+stratified Cox model.
 
 ```{r}
 plot(survfit(cox.modstrat), main = "Figure 7: Survival Probabilities by Cell Type Across Survival Time",
@@ -521,9 +589,15 @@ legend("topright", c("1-squamous","2-small cell", "3-adeno", "4-large"), lty=c("
 col=c("black","grey","blue","orange"))
 ```
 
-
 #### Extended Cox PH model for Time-Varying Coefficients
-Another approach to variables with nonproportional hazard ratios is specify a function for the coefficients that change with time. This function could be linear, logarithmic, or a step function. For this analysis, we will run the Cox PH model over specific time intervals using a step function for the Karnofsky's score. Before we can run the Cox PH across the intervals of 0-90, 90-180, and 180+ days, we must create a new column from the original dataset.
+
+Another approach to variables with nonproportional hazard ratios is
+specify a function for the coefficients that change with time. This
+function could be linear, logarithmic, or a step function. For this
+analysis, we will run the Cox PH model over specific time intervals
+using a step function for the Karnofsky's score. Before we can run the
+Cox PH across the intervals of 0-90, 90-180, and 180+ days, we must
+create a new column from the original dataset.
 
 ```{r}
 VA.cp = survSplit(Surv(stime, status)  ~ ., data=VA, cut=c(90,180), episode="tgroup")
@@ -533,7 +607,9 @@ kable(head(VA.cp, 5), caption = "Table 17: Sample Rows With New Column") %>%
   kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
   row_spec(0, bold = T, background = "#666666", color = "white")
 ```
-Note the addition of the "tstart" and "tgroup" columns in the new dataset
+
+Note the addition of the "tstart" and "tgroup" columns in the new
+dataset
 
 ```{r}
 cox.modextend = coxph(Surv(tstart, stime, status) ~ treat + age + diag.time + cell + prior + Karn:strata(tgroup),
@@ -552,7 +628,10 @@ kable(phtest.modex$table, caption = "Table 19: Proportional-Hazards Assumption T
   kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
   row_spec(0, bold = T, background = "#666666", color = "white")
 ```
-To address the nonproportional hazard of the cell type, we will also stratify on the cell type to create an stratified-extended Cox model. [@ratnaningsih2019stratified]
+
+To address the nonproportional hazard of the cell type, we will also
+stratify on the cell type to create an stratified-extended Cox model.
+[@ratnaningsih2019stratified]
 
 ```{r}
 cox.modse = coxph(Surv(tstart, stime, status) ~ treat + age + diag.time + strata(cell) + prior + Karn:strata(tgroup),
@@ -564,7 +643,8 @@ kable(phtest.modse$table, caption = "Table 20: Proportional-Hazards Assumption T
   row_spec(0, bold = T, background = "#666666", color = "white")
 ```
 
-This model satisfies the proportional hazard assumption. We will now check if we can remove some of the insignificant variables.
+This model satisfies the proportional hazard assumption. We will now
+check if we can remove some of the insignificant variables.
 
 ```{r}
 cox.modse_r = coxph(Surv(tstart, stime, status) ~ treat + strata(cell) + Karn:strata(tgroup),
@@ -578,8 +658,8 @@ cox.mod3 = cox.modse_r
 # Final models are stored as cox.mod1, cox.mod2, and cox.mod3 respectively
 ```
 
-Since the difference in Likelihood ratio test is
-insignificant, we can simplify the model to treat + Karn + cell.
+Since the difference in Likelihood ratio test is insignificant, we can
+simplify the model to treat + Karn + cell.
 
 ```{r}
 cox.modse_r %>% tbl_regression(exponentiate = T) %>% 
@@ -589,28 +669,65 @@ add_glance_table(
   modify_caption("**Table 22: Stratified-Extended Cox Model**") 
 ```
 
-
 $$h_g(t) = {h_{0g}(t)} \times \exp(0.0988\text{(treat-test)}-0.0464\text{(Karn*tgroup1)}+0.0097\text{(Karn*tgroup2)}-0.0179\text{(Karn*tgroup3)}$$
 where $$g = 1, 2, 3, 4 \text{ (number of cell types)}$$
- $$tgroup1 = 1 \text{ if  } 0 \le t < 90 $$
- $$tgroup2 = 1 \text{ if  } 90 \le t < 180 $$
- $$tgroup3 = 1 \text{ if  } t \ge 180$$
+$$tgroup1 = 1 \text{ if  } 0 \le t < 90 $$
+$$tgroup2 = 1 \text{ if  } 90 \le t < 180 $$
+$$tgroup3 = 1 \text{ if  } t \ge 180$$
 
 ### 3.5. Interpretations
 
-Based on Cox PH for after 180 days, a patient receiving the test treatment has 0.73 times the hazard of a patient receiving the standard treatment. In other words, a male VA patient receiving the standard treatment is 37% more likely to die than one receiving the test treatment when adjusting for the other predictors. However, these results are insignificant especially when considering the small sample size.
+Based on Cox PH for after 180 days, a patient receiving the test
+treatment has 0.73 times the hazard of a patient receiving the standard
+treatment. In other words, a male VA patient receiving the standard
+treatment is 37% more likely to die than one receiving the test
+treatment when adjusting for the other predictors. However, these
+results are insignificant especially when considering the small sample
+size.
 
-Based on the Cox model stratified on cell type, a patient receiving the test treatment is 33% more likely to die than a patient receiving the standard treatment, but these treatment results are insignificant.
+Based on the Cox model stratified on cell type, a patient receiving the
+test treatment is 33% more likely to die than a patient receiving the
+standard treatment, but these treatment results are insignificant.
 
-Using the Stratified-Extended Cox model, a patient on the test treatment is 10% more likely to die than one receiving the standard when adjusting for cell type and Karnofsky's score. However, the treatment results are insignificant. The model also showed that the probability of dying for a male VA patient with a 1-point lower Karnofsky's score is 5% more likely to die than a patient with a 1-point higher score for the first 90 days. The Karnofsky's scores across the other time intervals are insignificant.  
+Using the Stratified-Extended Cox model, a patient on the test treatment
+is 10% more likely to die than one receiving the standard when adjusting
+for cell type and Karnofsky's score. However, the treatment results are
+insignificant. The model also showed that the probability of dying for a
+male VA patient with a 1-point lower Karnofsky's score is 5% more likely
+to die than a patient with a 1-point higher score for the first 90 days.
+The Karnofsky's scores across the other time intervals are
+insignificant.
 
-Overall, it seems that Karnofsky's scores and cell type types are the strongest predictors of survival. The initial Karnofsky's score have significant predictive effects at the beginning of study but the effect diminishes as time increases. The effect of cell type also varies as time increases. Treatment seems insignificant based on the multiple attempted models in this analysis. 
+Overall, it seems that Karnofsky's scores and cell type types are the
+strongest predictors of survival. The initial Karnofsky's score have
+significant predictive effects at the beginning of study but the effect
+diminishes as time increases. The effect of cell type also varies as
+time increases. Treatment seems insignificant based on the multiple
+attempted models in this analysis.
 
+## 4. Conclusion
 
-## 4. Conclusion 
+In this paper, we were able to review which variables were significant
+in terms of impact on survival time while also ensuring that the
+Proportional Hazard (PH) Assumption was upheld. In our example, we
+tested various iterations of the Cox Proportional Hazard model to
+determine which variables, specifically treatment, were significant in
+the survival time of any given patient. The testing ranged from the
+standard Cox PH model itself, to utilizing Schoenfield's residuals and
+the stratified methods, as well as removing certain variables. We
+determined overall that treatment was insignificant and instead found
+that through the Stratified-Extended Cox model, the Karnofsky's scores
+and cell types were stronger predictors of the survival time of any
+given patient. While it is preferable to conduct a study with more
+available data, the Cox Proportional Hazards model allows some room for
+censored and missing information while not compromising much in terms of
+accuracy.
 
-In this paper, we were able to review which variables were significant in terms of impact on survival time while also ensuring that the Proportional Hazard (PH) Assumption was upheld. In our example, we tested various iterations of the Cox Proportional Hazard model to determine which variables, specifically treatment, were significant in the survival time of any given patient. The testing ranged from the standard Cox PH model itself, to utilizing Schoenfield’s residuals and the stratified methods, as well as removing certain variables. We determined overall that treatment was insignificant and instead found that through the Stratified-Extended Cox model, the Karnofsky’s scores and cell types were stronger predictors of the survival time of any given patient. While it is preferable to conduct a study with more available data, the Cox Proportional Hazards model allows some room for censored and missing information while not compromising much in terms of accuracy.
-
-The Cox Proportional Hazards model is a versatile tool to analyze covariates in the healthcare field. This, coupled with its ability to be adjusted as necessary to a censored or limited dataset, showcases its robust nature. With this model, researchers are able to accurately determine which risk factors may play a part in the survival time of a patient. 
+The Cox Proportional Hazards model is a versatile tool to analyze
+covariates in the healthcare field. This, coupled with its ability to be
+adjusted as necessary to a censored or limited dataset, showcases its
+robust nature. With this model, researchers are able to accurately
+determine which risk factors may play a part in the survival time of a
+patient.
 
 ## 5. References

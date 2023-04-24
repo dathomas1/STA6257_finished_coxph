@@ -289,8 +289,8 @@ The model also showed that the probability of dying for a male VA patient with a
 
 ## Conclusion
 
-- Cox Proportional Hazards Model is popular in survival analysis 
+-   Cox Proportional Hazards Model is popular in survival analysis
 
-- Considered robust, as it can handle censored data
+-   Considered robust, as it can handle censored data
 
-- Can be relied upon as an accurate indicator of risk factors
+-   Can be relied upon as an accurate indicator of risk factors
