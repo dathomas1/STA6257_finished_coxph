@@ -29,7 +29,9 @@ Goals
 -   Determine if any other variables have significant effect on survival time
 -   Properly test assumptions and fit the Cox Proportional Hazards Model
 
-## Case Study: VA Lung Cander Trial {.tabset}
+## Case Study: VA Lung Cander Trial 
+
+::: {.panel-tabset}
 
 ### Data Definition
 
@@ -74,11 +76,16 @@ kable(head(VA, 6), caption = "Table 2: Sample Rows from VA Lung Trial Data") %>%
 -   Includes Censored Data
 -   Per the National Cancer Institute, the Karnofsky score is standard way to measure how well a patient can perform ordinary tasks. A higher score indicates a higher ability to do these tasks
 
+:::
+
 ## Summary Statistics {.tabset}
+
+::: {.panel-tabset}
 
 ### Numerical Variables
 
 ```{r, echo=FALSE}
+summary_stats <- summary(VA[, c("stime", "age", "Karn", "diag.time")])
 #Convert summary statistics to a table
 kable(summary_stats, caption = "Table 3: Summary Statistics for VA Lung Trial Data") %>%
   kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
@@ -89,13 +96,16 @@ kable(summary_stats, caption = "Table 3: Summary Statistics for VA Lung Trial Da
 
 ```{r}
 #second prop summary
+VA$status <- as.factor(VA$status)
 summary_stats2 <- summary(VA[, c("status", "treat", "cell", "prior")])
-summary_stats2$status <- as.factor(summary_stats2$status)
+
 #Convert summary statistics to a table
 kable(summary_stats2, caption = "Table 4: Summary Count Statistics for VA Lung Trial Data") %>%
   kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
   row_spec(0, bold = T, background = "#666666", color = "white")
 ```
+
+:::
 
 ## Data Visualization
 
