@@ -29,3 +29,191 @@ When you click the **Render** button a presentation will be generated that inclu
 Words and text/code go inside. You can save plots locally, .jpg/etc, or access the already made plots. To insert them, go into visual mode (see top left) and then click insert and select the image from there, you can resize in visual mode. See lecture if this doesn't make sense.
 
 ![](index_files/figure-html/data%20viz-1.png){width="382"}
+
+## Statistic Model
+
+The composition of the model is as follows:
+
+$$ H(t) = H_0(t) \times exp(b_1x_1 + b_2x_2 + ... + b_kx_k) $$
+
+Where $H_0 (t)$ is considered to be the baseline hazard function of the model. \$ b_k \$ are model parameters.
+
+## Model in R
+
+The Cox PH model in R is ran from the survival package. Below is an example of running the model with a single variable (treat):
+
+```{r}
+# Import packages
+library(survival)
+library(MASS)
+
+# Load Data
+data(VA)
+
+# Fit Cox PH Model
+Y = Surv(VA$stime, VA$status)
+coxph(Y ~ treat, data=VA)
+```
+
+## Interpreting R Output
+
+We use the hazard ratio (HR) to determine the effect of test treatment in comparison with the standard treatment:
+
+$$ HR = {h_{test}(t) \over h_{standard}(t)} = {h_0(t)\times exp(0.0177 \times X_{test}) \over h_0(t) \times exp(0.0177 \times X_{standard})} $$ $$ = {exp(0.0177 \times 1) \over exp(0.0177 \times 0)} = 1.018$$ This means that the hazard for the test group is 1.02 times the hazard for the standard treatment group. In order words, the test group has a 1.8% more likely to experience the event than the standard group.
+
+## Proportional Hazard Assumption
+
+The proportional hazard assumption is means that hazard ratio (HR) is constant over time. This means the predictor variables and regression coefficients are time-independent (no change over course of study).
+
+Methods of checking PH assumption
+
+-   Graphical view of regression coefficients residuals
+
+-   Statistical test of residuals
+
+-   Graphical view of log-log survival curve
+
+## Graphical view of regression coefficients residuals
+
+PH assumption is valid when coefficient is constant over time.
+
+![](index_files/figure-html/unnamed-chunk-5-1.png){fig-alt="Plot of scaled Schoenfeld residuals and estimated beta versus time"}
+
+Schoenfeld residuals for a variable are the observed value for i-th individual at the "event" time - the weight-average of the variable for other subjects still at risk.
+
+## Statistical test of residuals
+
+Test if Schoenfeld residuals are correlated with time. The null hypothesis $H_0$ is that the residuals are not correlated with time. Rejecting $H_0$ means the PH assumption is violated. In R, use the cox.zph function.
+
+```{r, echo=TRUE}
+cox.zph(coxph(Y ~ treat, data=VA), transform = rank)
+```
+
+## Graphical view of log-log survival curve
+
+If log-log survival curves are parallel then the PH assumption is appropriate. Since curves cross, PH assumption is violated.
+
+![](index_files/figure-html/unnamed-chunk-8-1.png)
+
+## Options when PH assumption not met
+
+-   Start Cox PH model after certain time period (ie fit model for 180-day survivors)
+
+-   Stratify on the non-proportional variable and obtain separate models for each group
+
+-   Use extended Cox model which allows for time-varying coefficients and/or time-dependent variables
+
+## Multiple Variable Cox Model in R
+
+```{r, echo=TRUE}
+coxph(Y ~ treat + age + Karn + diag.time + cell + prior, data=VA)
+```
+
+## Checking PH Assumption
+
+```{r, echo=TRUE}
+cox.zph(coxph(Y ~ treat + age + Karn + diag.time + cell + prior, data=VA), transform=rank)
+```
+
+![](index_files/figure-html/unnamed-chunk-12-1.png){fig-alt="Schoenfeld plot of nonproportional variables"}
+
+## Fitting Cox model for 180-day survivors
+
+Only 27 individual left in study after 180 days. Sample too small to make conclusions.
+
+## Stratified Cox model
+
+Assumes a different baseline hazard function for each categorical variable.
+
+$$h_g(t) = {h_{0g}(t)} \times \exp(0.286\text{(treat-test)}-0.012\text{(age)}-0.0383\text{(Karn)}-0.0034\text{(diag.time)}+0.169\text{(prior-no)})$$ where $$g = 1, 2, 3, 4 \text{ (number of cell types)}$$
+## Stratified Cox model in R
+We the following code for stratifying on cell type.
+
+```{r, echo=TRUE}
+coxph(Y ~ treat + age + Karn + diag.time + strata(cell) + prior, data=VA)
+```
+
+## Stratified Cox model limitation
+
+-   Continuous variables like Karnofsky score must be grouped to categories.
+
+-   Cannot compare the effect of each cell type on survival using hazard ratios (HR).
+
+## Stratified Cox model with Interaction
+
+The previous stratified Cox model assumed the coefficients did not vary across cell types. To check this assumption, we fit a Cox model with interaction terms for strata.
+
+```{r, echo=TRUE}
+coxph(Y ~ treat + age + Karn + diag.time + prior + treat:cell + age:cell + Karn:cell + diag.time:cell +strata(cell) + prior:cell, data=VA)
+```
+
+## Likelihood Ratio Test
+
+We can use the Log-Likelihood Ratio Test to determine if there is a significant difference in nested models.
+
+```{r}
+cox.modstrat <- coxph(Y ~ treat + age + Karn + diag.time + strata(cell) + prior, data=VA)
+cox.modstratI <- coxph(Y ~ treat + age + Karn + diag.time + prior + treat:cell + age:cell + Karn:cell + diag.time:cell +strata(cell) + prior:cell, data=VA)
+```
+
+```{r, echo=TRUE}
+anova(cox.modstrat, cox.modstratI, test="LRT")
+```
+
+Based on the Log-Likelihood Ratio Test, the no-interaction stratified Cox is sufficient.
+
+## Extended Cox model for Time-Varying Coefficients
+
+$$h_i(t)= h_0(t) \times exp(\beta_i(t)Z_i) $$ 
+
+Used to specify a function for the coefficients that change with time (linear, logarithmic, a step function, etc).
+
+We used a step function for time intervals of 0-90, 90-180, and 180+ days.
+```{r, echo=TRUE}
+VA.cp = survSplit(Surv(stime, status)  ~ ., data=VA, cut=c(90,180), episode="tgroup")
+```
+
+## Stratified-Extended Cox model
+We can both stratify on cell type while using the extended model for the Karnofsky score. 
+```{r, echo=TRUE}
+coxph(Surv(tstart, stime, status) ~ treat + age + diag.time + strata(cell) + prior + Karn:strata(tgroup),
+                 data=VA.cp)
+```
+
+## Reducing Model with Likelihood Ratio Test
+```{r}
+cox.modse = coxph(Surv(tstart, stime, status) ~ treat + age + diag.time + strata(cell) + prior + Karn:strata(tgroup),
+                 data=VA.cp)
+cox.modse_r = coxph(Surv(tstart, stime, status) ~ treat + strata(cell) + Karn:strata(tgroup),
+                 data=VA.cp)
+```
+
+```{r, echo=TRUE}
+# Using anova with Likelihood ratio test
+anova(cox.modse_r, cox.modse, test="LRT")
+```
+
+## Final Stratified-Extended Cox model
+Since the difference in Likelihood ratio test is insignificant, we can simplify the model to treat + Karn + cell.
+
+$$h_g(t) = {h_{0g}(t)} \times \exp(0.0988\text{(treat-test)}-0.0464\text{(Karn*tgroup1)}+0.0097\text{(Karn*tgroup2)}-0.0179\text{(Karn*tgroup3)}$$
+where $$g = 1, 2, 3, 4 \text{ (number of cell types)}$$
+ $$tgroup1 = 1 \text{ if  } 0 \le t < 90 $$
+ $$tgroup2 = 1 \text{ if  } 90 \le t < 180 $$
+ $$tgroup3 = 1 \text{ if  } t \ge 180$$
+
+## Stratified-Extended Cox model Summary
+```{r}
+library(gtsummary)
+cox.modse_r %>% tbl_regression(exponentiate = T) %>% 
+add_glance_table(
+  include = c(logLik, concordance)
+) %>%
+  modify_caption("**Stratified-Extended Cox Model**")
+```
+ 
+## Model Interpretation for Treatment
+Using the Stratified-Extended Cox model, a patient on the test treatment is 10% more likely to die than one receiving the standard when adjusting for cell type and Karnofsky's score. However, the treatment results are insignificant. 
+
+## Model Interpretation for Karnofsky Score
+The model also showed that the probability of dying for a male VA patient with a 1-point lower Karnofsky's score is 5% more likely to die than a patient with a 1-point higher score for the first 90 days. The Karnofsky's scores across the other time intervals are insignificant. 

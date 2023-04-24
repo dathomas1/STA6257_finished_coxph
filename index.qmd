@@ -111,7 +111,7 @@ coefficients of a hazard function without specifying the baseline hazard
 failure at time (t). The hazard function for other survival
 distributions such as Weibull take the form below:
 
-$$h_i(t)= exp \times (α+ Z_iβ) $$
+$$h_i(t)= exp (α+ Z_iβ) $$
 
 where
 
@@ -141,7 +141,7 @@ $h_0(t) \times exp(\beta)$ [@cox1972regression]. This example can be
 extended to include more variables and used to calculate the hazard
 ratio for the two cases:
 
-$$ {h_i(t) \over h_{i'}(t)} = {h_0(t)\times exp(\eta_i) \over h_0(t) \times exp(\eta_{i'})} =  {exp(\eta_i) \over exp(\eta_{i'})} $$
+$$ HR = {h_i(t) \over h_{i'}(t)} = {h_0(t)\times exp(\eta_i) \over h_0(t) \times exp(\eta_{i'})} =  {exp(\eta_i) \over exp(\eta_{i'})} $$
 
 Where
 
@@ -165,7 +165,7 @@ covariates are variables that vary with respect to time. Time dependent
 covariates can be modeled in the Cox by replacing $Z_i$ with $Z_i(t)$
 which indicates that $Z_i$ varies with respect to time.
 
-$$h_i(t)= h_0(t) exp(Z_i(t)β) $$
+$$h_i(t)= h_0(t) \times exp(Z_i(t)β) $$
 
 where
 
@@ -335,13 +335,13 @@ add_glance_table(
 
 ```
 
-The Cox PH model found that the treatment type only is insignificant. A key assumption of the Cox PH model is that the hazard is proportional (i.e. the HR is constant across time). To validate the proportional hazard assumption, we will use the scaled Schoenfield's residuals to compare the difference between the estimated coefficient for treatment and a proportional hazard based model. If the HR is constant, the smoothed residual curve will stay around 0 as time increases, which validates the proportional hazard assumption. [@therneau2017using]
+The Cox PH model found that the treatment type only is insignificant. A key assumption of the Cox PH model is that the hazard is proportional (i.e. the HR is constant across time). To validate the proportional hazard assumption, we will use the scaled Schoenfield's residuals to compare the difference between the observed treatment value and the weighted-average of other individuals. [@grambsch1994proportional] If the HR is constant, the smoothed residual curve will stay around 0 as time increases, which validates the proportional hazard assumption. [@therneau2017using]
 
 
 ```{r}
-# Plotting graphs of Schoenfield residuals vs time
+# Plotting graphs of Schoenfeld residuals vs time
 phtest.unimod = cox.zph(cox.unimod, transform = rank)
-plot(phtest.unimod, main = "Figure 2: Schoenfield Residuals Over Time")
+plot(phtest.unimod, main = "Figure 2: Schoenfeld Residuals Over Time")
 abline(h=0)
 ```
 
@@ -356,7 +356,7 @@ kable(phtest.unimod$table, caption = "Table 6: Scheonfeld Test for Proportional-
 ```
 Based on the p-value for treatment, we fail to reject the null hypothesis that the proportional hazard assumption is valid. Since the p-value is very close to the cutoff, we will use a graphical method based the survival probability curve.
 
-While the Cox PH model can inform us of a variable's effect, we are unable to determine the probability of survival at a given time. To address this, we will use the Kaplan-Meier method to estimate the probability of survival with respect to time. Using the Kaplan-Meier estimates, we can plot estimated survivor curves for both treatments. 
+We could use Cox PH to estimate survival probability curve based on fitted model. However, we will use the Kaplan-Meier method, which was does not depend on a fitted model, to estimate the probability of survival with respect to time. Using the Kaplan-Meier estimates, we can plot estimated survivor curves for both treatments. 
 
 ```{r}
 # Plotting graph of Kaplan-Meier curve
@@ -400,7 +400,7 @@ cox.mod %>% tbl_regression(exponentiate = T) %>%
 add_glance_table(
   include = c(logLik, concordance)
 ) %>%
-  modify_caption("**Table 8: Treatment Only Model**") 
+  modify_caption("**Table 8: Multiple Variable Cox PH Model**") 
 ```
 
 ```{r}
@@ -413,11 +413,11 @@ kable(phtest.mod$table, caption = "Table 9: Proportional-Hazards Assumption Test
 ```
 
 ```{r}
-# Plotting graphs of Schoenfield residuals vs time
+# Plotting graphs of Schoenfeld residuals vs time
 par(mfrow=c(1,2))
 plot(phtest.mod[3])
 plot(phtest.mod[5])
-mtext("Figure 5: Schoenfield Residuals Over Time", side = 3, line = -3, outer = TRUE)
+mtext("Figure 5: Schoenfeld Residuals Over Time", side = 3, line = -3, outer = TRUE)
 
 ```
 
@@ -479,7 +479,7 @@ Since this model is not likely to produce significant results, we will look at u
 
 #### Stratified Cox model
 
-The stratified Cox model assumes a different baseline hazard function for each categorical variable that does not meet the proportional hazard assumption. We can stratify on the non-proportional cell type, which will estimate the effects of the other variables for each cell type. The downside is that we cannot compare the effect of each cell type on survival.
+The stratified Cox model assumes a different baseline hazard function for each categorical variable that does not meet the proportional hazard assumption. We can stratify on the non-proportional cell type, which will estimate the effects of the other variables for each cell type. The downside is that we cannot compare the effect of each cell type on survival using hazard ratios (HR).
 
 ```{r}
 cox.modstrat <- coxph(Y ~ treat + age + Karn + diag.time + strata(cell) + prior, data=VA)
@@ -489,12 +489,12 @@ add_glance_table(
 ) %>%
   modify_caption("**Table 14: Stratified Cox Model**") 
 ```
-This form of the stratified Cox model assumes that the coefficients are the same across each of the four (4) cell types. We can also run a stratified Cox model where the coefficients can vary between strata by using interaction terms.
+This form of the stratified Cox model assumes that the coefficients are the same across each of the four (4) cell types. We can also run a stratified Cox model where the coefficients can vary between strata by using interaction terms. [@kleinbaum2012cox]
 
 ```{r}
 cox.modstratI <- coxph(Y ~ treat + age + Karn + diag.time + prior + treat:cell + age:cell + Karn:cell + diag.time:cell +strata(cell) + prior:cell, data=VA)
 #anova(cox.modstrat, cox.modstratI, test="LRT")
-kable(anova(cox.modstrat, cox.modstratI, test="LRT"), caption = "Table 15: ANOVA Test On >180 Days Models") %>%
+kable(anova(cox.modstrat, cox.modstratI, test="LRT"), caption = "Table 15: ANOVA Test On Stratified Models") %>%
   kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
   row_spec(0, bold = T, background = "#666666", color = "white")
 ```
@@ -514,7 +514,7 @@ kable(phtest.mod2$table, caption = "Table 16: Proportional-Hazards Assumption Te
 The Karnofsky's score still violates the proportional hazards assumption. If we wanted to stratify it, we would first need to group the continuous scores into categorical bins. If we grouped Karnofsky's scores into high, medium, and low bins, that would result in 12 different curves. We will not apply stratification to Karnofsky's score in this paper. Below are survival curves for cell type based the stratified Cox model.
 
 ```{r}
-plot(survfit(cox.modstrat), main = "Figure 7: Survival Probailities by Cell Type Across Survival Time",
+plot(survfit(cox.modstrat), main = "Figure 7: Survival Probabilities by Cell Type Across Survival Time",
      lty = c("solid","dashed", "dotted","longdash"), col=c("black","grey","blue","orange"),
 xlab="survival time",ylab="survival probabilities")
 legend("topright", c("1-squamous","2-small cell", "3-adeno", "4-large"), lty=c("solid","dashed", "dotted","longdash"),

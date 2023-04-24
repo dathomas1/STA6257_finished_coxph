@@ -28,6 +28,70 @@
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
     }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
   <link rel="stylesheet" href="slides_files/libs/revealjs/dist/theme/quarto.css" id="theme">
   <link href="slides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
@@ -353,7 +417,784 @@
 <h2>Add Your Slides Separated by two “##”</h2>
 <p>Words and text/code go inside. You can save plots locally, .jpg/etc, or access the already made plots. To insert them, go into visual mode (see top left) and then click insert and select the image from there, you can resize in visual mode. See lecture if this doesn’t make sense.</p>
 
-<img data-src="index_files/figure-html/data%20viz-1.png" width="382" class="r-stretch"><div class="footer footer-default">
+<img data-src="index_files/figure-html/data%20viz-1.png" width="382" class="r-stretch"></section>
+<section id="statistic-model" class="slide level2">
+<h2>Statistic Model</h2>
+<p>The composition of the model is as follows:</p>
+<p><span class="math display">\[ H(t) = H_0(t) \times exp(b_1x_1 + b_2x_2 + ... + b_kx_k) \]</span></p>
+<p>Where <span class="math inline">\(H_0 (t)\)</span> is considered to be the baseline hazard function of the model. $ b_k $ are model parameters.</p>
+</section>
+<section id="model-in-r" class="slide level2">
+<h2>Model in R</h2>
+<p>The Cox PH model in R is ran from the survival package. Below is an example of running the model with a single variable (treat):</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Call:
+coxph(formula = Y ~ treat, data = VA)
+
+          coef exp(coef) se(coef)     z     p
+treat2 0.01774   1.01790  0.18066 0.098 0.922
+
+Likelihood ratio test=0.01  on 1 df, p=0.9218
+n= 137, number of events= 128 </code></pre>
+</div>
+</div>
+</section>
+<section id="interpreting-r-output" class="slide level2">
+<h2>Interpreting R Output</h2>
+<p>We use the hazard ratio (HR) to determine the effect of test treatment in comparison with the standard treatment:</p>
+<p><span class="math display">\[ HR = {h_{test}(t) \over h_{standard}(t)} = {h_0(t)\times exp(0.0177 \times X_{test}) \over h_0(t) \times exp(0.0177 \times X_{standard})} \]</span> <span class="math display">\[ = {exp(0.0177 \times 1) \over exp(0.0177 \times 0)} = 1.018\]</span> This means that the hazard for the test group is 1.02 times the hazard for the standard treatment group. In order words, the test group has a 1.8% more likely to experience the event than the standard group.</p>
+</section>
+<section id="proportional-hazard-assumption" class="slide level2">
+<h2>Proportional Hazard Assumption</h2>
+<p>The proportional hazard assumption is means that hazard ratio (HR) is constant over time. This means the predictor variables and regression coefficients are time-independent (no change over course of study).</p>
+<p>Methods of checking PH assumption</p>
+<ul>
+<li><p>Graphical view of regression coefficients residuals</p></li>
+<li><p>Statistical test of residuals</p></li>
+<li><p>Graphical view of log-log survival curve</p></li>
+</ul>
+</section>
+<section id="graphical-view-of-regression-coefficients-residuals" class="slide level2">
+<h2>Graphical view of regression coefficients residuals</h2>
+<p>PH assumption is valid when coefficient is constant over time.</p>
+
+<img data-src="index_files/figure-html/unnamed-chunk-5-1.png" alt="Plot of scaled Schoenfeld residuals and estimated beta versus time" class="r-stretch"><p>Schoenfeld residuals for a variable are the observed value for i-th individual at the “event” time - the weight-average of the variable for other subjects still at risk.</p>
+</section>
+<section id="statistical-test-of-residuals" class="slide level2">
+<h2>Statistical test of residuals</h2>
+<p>Test if Schoenfeld residuals are correlated with time. The null hypothesis <span class="math inline">\(H_0\)</span> is that the residuals are not correlated with time. Rejecting <span class="math inline">\(H_0\)</span> means the PH assumption is violated. In R, use the cox.zph function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">cox.zph</span>(<span class="fu">coxph</span>(Y <span class="sc">~</span> treat, <span class="at">data=</span>VA), <span class="at">transform =</span> rank)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       chisq df    p
+treat   3.53  1 0.06
+GLOBAL  3.53  1 0.06</code></pre>
+</div>
+</div>
+</section>
+<section id="graphical-view-of-log-log-survival-curve" class="slide level2">
+<h2>Graphical view of log-log survival curve</h2>
+<p>If log-log survival curves are parallel then the PH assumption is appropriate. Since curves cross, PH assumption is violated.</p>
+
+<img data-src="index_files/figure-html/unnamed-chunk-8-1.png" class="r-stretch"></section>
+<section id="options-when-ph-assumption-not-met" class="slide level2">
+<h2>Options when PH assumption not met</h2>
+<ul>
+<li><p>Start Cox PH model after certain time period (ie fit model for 180-day survivors)</p></li>
+<li><p>Stratify on the non-proportional variable and obtain separate models for each group</p></li>
+<li><p>Use extended Cox model which allows for time-varying coefficients and/or time-dependent variables</p></li>
+</ul>
+</section>
+<section id="multiple-variable-cox-model-in-r" class="slide level2">
+<h2>Multiple Variable Cox Model in R</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">coxph</span>(Y <span class="sc">~</span> treat <span class="sc">+</span> age <span class="sc">+</span> Karn <span class="sc">+</span> diag.time <span class="sc">+</span> cell <span class="sc">+</span> prior, <span class="at">data=</span>VA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call:
+coxph(formula = Y ~ treat + age + Karn + diag.time + cell + prior, 
+    data = VA)
+
+                coef  exp(coef)   se(coef)      z        p
+treat2     2.946e-01  1.343e+00  2.075e-01  1.419  0.15577
+age       -8.706e-03  9.913e-01  9.300e-03 -0.936  0.34920
+Karn      -3.282e-02  9.677e-01  5.508e-03 -5.958 2.55e-09
+diag.time  8.132e-05  1.000e+00  9.136e-03  0.009  0.99290
+cell2      8.616e-01  2.367e+00  2.753e-01  3.130  0.00175
+cell3      1.196e+00  3.307e+00  3.009e-01  3.975 7.05e-05
+cell4      4.013e-01  1.494e+00  2.827e-01  1.420  0.15574
+prior10    7.159e-02  1.074e+00  2.323e-01  0.308  0.75794
+
+Likelihood ratio test=62.1  on 8 df, p=1.799e-10
+n= 137, number of events= 128 </code></pre>
+</div>
+</div>
+</section>
+<section id="checking-ph-assumption" class="slide level2">
+<h2>Checking PH Assumption</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">cox.zph</span>(<span class="fu">coxph</span>(Y <span class="sc">~</span> treat <span class="sc">+</span> age <span class="sc">+</span> Karn <span class="sc">+</span> diag.time <span class="sc">+</span> cell <span class="sc">+</span> prior, <span class="at">data=</span>VA), <span class="at">transform=</span>rank)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             chisq df       p
+treat      0.27566  1 0.59956
+age        1.76999  1 0.18338
+Karn      13.53155  1 0.00023
+diag.time  0.00766  1 0.93025
+cell      15.39791  3 0.00151
+prior      2.23094  1 0.13527
+GLOBAL    35.22254  8 2.4e-05</code></pre>
+</div>
+</div>
+
+<img data-src="index_files/figure-html/unnamed-chunk-12-1.png" alt="Schoenfeld plot of nonproportional variables" class="r-stretch"></section>
+<section id="fitting-cox-model-for-180-day-survivors" class="slide level2">
+<h2>Fitting Cox model for 180-day survivors</h2>
+<p>Only 27 individual left in study after 180 days. Sample too small to make conclusions.</p>
+</section>
+<section id="stratified-cox-model" class="slide level2">
+<h2>Stratified Cox model</h2>
+<p>Assumes a different baseline hazard function for each categorical variable.</p>
+<p><span class="math display">\[h_g(t) = {h_{0g}(t)} \times \exp(0.286\text{(treat-test)}-0.012\text{(age)}-0.0383\text{(Karn)}-0.0034\text{(diag.time)}+0.169\text{(prior-no)})\]</span> where <span class="math display">\[g = 1, 2, 3, 4 \text{ (number of cell types)}\]</span> ## Stratified Cox model in R We the following code for stratifying on cell type.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">coxph</span>(Y <span class="sc">~</span> treat <span class="sc">+</span> age <span class="sc">+</span> Karn <span class="sc">+</span> diag.time <span class="sc">+</span> <span class="fu">strata</span>(cell) <span class="sc">+</span> prior, <span class="at">data=</span>VA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call:
+coxph(formula = Y ~ treat + age + Karn + diag.time + strata(cell) + 
+    prior, data = VA)
+
+               coef exp(coef)  se(coef)      z        p
+treat2     0.285902  1.330962  0.210009  1.361    0.173
+age       -0.011821  0.988249  0.009846 -1.201    0.230
+Karn      -0.038262  0.962461  0.005932 -6.450 1.12e-10
+diag.time -0.003439  0.996567  0.009075 -0.379    0.705
+prior10    0.169069  1.184201  0.235667  0.717    0.473
+
+Likelihood ratio test=44.27  on 5 df, p=2.042e-08
+n= 137, number of events= 128 </code></pre>
+</div>
+</div>
+</section>
+<section id="stratified-cox-model-limitation" class="slide level2">
+<h2>Stratified Cox model limitation</h2>
+<ul>
+<li><p>Continuous variables like Karnofsky score must be grouped to categories.</p></li>
+<li><p>Cannot compare the effect of each cell type on survival using hazard ratios (HR).</p></li>
+</ul>
+</section>
+<section id="stratified-cox-model-with-interaction" class="slide level2">
+<h2>Stratified Cox model with Interaction</h2>
+<p>The previous stratified Cox model assumed the coefficients did not vary across cell types. To check this assumption, we fit a Cox model with interaction terms for strata.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">coxph</span>(Y <span class="sc">~</span> treat <span class="sc">+</span> age <span class="sc">+</span> Karn <span class="sc">+</span> diag.time <span class="sc">+</span> prior <span class="sc">+</span> treat<span class="sc">:</span>cell <span class="sc">+</span> age<span class="sc">:</span>cell <span class="sc">+</span> Karn<span class="sc">:</span>cell <span class="sc">+</span> diag.time<span class="sc">:</span>cell <span class="sc">+</span><span class="fu">strata</span>(cell) <span class="sc">+</span> prior<span class="sc">:</span>cell, <span class="at">data=</span>VA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call:
+coxph(formula = Y ~ treat + age + Karn + diag.time + prior + 
+    treat:cell + age:cell + Karn:cell + diag.time:cell + strata(cell) + 
+    prior:cell, data = VA)
+
+                     coef exp(coef)  se(coef)      z       p
+treat2          -0.227963  0.796153  0.409569 -0.557 0.57781
+age              0.026812  1.027175  0.023323  1.150 0.25030
+Karn            -0.032237  0.968277  0.011295 -2.854 0.00432
+diag.time        0.044183  1.045173  0.018585  2.377 0.01744
+prior10         -0.231601  0.793262  0.421828 -0.549 0.58298
+treat1:cell2    -0.847355  0.428547  0.533203 -1.589 0.11202
+treat2:cell2           NA        NA  0.000000     NA      NA
+treat1:cell3    -0.283870  0.752864  0.665777 -0.426 0.66984
+treat2:cell3           NA        NA  0.000000     NA      NA
+treat1:cell4    -0.901538  0.405945  0.650504 -1.386 0.16578
+treat2:cell4           NA        NA  0.000000     NA      NA
+age:cell2       -0.035288  0.965327  0.028387 -1.243 0.21383
+age:cell3       -0.099678  0.905128  0.036566 -2.726 0.00641
+age:cell4       -0.039678  0.961099  0.036695 -1.081 0.27956
+Karn:cell2       0.006414  1.006434  0.015013  0.427 0.66923
+Karn:cell3      -0.046307  0.954749  0.021536 -2.150 0.03154
+Karn:cell4      -0.023842  0.976440  0.021963 -1.086 0.27767
+diag.time:cell2 -0.059080  0.942631  0.023604 -2.503 0.01232
+diag.time:cell3 -0.138551  0.870619  0.060599 -2.286 0.02223
+diag.time:cell4 -0.072737  0.929846  0.062389 -1.166 0.24367
+prior10:cell2    0.519417  1.681047  0.613365  0.847 0.39709
+prior10:cell3    1.943418  6.982579  0.941748  2.064 0.03905
+prior10:cell4    0.554294  1.740711  0.687617  0.806 0.42018
+
+Likelihood ratio test=67.3  on 20 df, p=5e-07
+n= 137, number of events= 128 </code></pre>
+</div>
+</div>
+</section>
+<section id="likelihood-ratio-test" class="slide level2">
+<h2>Likelihood Ratio Test</h2>
+<p>We can use the Log-Likelihood Ratio Test to determine if there is a significant difference in nested models.</p>
+<div class="cell">
+
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">anova</span>(cox.modstrat, cox.modstratI, <span class="at">test=</span><span class="st">"LRT"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Deviance Table
+ Cox model: response is  Y
+ Model 1: ~ treat + age + Karn + diag.time + strata(cell) + prior
+ Model 2: ~ treat + age + Karn + diag.time + prior + treat:cell + age:cell + Karn:cell + diag.time:cell + strata(cell) + prior:cell
+   loglik  Chisq Df Pr(&gt;|Chi|)  
+1 -316.60                       
+2 -305.09 23.027 15    0.08357 .
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>Based on the Log-Likelihood Ratio Test, the no-interaction stratified Cox is sufficient.</p>
+</section>
+<section id="extended-cox-model-for-time-varying-coefficients" class="slide level2">
+<h2>Extended Cox model for Time-Varying Coefficients</h2>
+<p><span class="math display">\[h_i(t)= h_0(t) \times exp(\beta_i(t)Z_i) \]</span></p>
+<p>Used to specify a function for the coefficients that change with time (linear, logarithmic, a step function, etc).</p>
+<p>We used a step function for time intervals of 0-90, 90-180, and 180+ days.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>VA.cp <span class="ot">=</span> <span class="fu">survSplit</span>(<span class="fu">Surv</span>(stime, status)  <span class="sc">~</span> ., <span class="at">data=</span>VA, <span class="at">cut=</span><span class="fu">c</span>(<span class="dv">90</span>,<span class="dv">180</span>), <span class="at">episode=</span><span class="st">"tgroup"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="stratified-extended-cox-model" class="slide level2">
+<h2>Stratified-Extended Cox model</h2>
+<p>We can both stratify on cell type while using the extended model for the Karnofsky score.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">coxph</span>(<span class="fu">Surv</span>(tstart, stime, status) <span class="sc">~</span> treat <span class="sc">+</span> age <span class="sc">+</span> diag.time <span class="sc">+</span> <span class="fu">strata</span>(cell) <span class="sc">+</span> prior <span class="sc">+</span> Karn<span class="sc">:</span><span class="fu">strata</span>(tgroup),</span>
+<span id="cb16-2"><a href="#cb16-2"></a>                 <span class="at">data=</span>VA.cp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call:
+coxph(formula = Surv(tstart, stime, status) ~ treat + age + diag.time + 
+    strata(cell) + prior + Karn:strata(tgroup), data = VA.cp)
+
+                                 coef exp(coef)  se(coef)      z        p
+treat2                       0.160901  1.174569  0.215924  0.745    0.456
+age                         -0.012389  0.987687  0.009893 -1.252    0.210
+diag.time                   -0.004278  0.995731  0.008938 -0.479    0.632
+prior10                      0.164566  1.178882  0.237594  0.693    0.489
+Karn:strata(tgroup)tgroup=1 -0.049032  0.952150  0.006818 -7.192 6.41e-13
+Karn:strata(tgroup)tgroup=2  0.008194  1.008228  0.015464  0.530    0.596
+Karn:strata(tgroup)tgroup=3 -0.019916  0.980281  0.020078 -0.992    0.321
+
+Likelihood ratio test=57.35  on 7 df, p=5.104e-10
+n= 225, number of events= 128 </code></pre>
+</div>
+</div>
+</section>
+<section id="reducing-model-with-likelihood-ratio-test" class="slide level2">
+<h2>Reducing Model with Likelihood Ratio Test</h2>
+<div class="cell">
+
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="co"># Using anova with Likelihood ratio test</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a><span class="fu">anova</span>(cox.modse_r, cox.modse, <span class="at">test=</span><span class="st">"LRT"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Deviance Table
+ Cox model: response is  Surv(tstart, stime, status)
+ Model 1: ~ treat + strata(cell) + Karn:strata(tgroup)
+ Model 2: ~ treat + age + diag.time + strata(cell) + prior + Karn:strata(tgroup)
+   loglik  Chisq Df Pr(&gt;|Chi|)
+1 -311.09                     
+2 -310.06 2.0444  3     0.5632</code></pre>
+</div>
+</div>
+</section>
+<section id="final-stratified-extended-cox-model" class="slide level2">
+<h2>Final Stratified-Extended Cox model</h2>
+<p>Since the difference in Likelihood ratio test is insignificant, we can simplify the model to treat + Karn + cell.</p>
+<p><span class="math display">\[h_g(t) = {h_{0g}(t)} \times \exp(0.0988\text{(treat-test)}-0.0464\text{(Karn*tgroup1)}+0.0097\text{(Karn*tgroup2)}-0.0179\text{(Karn*tgroup3)}\]</span> where <span class="math display">\[g = 1, 2, 3, 4 \text{ (number of cell types)}\]</span> <span class="math display">\[tgroup1 = 1 \text{ if  } 0 \le t &lt; 90 \]</span> <span class="math display">\[tgroup2 = 1 \text{ if  } 90 \le t &lt; 180 \]</span> <span class="math display">\[tgroup3 = 1 \text{ if  } t \ge 180\]</span></p>
+</section>
+<section id="stratified-extended-cox-model-summary" class="slide level2">
+<h2>Stratified-Extended Cox model Summary</h2>
+<div class="cell">
+<div class="cell-output-display">
+
+<div id="vqzgxskiix" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#vqzgxskiix table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#vqzgxskiix thead, #vqzgxskiix tbody, #vqzgxskiix tfoot, #vqzgxskiix tr, #vqzgxskiix td, #vqzgxskiix th {
+  border-style: none;
+}
+
+#vqzgxskiix p {
+  margin: 0;
+  padding: 0;
+}
+
+#vqzgxskiix .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#vqzgxskiix .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#vqzgxskiix .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#vqzgxskiix .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#vqzgxskiix .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#vqzgxskiix .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vqzgxskiix .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#vqzgxskiix .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#vqzgxskiix .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#vqzgxskiix .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#vqzgxskiix .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#vqzgxskiix .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#vqzgxskiix .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#vqzgxskiix .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#vqzgxskiix .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#vqzgxskiix .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#vqzgxskiix .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#vqzgxskiix .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#vqzgxskiix .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vqzgxskiix .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#vqzgxskiix .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#vqzgxskiix .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#vqzgxskiix .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vqzgxskiix .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#vqzgxskiix .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#vqzgxskiix .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vqzgxskiix .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vqzgxskiix .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#vqzgxskiix .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vqzgxskiix .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#vqzgxskiix .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vqzgxskiix .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#vqzgxskiix .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vqzgxskiix .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#vqzgxskiix .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vqzgxskiix .gt_left {
+  text-align: left;
+}
+
+#vqzgxskiix .gt_center {
+  text-align: center;
+}
+
+#vqzgxskiix .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#vqzgxskiix .gt_font_normal {
+  font-weight: normal;
+}
+
+#vqzgxskiix .gt_font_bold {
+  font-weight: bold;
+}
+
+#vqzgxskiix .gt_font_italic {
+  font-style: italic;
+}
+
+#vqzgxskiix .gt_super {
+  font-size: 65%;
+}
+
+#vqzgxskiix .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#vqzgxskiix .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#vqzgxskiix .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#vqzgxskiix .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#vqzgxskiix .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#vqzgxskiix .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#vqzgxskiix .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <caption><strong>Stratified-Extended Cox Model</strong></caption>
+  <thead>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="<strong>Characteristic</strong>"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>HR</strong><span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>HR</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>95% CI</strong><span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>95% CI</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>p-value</strong>"><strong>p-value</strong></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="label" class="gt_row gt_left">treat</td>
+<td headers="estimate" class="gt_row gt_center"></td>
+<td headers="ci" class="gt_row gt_center"></td>
+<td headers="p.value" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;1</td>
+<td headers="estimate" class="gt_row gt_center">—</td>
+<td headers="ci" class="gt_row gt_center">—</td>
+<td headers="p.value" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;2</td>
+<td headers="estimate" class="gt_row gt_center">1.10</td>
+<td headers="ci" class="gt_row gt_center">0.74, 1.66</td>
+<td headers="p.value" class="gt_row gt_center">0.6</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">Karn * strata(tgroup)</td>
+<td headers="estimate" class="gt_row gt_center"></td>
+<td headers="ci" class="gt_row gt_center"></td>
+<td headers="p.value" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Karn * tgroup=1</td>
+<td headers="estimate" class="gt_row gt_center">0.95</td>
+<td headers="ci" class="gt_row gt_center">0.94, 0.97</td>
+<td headers="p.value" class="gt_row gt_center">&lt;0.001</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Karn * tgroup=2</td>
+<td headers="estimate" class="gt_row gt_center">1.01</td>
+<td headers="ci" class="gt_row gt_center">0.98, 1.04</td>
+<td headers="p.value" class="gt_row gt_center">0.5</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Karn * tgroup=3</td>
+<td headers="estimate" class="gt_row gt_center">0.98</td>
+<td headers="ci" class="gt_row gt_center">0.95, 1.02</td>
+<td headers="p.value" class="gt_row gt_center">0.4</td></tr>
+    <tr><td headers="label" class="gt_row gt_left" style="border-top-width: 2px; border-top-style: solid; border-top-color: #D3D3D3;">Log-likelihood</td>
+<td headers="estimate" class="gt_row gt_center" style="border-top-width: 2px; border-top-style: solid; border-top-color: #D3D3D3;">-311</td>
+<td headers="ci" class="gt_row gt_center" style="border-top-width: 2px; border-top-style: solid; border-top-color: #D3D3D3;"></td>
+<td headers="p.value" class="gt_row gt_center" style="border-top-width: 2px; border-top-style: solid; border-top-color: #D3D3D3;"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">c-index</td>
+<td headers="estimate" class="gt_row gt_center">0.705</td>
+<td headers="ci" class="gt_row gt_center"></td>
+<td headers="p.value" class="gt_row gt_center"></td></tr>
+  </tbody>
+  
+  <tfoot class="gt_footnotes">
+    <tr>
+      <td class="gt_footnote" colspan="4"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span> HR = Hazard Ratio, CI = Confidence Interval</td>
+    </tr>
+  </tfoot>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="model-interpretation-for-treatment" class="slide level2">
+<h2>Model Interpretation for Treatment</h2>
+<p>Using the Stratified-Extended Cox model, a patient on the test treatment is 10% more likely to die than one receiving the standard when adjusting for cell type and Karnofsky’s score. However, the treatment results are insignificant.</p>
+</section>
+<section id="model-interpretation-for-karnofsky-score" class="slide level2">
+<h2>Model Interpretation for Karnofsky Score</h2>
+<p>The model also showed that the probability of dying for a male VA patient with a 1-point lower Karnofsky’s score is 5% more likely to die than a patient with a 1-point higher score for the first 90 days. The Karnofsky’s scores across the other time intervals are insignificant.</p>
+<div class="footer footer-default">
 
 </div>
 </section>
