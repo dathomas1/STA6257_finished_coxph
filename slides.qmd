@@ -74,7 +74,28 @@ kable(head(VA, 6), caption = "Table 2: Sample Rows from VA Lung Trial Data") %>%
 -   Includes Censored Data
 -   Per the National Cancer Institute, the Karnofsky score is standard way to measure how well a patient can perform ordinary tasks. A higher score indicates a higher ability to do these tasks
 
+## Summary Statistics {.tabset}
 
+### Numerical Variables
+
+```{r, echo=FALSE}
+#Convert summary statistics to a table
+kable(summary_stats, caption = "Table 3: Summary Statistics for VA Lung Trial Data") %>%
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
+  row_spec(0, bold = T, background = "#666666", color = "white")
+```
+
+### Categorical Variables
+
+```{r}
+#second prop summary
+summary_stats2 <- summary(VA[, c("status", "treat", "cell", "prior")])
+summary_stats2$status <- as.factor(summary_stats2$status)
+#Convert summary statistics to a table
+kable(summary_stats2, caption = "Table 4: Summary Count Statistics for VA Lung Trial Data") %>%
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
+  row_spec(0, bold = T, background = "#666666", color = "white")
+```
 
 ## Statistic Model
 
