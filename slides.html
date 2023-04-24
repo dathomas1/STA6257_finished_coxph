@@ -392,32 +392,22 @@
   <p class="author">Edwin Alvarado, Darnell Thomas, and Michael Ho</p>
 </section>
 
-<section id="introduction" class="slide level2">
-<h2>Introduction</h2>
-<p>Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <a href="https://quarto.org/docs/presentations/" class="uri">https://quarto.org/docs/presentations/</a>.</p>
-</section>
-<section id="bullets" class="slide level2">
-<h2>Bullets</h2>
-<p>When you click the <strong>Render</strong> button a document will be generated that includes:</p>
+<section id="overview" class="slide level2">
+<h2>Overview</h2>
 <ul>
-<li>Content authored with markdown</li>
-<li>Output from executable code</li>
+<li><p>What is the Cox Proportional Hazards Model?</p></li>
+<li><p>Known for its ability to handle censored data</p></li>
+<li><p>Versatile and can achieve comparable results to its parametric counterparts</p></li>
 </ul>
 </section>
-<section id="code" class="slide level2">
-<h2>Code</h2>
-<p>When you click the <strong>Render</strong> button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 2</code></pre>
-</div>
-</div>
+<section id="applications-and-limitations" class="slide level2">
+<h2>Applications and Limitations</h2>
+<ul>
+<li><p>Mainly used in medical field</p></li>
+<li><p>While commonly used in medical research, can be applied to other fields, such as finance or social sciences</p></li>
+<li><p>Limitations concerning time dependent variables</p></li>
+</ul>
 </section>
-<section id="add-your-slides-separated-by-two" class="slide level2">
-<h2>Add Your Slides Separated by two “##”</h2>
-<p>Words and text/code go inside. You can save plots locally, .jpg/etc, or access the already made plots. To insert them, go into visual mode (see top left) and then click insert and select the image from there, you can resize in visual mode. See lecture if this doesn’t make sense.</p>
-
-<img data-src="index_files/figure-html/data%20viz-1.png" width="382" class="r-stretch"></section>
 <section id="statistic-model" class="slide level2">
 <h2>Statistic Model</h2>
 <p>The composition of the model is as follows:</p>
@@ -465,7 +455,7 @@ n= 137, number of events= 128 </code></pre>
 <h2>Statistical test of residuals</h2>
 <p>Test if Schoenfeld residuals are correlated with time. The null hypothesis <span class="math inline">\(H_0\)</span> is that the residuals are not correlated with time. Rejecting <span class="math inline">\(H_0\)</span> means the PH assumption is violated. In R, use the cox.zph function.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">cox.zph</span>(<span class="fu">coxph</span>(Y <span class="sc">~</span> treat, <span class="at">data=</span>VA), <span class="at">transform =</span> rank)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">cox.zph</span>(<span class="fu">coxph</span>(Y <span class="sc">~</span> treat, <span class="at">data=</span>VA), <span class="at">transform =</span> rank)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       chisq df    p
 treat   3.53  1 0.06
@@ -489,7 +479,7 @@ GLOBAL  3.53  1 0.06</code></pre>
 <section id="multiple-variable-cox-model-in-r" class="slide level2">
 <h2>Multiple Variable Cox Model in R</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">coxph</span>(Y <span class="sc">~</span> treat <span class="sc">+</span> age <span class="sc">+</span> Karn <span class="sc">+</span> diag.time <span class="sc">+</span> cell <span class="sc">+</span> prior, <span class="at">data=</span>VA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">coxph</span>(Y <span class="sc">~</span> treat <span class="sc">+</span> age <span class="sc">+</span> Karn <span class="sc">+</span> diag.time <span class="sc">+</span> cell <span class="sc">+</span> prior, <span class="at">data=</span>VA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Call:
 coxph(formula = Y ~ treat + age + Karn + diag.time + cell + prior, 
@@ -513,7 +503,7 @@ n= 137, number of events= 128 </code></pre>
 <section id="checking-ph-assumption" class="slide level2">
 <h2>Checking PH Assumption</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">cox.zph</span>(<span class="fu">coxph</span>(Y <span class="sc">~</span> treat <span class="sc">+</span> age <span class="sc">+</span> Karn <span class="sc">+</span> diag.time <span class="sc">+</span> cell <span class="sc">+</span> prior, <span class="at">data=</span>VA), <span class="at">transform=</span>rank)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">cox.zph</span>(<span class="fu">coxph</span>(Y <span class="sc">~</span> treat <span class="sc">+</span> age <span class="sc">+</span> Karn <span class="sc">+</span> diag.time <span class="sc">+</span> cell <span class="sc">+</span> prior, <span class="at">data=</span>VA), <span class="at">transform=</span>rank)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>             chisq df       p
 treat      0.27566  1 0.59956
@@ -536,7 +526,7 @@ GLOBAL    35.22254  8 2.4e-05</code></pre>
 <p>Assumes a different baseline hazard function for each categorical variable.</p>
 <p><span class="math display">\[h_g(t) = {h_{0g}(t)} \times \exp(0.286\text{(treat-test)}-0.012\text{(age)}-0.0383\text{(Karn)}-0.0034\text{(diag.time)}+0.169\text{(prior-no)})\]</span> where <span class="math display">\[g = 1, 2, 3, 4 \text{ (number of cell types)}\]</span> ## Stratified Cox model in R We the following code for stratifying on cell type.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">coxph</span>(Y <span class="sc">~</span> treat <span class="sc">+</span> age <span class="sc">+</span> Karn <span class="sc">+</span> diag.time <span class="sc">+</span> <span class="fu">strata</span>(cell) <span class="sc">+</span> prior, <span class="at">data=</span>VA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">coxph</span>(Y <span class="sc">~</span> treat <span class="sc">+</span> age <span class="sc">+</span> Karn <span class="sc">+</span> diag.time <span class="sc">+</span> <span class="fu">strata</span>(cell) <span class="sc">+</span> prior, <span class="at">data=</span>VA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Call:
 coxph(formula = Y ~ treat + age + Karn + diag.time + strata(cell) + 
@@ -565,7 +555,7 @@ n= 137, number of events= 128 </code></pre>
 <h2>Stratified Cox model with Interaction</h2>
 <p>The previous stratified Cox model assumed the coefficients did not vary across cell types. To check this assumption, we fit a Cox model with interaction terms for strata.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">coxph</span>(Y <span class="sc">~</span> treat <span class="sc">+</span> age <span class="sc">+</span> Karn <span class="sc">+</span> diag.time <span class="sc">+</span> prior <span class="sc">+</span> treat<span class="sc">:</span>cell <span class="sc">+</span> age<span class="sc">:</span>cell <span class="sc">+</span> Karn<span class="sc">:</span>cell <span class="sc">+</span> diag.time<span class="sc">:</span>cell <span class="sc">+</span><span class="fu">strata</span>(cell) <span class="sc">+</span> prior<span class="sc">:</span>cell, <span class="at">data=</span>VA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">coxph</span>(Y <span class="sc">~</span> treat <span class="sc">+</span> age <span class="sc">+</span> Karn <span class="sc">+</span> diag.time <span class="sc">+</span> prior <span class="sc">+</span> treat<span class="sc">:</span>cell <span class="sc">+</span> age<span class="sc">:</span>cell <span class="sc">+</span> Karn<span class="sc">:</span>cell <span class="sc">+</span> diag.time<span class="sc">:</span>cell <span class="sc">+</span><span class="fu">strata</span>(cell) <span class="sc">+</span> prior<span class="sc">:</span>cell, <span class="at">data=</span>VA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Call:
 coxph(formula = Y ~ treat + age + Karn + diag.time + prior + 
@@ -609,7 +599,7 @@ n= 137, number of events= 128 </code></pre>
 
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">anova</span>(cox.modstrat, cox.modstratI, <span class="at">test=</span><span class="st">"LRT"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">anova</span>(cox.modstrat, cox.modstratI, <span class="at">test=</span><span class="st">"LRT"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Analysis of Deviance Table
  Cox model: response is  Y
@@ -630,15 +620,15 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <p>Used to specify a function for the coefficients that change with time (linear, logarithmic, a step function, etc).</p>
 <p>We used a step function for time intervals of 0-90, 90-180, and 180+ days.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>VA.cp <span class="ot">=</span> <span class="fu">survSplit</span>(<span class="fu">Surv</span>(stime, status)  <span class="sc">~</span> ., <span class="at">data=</span>VA, <span class="at">cut=</span><span class="fu">c</span>(<span class="dv">90</span>,<span class="dv">180</span>), <span class="at">episode=</span><span class="st">"tgroup"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>VA.cp <span class="ot">=</span> <span class="fu">survSplit</span>(<span class="fu">Surv</span>(stime, status)  <span class="sc">~</span> ., <span class="at">data=</span>VA, <span class="at">cut=</span><span class="fu">c</span>(<span class="dv">90</span>,<span class="dv">180</span>), <span class="at">episode=</span><span class="st">"tgroup"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="stratified-extended-cox-model" class="slide level2">
 <h2>Stratified-Extended Cox model</h2>
 <p>We can both stratify on cell type while using the extended model for the Karnofsky score.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">coxph</span>(<span class="fu">Surv</span>(tstart, stime, status) <span class="sc">~</span> treat <span class="sc">+</span> age <span class="sc">+</span> diag.time <span class="sc">+</span> <span class="fu">strata</span>(cell) <span class="sc">+</span> prior <span class="sc">+</span> Karn<span class="sc">:</span><span class="fu">strata</span>(tgroup),</span>
-<span id="cb16-2"><a href="#cb16-2"></a>                 <span class="at">data=</span>VA.cp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">coxph</span>(<span class="fu">Surv</span>(tstart, stime, status) <span class="sc">~</span> treat <span class="sc">+</span> age <span class="sc">+</span> diag.time <span class="sc">+</span> <span class="fu">strata</span>(cell) <span class="sc">+</span> prior <span class="sc">+</span> Karn<span class="sc">:</span><span class="fu">strata</span>(tgroup),</span>
+<span id="cb15-2"><a href="#cb15-2"></a>                 <span class="at">data=</span>VA.cp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Call:
 coxph(formula = Surv(tstart, stime, status) ~ treat + age + diag.time + 
@@ -664,8 +654,8 @@ n= 225, number of events= 128 </code></pre>
 
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="co"># Using anova with Likelihood ratio test</span></span>
-<span id="cb18-2"><a href="#cb18-2"></a><span class="fu">anova</span>(cox.modse_r, cox.modse, <span class="at">test=</span><span class="st">"LRT"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="co"># Using anova with Likelihood ratio test</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="fu">anova</span>(cox.modse_r, cox.modse, <span class="at">test=</span><span class="st">"LRT"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Analysis of Deviance Table
  Cox model: response is  Surv(tstart, stime, status)
@@ -687,26 +677,14 @@ n= 225, number of events= 128 </code></pre>
 <div class="cell">
 <div class="cell-output-display">
 
-<div id="vqzgxskiix" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#vqzgxskiix table {
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+<div id="rlptyayygc" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#vqzgxskiix thead, #vqzgxskiix tbody, #vqzgxskiix tfoot, #vqzgxskiix tr, #vqzgxskiix td, #vqzgxskiix th {
-  border-style: none;
-}
-
-#vqzgxskiix p {
-  margin: 0;
-  padding: 0;
-}
-
-#vqzgxskiix .gt_table {
+:where(#rlptyayygc) .gt_table {
   display: table;
   border-collapse: collapse;
-  line-height: normal;
   margin-left: auto;
   margin-right: auto;
   color: #333333;
@@ -729,36 +707,7 @@ n= 225, number of events= 128 </code></pre>
   border-left-color: #D3D3D3;
 }
 
-#vqzgxskiix .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#vqzgxskiix .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#vqzgxskiix .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#vqzgxskiix .gt_heading {
+:where(#rlptyayygc) .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -770,13 +719,42 @@ n= 225, number of events= 128 </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#vqzgxskiix .gt_bottom_border {
+:where(#rlptyayygc) .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+:where(#rlptyayygc) .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+:where(#rlptyayygc) .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+:where(#rlptyayygc) .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#vqzgxskiix .gt_col_headings {
+:where(#rlptyayygc) .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -791,7 +769,7 @@ n= 225, number of events= 128 </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#vqzgxskiix .gt_col_heading {
+:where(#rlptyayygc) .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -811,7 +789,7 @@ n= 225, number of events= 128 </code></pre>
   overflow-x: hidden;
 }
 
-#vqzgxskiix .gt_column_spanner_outer {
+:where(#rlptyayygc) .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -823,15 +801,15 @@ n= 225, number of events= 128 </code></pre>
   padding-right: 4px;
 }
 
-#vqzgxskiix .gt_column_spanner_outer:first-child {
+:where(#rlptyayygc) .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#vqzgxskiix .gt_column_spanner_outer:last-child {
+:where(#rlptyayygc) .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#vqzgxskiix .gt_column_spanner {
+:where(#rlptyayygc) .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -843,11 +821,7 @@ n= 225, number of events= 128 </code></pre>
   width: 100%;
 }
 
-#vqzgxskiix .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#vqzgxskiix .gt_group_heading {
+:where(#rlptyayygc) .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -873,7 +847,7 @@ n= 225, number of events= 128 </code></pre>
   text-align: left;
 }
 
-#vqzgxskiix .gt_empty_group_heading {
+:where(#rlptyayygc) .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -888,15 +862,15 @@ n= 225, number of events= 128 </code></pre>
   vertical-align: middle;
 }
 
-#vqzgxskiix .gt_from_md > :first-child {
+:where(#rlptyayygc) .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#vqzgxskiix .gt_from_md > :last-child {
+:where(#rlptyayygc) .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#vqzgxskiix .gt_row {
+:where(#rlptyayygc) .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -915,7 +889,7 @@ n= 225, number of events= 128 </code></pre>
   overflow-x: hidden;
 }
 
-#vqzgxskiix .gt_stub {
+:where(#rlptyayygc) .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -928,7 +902,7 @@ n= 225, number of events= 128 </code></pre>
   padding-right: 5px;
 }
 
-#vqzgxskiix .gt_stub_row_group {
+:where(#rlptyayygc) .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -942,15 +916,11 @@ n= 225, number of events= 128 </code></pre>
   vertical-align: top;
 }
 
-#vqzgxskiix .gt_row_group_first td {
+:where(#rlptyayygc) .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#vqzgxskiix .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#vqzgxskiix .gt_summary_row {
+:where(#rlptyayygc) .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -960,16 +930,16 @@ n= 225, number of events= 128 </code></pre>
   padding-right: 5px;
 }
 
-#vqzgxskiix .gt_first_summary_row {
+:where(#rlptyayygc) .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#vqzgxskiix .gt_first_summary_row.thick {
+:where(#rlptyayygc) .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#vqzgxskiix .gt_last_summary_row {
+:where(#rlptyayygc) .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -979,7 +949,7 @@ n= 225, number of events= 128 </code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#vqzgxskiix .gt_grand_summary_row {
+:where(#rlptyayygc) .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -989,7 +959,7 @@ n= 225, number of events= 128 </code></pre>
   padding-right: 5px;
 }
 
-#vqzgxskiix .gt_first_grand_summary_row {
+:where(#rlptyayygc) .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -999,21 +969,11 @@ n= 225, number of events= 128 </code></pre>
   border-top-color: #D3D3D3;
 }
 
-#vqzgxskiix .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #D3D3D3;
-}
-
-#vqzgxskiix .gt_striped {
+:where(#rlptyayygc) .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#vqzgxskiix .gt_table_body {
+:where(#rlptyayygc) .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1022,7 +982,7 @@ n= 225, number of events= 128 </code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#vqzgxskiix .gt_footnotes {
+:where(#rlptyayygc) .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1036,16 +996,16 @@ n= 225, number of events= 128 </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#vqzgxskiix .gt_footnote {
+:where(#rlptyayygc) .gt_footnote {
   margin: 0px;
   font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
+  padding-left: 4px;
+  padding-right: 4px;
   padding-left: 5px;
   padding-right: 5px;
 }
 
-#vqzgxskiix .gt_sourcenotes {
+:where(#rlptyayygc) .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1059,7 +1019,7 @@ n= 225, number of events= 128 </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#vqzgxskiix .gt_sourcenote {
+:where(#rlptyayygc) .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1067,74 +1027,75 @@ n= 225, number of events= 128 </code></pre>
   padding-right: 5px;
 }
 
-#vqzgxskiix .gt_left {
+:where(#rlptyayygc) .gt_left {
   text-align: left;
 }
 
-#vqzgxskiix .gt_center {
+:where(#rlptyayygc) .gt_center {
   text-align: center;
 }
 
-#vqzgxskiix .gt_right {
+:where(#rlptyayygc) .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#vqzgxskiix .gt_font_normal {
+:where(#rlptyayygc) .gt_font_normal {
   font-weight: normal;
 }
 
-#vqzgxskiix .gt_font_bold {
+:where(#rlptyayygc) .gt_font_bold {
   font-weight: bold;
 }
 
-#vqzgxskiix .gt_font_italic {
+:where(#rlptyayygc) .gt_font_italic {
   font-style: italic;
 }
 
-#vqzgxskiix .gt_super {
+:where(#rlptyayygc) .gt_super {
   font-size: 65%;
 }
 
-#vqzgxskiix .gt_footnote_marks {
+:where(#rlptyayygc) .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
-  position: initial;
 }
 
-#vqzgxskiix .gt_asterisk {
+:where(#rlptyayygc) .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#vqzgxskiix .gt_indent_1 {
+:where(#rlptyayygc) .gt_indent_1 {
   text-indent: 5px;
 }
 
-#vqzgxskiix .gt_indent_2 {
+:where(#rlptyayygc) .gt_indent_2 {
   text-indent: 10px;
 }
 
-#vqzgxskiix .gt_indent_3 {
+:where(#rlptyayygc) .gt_indent_3 {
   text-indent: 15px;
 }
 
-#vqzgxskiix .gt_indent_4 {
+:where(#rlptyayygc) .gt_indent_4 {
   text-indent: 20px;
 }
 
-#vqzgxskiix .gt_indent_5 {
+:where(#rlptyayygc) .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<table class="gt_table">
   <caption><strong>Stratified-Extended Cox Model</strong></caption>
-  <thead>
-    
-    <tr class="gt_col_headings">
+  
+  <thead class="gt_col_headings">
+    <tr>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="<strong>Characteristic</strong>"><strong>Characteristic</strong></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>HR</strong><span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>HR</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>95% CI</strong><span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>95% CI</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>HR</strong><sup class=&quot;gt_footnote_marks&quot;>1</sup>"><strong>HR</strong><sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>95% CI</strong><sup class=&quot;gt_footnote_marks&quot;>1</sup>"><strong>95% CI</strong><sup class="gt_footnote_marks">1</sup></th>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>p-value</strong>"><strong>p-value</strong></th>
     </tr>
   </thead>
@@ -1179,7 +1140,7 @@ n= 225, number of events= 128 </code></pre>
   
   <tfoot class="gt_footnotes">
     <tr>
-      <td class="gt_footnote" colspan="4"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span> HR = Hazard Ratio, CI = Confidence Interval</td>
+      <td class="gt_footnote" colspan="4"><sup class="gt_footnote_marks">1</sup> HR = Hazard Ratio, CI = Confidence Interval</td>
     </tr>
   </tfoot>
 </table>
@@ -1194,6 +1155,12 @@ n= 225, number of events= 128 </code></pre>
 <section id="model-interpretation-for-karnofsky-score" class="slide level2">
 <h2>Model Interpretation for Karnofsky Score</h2>
 <p>The model also showed that the probability of dying for a male VA patient with a 1-point lower Karnofsky’s score is 5% more likely to die than a patient with a 1-point higher score for the first 90 days. The Karnofsky’s scores across the other time intervals are insignificant.</p>
+</section>
+<section id="conclusion" class="slide level2">
+<h2>Conclusion</h2>
+<ul>
+<li>There are some</li>
+</ul>
 <div class="footer footer-default">
 
 </div>
