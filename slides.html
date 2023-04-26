@@ -704,8 +704,24 @@
 </section>
 <section id="data-visualization" class="slide level2">
 <h2>Data Visualization</h2>
+<div class="panel-tabset">
+<ul id="tabset-3" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-3-1">Visualization</a></li><li><a href="#tabset-3-2">Code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1">
+<div class="cell">
+<div class="cell-output-display">
+<p><img data-src="slides_files/figure-revealjs/unnamed-chunk-5-1.png" width="960"></p>
+</div>
+</div>
+</div>
+<div id="tabset-3-2">
+<div class="cell">
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-5-1.png" width="960" class="r-stretch"></section>
+</div>
+</div>
+</div>
+</div>
+</section>
 <section id="statistical-model" class="slide level2">
 <h2>Statistical Model</h2>
 <p>The composition of the model is as follows:</p>
@@ -768,9 +784,9 @@ GLOBAL  3.53  1 0.06</code></pre>
 <section id="survival-curves" class="slide level2 tabset">
 <h2>3. Survival Curves</h2>
 <div class="panel-tabset">
-<ul id="tabset-3" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-3-1">Empirical</a></li><li><a href="#tabset-3-2">Log-Log</a></li></ul>
+<ul id="tabset-4" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-4-1">Empirical</a></li><li><a href="#tabset-4-2">Log-Log</a></li></ul>
 <div class="tab-content">
-<div id="tabset-3-1">
+<div id="tabset-4-1">
 <div class="quarto-figure quarto-figure-center">
 <figure>
 <p><img data-src="index_files/figure-html/unnamed-chunk-7-1.png"></p>
@@ -778,7 +794,7 @@ GLOBAL  3.53  1 0.06</code></pre>
 </figure>
 </div>
 </div>
-<div id="tabset-3-2">
+<div id="tabset-4-2">
 <p>If log-log survival curves are parallel then the PH assumption is appropriate. <strong>Since curves cross, PH assumption is violated.</strong></p>
 <p><img data-src="index_files/figure-html/unnamed-chunk-8-1.png"></p>
 </div>
@@ -788,9 +804,9 @@ GLOBAL  3.53  1 0.06</code></pre>
 <section id="multiple-variable-cox-model" class="slide level2 tabset">
 <h2>Multiple Variable Cox Model</h2>
 <div class="panel-tabset">
-<ul id="tabset-4" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-4-1">R Code</a></li><li><a href="#tabset-4-2">PH Test</a></li><li><a href="#tabset-4-3">Non-PH Plot</a></li></ul>
+<ul id="tabset-5" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-5-1">R Code</a></li><li><a href="#tabset-5-2">PH Test</a></li><li><a href="#tabset-5-3">Non-PH Plot</a></li></ul>
 <div class="tab-content">
-<div id="tabset-4-1">
+<div id="tabset-5-1">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">coxph</span>(Y <span class="sc">~</span> treat <span class="sc">+</span> age <span class="sc">+</span> Karn <span class="sc">+</span> diag.time <span class="sc">+</span> cell <span class="sc">+</span> prior, <span class="at">data=</span>VA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -813,7 +829,7 @@ n= 137, number of events= 128 </code></pre>
 </div>
 </div>
 </div>
-<div id="tabset-4-2">
+<div id="tabset-5-2">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">cox.zph</span>(<span class="fu">coxph</span>(Y <span class="sc">~</span> treat <span class="sc">+</span> age <span class="sc">+</span> Karn <span class="sc">+</span> diag.time <span class="sc">+</span> cell <span class="sc">+</span> prior, <span class="at">data=</span>VA), <span class="at">transform=</span>rank)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -828,7 +844,7 @@ GLOBAL    35.22254  8 2.4e-05</code></pre>
 </div>
 </div>
 </div>
-<div id="tabset-4-3">
+<div id="tabset-5-3">
 <p><img data-src="index_files/figure-html/unnamed-chunk-12-1.png" alt="Schoenfeld plot of nonproportional variables"></p>
 </div>
 </div>
@@ -870,16 +886,16 @@ GLOBAL    35.22254  8 2.4e-05</code></pre>
 <section id="stratified-cox-model" class="slide level2 tabset">
 <h2>2. Stratified Cox model</h2>
 <div class="panel-tabset">
-<ul id="tabset-5" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-5-1">Model</a></li><li><a href="#tabset-5-2">Survival Curve</a></li><li><a href="#tabset-5-3">R Code</a></li></ul>
+<ul id="tabset-6" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-6-1">Model</a></li><li><a href="#tabset-6-2">Survival Curve</a></li><li><a href="#tabset-6-3">R Code</a></li></ul>
 <div class="tab-content">
-<div id="tabset-5-1">
+<div id="tabset-6-1">
 <p>Assumes a different baseline hazard function for each Cell Type.</p>
 <p><span class="math display">\[h_g(t) = {h_{0g}(t)} \times \exp(0.286\text{(treat-test)}-0.012\text{(age)}-0.0383\text{(Karn)}-0.0034\text{(diag.time)}+0.169\text{(prior-no)})\]</span> where <span class="math display">\[g = 1, 2, 3, 4 \text{ (number of cell types)}\]</span></p>
 </div>
-<div id="tabset-5-2">
+<div id="tabset-6-2">
 <p><img data-src="index_files/figure-html/unnamed-chunk-20-1.png"></p>
 </div>
-<div id="tabset-5-3">
+<div id="tabset-6-3">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">coxph</span>(Y <span class="sc">~</span> treat <span class="sc">+</span> age <span class="sc">+</span> Karn <span class="sc">+</span> diag.time <span class="sc">+</span> <span class="fu">strata</span>(cell) <span class="sc">+</span> prior, <span class="at">data=</span>VA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -905,13 +921,13 @@ n= 137, number of events= 128 </code></pre>
 <section id="extended-cox-model" class="slide level2 tabset">
 <h2>3. Extended Cox model</h2>
 <div class="panel-tabset">
-<ul id="tabset-6" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-6-1">Time-Varying Coefficients</a></li><li><a href="#tabset-6-2">R Code</a></li><li><a href="#tabset-6-3">R Code Model</a></li></ul>
+<ul id="tabset-7" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-7-1">Time-Varying Coefficients</a></li><li><a href="#tabset-7-2">R Code</a></li><li><a href="#tabset-7-3">R Code Model</a></li></ul>
 <div class="tab-content">
-<div id="tabset-6-1">
+<div id="tabset-7-1">
 <p><span class="math display">\[h_i(t)= h_0(t) \times exp(\beta_1(t)X_{1i} + ... + \beta_k(t)X_{ki}) \]</span>Used to specify a function for the coefficients that change with time (linear, logarithmic, a step function, etc).</p>
 <p>We used a step function for time intervals of 0-90, 90-180, and 180+ days.</p>
 </div>
-<div id="tabset-6-2">
+<div id="tabset-7-2">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="co">#Creating tgroup column for each individual</span></span>
 <span id="cb10-2"><a href="#cb10-2"></a>VA.cp <span class="ot">=</span> <span class="fu">survSplit</span>(<span class="fu">Surv</span>(stime, status)  <span class="sc">~</span> ., <span class="at">data=</span>VA, <span class="at">cut=</span><span class="fu">c</span>(<span class="dv">90</span>,<span class="dv">180</span>), <span class="at">episode=</span><span class="st">"tgroup"</span>)</span>
@@ -930,7 +946,7 @@ n= 137, number of events= 128 </code></pre>
 </div>
 </div>
 </div>
-<div id="tabset-6-3">
+<div id="tabset-7-3">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">coxph</span>(<span class="fu">Surv</span>(tstart, stime, status) <span class="sc">~</span> treat <span class="sc">+</span> age <span class="sc">+</span> diag.time <span class="sc">+</span> cell <span class="sc">+</span> prior <span class="sc">+</span> Karn<span class="sc">:</span><span class="fu">strata</span>(tgroup),</span>
 <span id="cb12-2"><a href="#cb12-2"></a>                 <span class="at">data=</span>VA.cp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -987,14 +1003,14 @@ n= 225, number of events= 128 </code></pre>
 <section id="reducing-model" class="slide level2 tabset">
 <h2>Reducing Model</h2>
 <div class="panel-tabset">
-<ul id="tabset-7" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-7-1">Likelihood Ratio Test</a></li><li><a href="#tabset-7-2">R Code</a></li></ul>
+<ul id="tabset-8" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-8-1">Likelihood Ratio Test</a></li><li><a href="#tabset-8-2">R Code</a></li></ul>
 <div class="tab-content">
-<div id="tabset-7-1">
+<div id="tabset-8-1">
 <p>We can use the Log-Likelihood value (<span class="math inline">\(L\)</span>) to determine if there is a significant difference in nested models.</p>
 <p><span class="math display">\[\chi_{LR}^2 = -2\ln L_\text{reduced-model} - (-2\ln L_\text{full-model})\]</span></p>
 <p>If <span class="math inline">\(\chi_{LR}^2 &gt; \chi_{df,\alpha}^2\)</span> (ie p-value &lt; 0.05), then significant difference in models</p>
 </div>
-<div id="tabset-7-2">
+<div id="tabset-8-2">
 <div class="cell">
 
 </div>
@@ -1025,23 +1041,23 @@ n= 225, number of events= 128 </code></pre>
 <div class="cell">
 <div class="cell-output-display">
 
-<div id="miuypwfmps" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#miuypwfmps table {
+<div id="auutqsotmh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#auutqsotmh table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#miuypwfmps thead, #miuypwfmps tbody, #miuypwfmps tfoot, #miuypwfmps tr, #miuypwfmps td, #miuypwfmps th {
+#auutqsotmh thead, #auutqsotmh tbody, #auutqsotmh tfoot, #auutqsotmh tr, #auutqsotmh td, #auutqsotmh th {
   border-style: none;
 }
 
-#miuypwfmps p {
+#auutqsotmh p {
   margin: 0;
   padding: 0;
 }
 
-#miuypwfmps .gt_table {
+#auutqsotmh .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1067,12 +1083,12 @@ n= 225, number of events= 128 </code></pre>
   border-left-color: #D3D3D3;
 }
 
-#miuypwfmps .gt_caption {
+#auutqsotmh .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#miuypwfmps .gt_title {
+#auutqsotmh .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1084,7 +1100,7 @@ n= 225, number of events= 128 </code></pre>
   border-bottom-width: 0;
 }
 
-#miuypwfmps .gt_subtitle {
+#auutqsotmh .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1096,7 +1112,7 @@ n= 225, number of events= 128 </code></pre>
   border-top-width: 0;
 }
 
-#miuypwfmps .gt_heading {
+#auutqsotmh .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1108,13 +1124,13 @@ n= 225, number of events= 128 </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#miuypwfmps .gt_bottom_border {
+#auutqsotmh .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#miuypwfmps .gt_col_headings {
+#auutqsotmh .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1129,7 +1145,7 @@ n= 225, number of events= 128 </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#miuypwfmps .gt_col_heading {
+#auutqsotmh .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1149,7 +1165,7 @@ n= 225, number of events= 128 </code></pre>
   overflow-x: hidden;
 }
 
-#miuypwfmps .gt_column_spanner_outer {
+#auutqsotmh .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1161,15 +1177,15 @@ n= 225, number of events= 128 </code></pre>
   padding-right: 4px;
 }
 
-#miuypwfmps .gt_column_spanner_outer:first-child {
+#auutqsotmh .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#miuypwfmps .gt_column_spanner_outer:last-child {
+#auutqsotmh .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#miuypwfmps .gt_column_spanner {
+#auutqsotmh .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1181,11 +1197,11 @@ n= 225, number of events= 128 </code></pre>
   width: 100%;
 }
 
-#miuypwfmps .gt_spanner_row {
+#auutqsotmh .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#miuypwfmps .gt_group_heading {
+#auutqsotmh .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1211,7 +1227,7 @@ n= 225, number of events= 128 </code></pre>
   text-align: left;
 }
 
-#miuypwfmps .gt_empty_group_heading {
+#auutqsotmh .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1226,15 +1242,15 @@ n= 225, number of events= 128 </code></pre>
   vertical-align: middle;
 }
 
-#miuypwfmps .gt_from_md > :first-child {
+#auutqsotmh .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#miuypwfmps .gt_from_md > :last-child {
+#auutqsotmh .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#miuypwfmps .gt_row {
+#auutqsotmh .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1253,7 +1269,7 @@ n= 225, number of events= 128 </code></pre>
   overflow-x: hidden;
 }
 
-#miuypwfmps .gt_stub {
+#auutqsotmh .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1266,7 +1282,7 @@ n= 225, number of events= 128 </code></pre>
   padding-right: 5px;
 }
 
-#miuypwfmps .gt_stub_row_group {
+#auutqsotmh .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1280,15 +1296,15 @@ n= 225, number of events= 128 </code></pre>
   vertical-align: top;
 }
 
-#miuypwfmps .gt_row_group_first td {
+#auutqsotmh .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#miuypwfmps .gt_row_group_first th {
+#auutqsotmh .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#miuypwfmps .gt_summary_row {
+#auutqsotmh .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1298,16 +1314,16 @@ n= 225, number of events= 128 </code></pre>
   padding-right: 5px;
 }
 
-#miuypwfmps .gt_first_summary_row {
+#auutqsotmh .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#miuypwfmps .gt_first_summary_row.thick {
+#auutqsotmh .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#miuypwfmps .gt_last_summary_row {
+#auutqsotmh .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1317,7 +1333,7 @@ n= 225, number of events= 128 </code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#miuypwfmps .gt_grand_summary_row {
+#auutqsotmh .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1327,7 +1343,7 @@ n= 225, number of events= 128 </code></pre>
   padding-right: 5px;
 }
 
-#miuypwfmps .gt_first_grand_summary_row {
+#auutqsotmh .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1337,7 +1353,7 @@ n= 225, number of events= 128 </code></pre>
   border-top-color: #D3D3D3;
 }
 
-#miuypwfmps .gt_last_grand_summary_row_top {
+#auutqsotmh .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1347,11 +1363,11 @@ n= 225, number of events= 128 </code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#miuypwfmps .gt_striped {
+#auutqsotmh .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#miuypwfmps .gt_table_body {
+#auutqsotmh .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1360,7 +1376,7 @@ n= 225, number of events= 128 </code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#miuypwfmps .gt_footnotes {
+#auutqsotmh .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1374,7 +1390,7 @@ n= 225, number of events= 128 </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#miuypwfmps .gt_footnote {
+#auutqsotmh .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1383,7 +1399,7 @@ n= 225, number of events= 128 </code></pre>
   padding-right: 5px;
 }
 
-#miuypwfmps .gt_sourcenotes {
+#auutqsotmh .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1397,7 +1413,7 @@ n= 225, number of events= 128 </code></pre>
   border-right-color: #D3D3D3;
 }
 
-#miuypwfmps .gt_sourcenote {
+#auutqsotmh .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1405,63 +1421,63 @@ n= 225, number of events= 128 </code></pre>
   padding-right: 5px;
 }
 
-#miuypwfmps .gt_left {
+#auutqsotmh .gt_left {
   text-align: left;
 }
 
-#miuypwfmps .gt_center {
+#auutqsotmh .gt_center {
   text-align: center;
 }
 
-#miuypwfmps .gt_right {
+#auutqsotmh .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#miuypwfmps .gt_font_normal {
+#auutqsotmh .gt_font_normal {
   font-weight: normal;
 }
 
-#miuypwfmps .gt_font_bold {
+#auutqsotmh .gt_font_bold {
   font-weight: bold;
 }
 
-#miuypwfmps .gt_font_italic {
+#auutqsotmh .gt_font_italic {
   font-style: italic;
 }
 
-#miuypwfmps .gt_super {
+#auutqsotmh .gt_super {
   font-size: 65%;
 }
 
-#miuypwfmps .gt_footnote_marks {
+#auutqsotmh .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#miuypwfmps .gt_asterisk {
+#auutqsotmh .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#miuypwfmps .gt_indent_1 {
+#auutqsotmh .gt_indent_1 {
   text-indent: 5px;
 }
 
-#miuypwfmps .gt_indent_2 {
+#auutqsotmh .gt_indent_2 {
   text-indent: 10px;
 }
 
-#miuypwfmps .gt_indent_3 {
+#auutqsotmh .gt_indent_3 {
   text-indent: 15px;
 }
 
-#miuypwfmps .gt_indent_4 {
+#auutqsotmh .gt_indent_4 {
   text-indent: 20px;
 }
 
-#miuypwfmps .gt_indent_5 {
+#auutqsotmh .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -1528,12 +1544,12 @@ n= 225, number of events= 128 </code></pre>
 <section id="se-cox-model-interpretations" class="slide level2 tabset">
 <h2>SE Cox model Interpretations</h2>
 <div class="panel-tabset">
-<ul id="tabset-8" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-8-1">Treatment</a></li><li><a href="#tabset-8-2">Karnofsky Score</a></li></ul>
+<ul id="tabset-9" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-9-1">Treatment</a></li><li><a href="#tabset-9-2">Karnofsky Score</a></li></ul>
 <div class="tab-content">
-<div id="tabset-8-1">
+<div id="tabset-9-1">
 <p>Using the Stratified-Extended Cox model, a patient on the test treatment is 10% more likely to die than one receiving the standard when adjusting for cell type and Karnofsky’s score. However, the treatment results are insignificant.</p>
 </div>
-<div id="tabset-8-2">
+<div id="tabset-9-2">
 <p>The model also showed that the probability of dying for a male VA patient with a 10-point lower Karnofsky’s score is 57% more likely to die than a patient with a 10-point higher score for the first 90 days. However, Karnofsky’s scores are insignificant as time increases.</p>
 </div>
 </div>
