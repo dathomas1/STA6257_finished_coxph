@@ -18,7 +18,7 @@ editor_options:
   chunk_output_type: inline
 ---
 
-[Slides](https://rstudio.hmcse.uwf.edu/s/a8e1346173be2f14eec01/files/R/GitFolder/project-r-MX9471/STA6257/STA6257%20Capstone/STA6257_coxph/slides.html#/title-slide)
+[Slides](https://e-alvarado.github.io/STA6257_coxph/slides#/title-slide)
 
 ## 1. Introduction
 
@@ -173,7 +173,9 @@ where
 $h_i(t)$ is the hazard function with respect
 
 $Z_i(t)$ are the covariates that may be time-fixed or time-dependent
-[@hendry2014data] is the unknown regression coefficients.
+[@hendry2014data] 
+
+$\beta$ are the unknown regression coefficients.
 
 The hazard ratio (HR) then becomes the following:
 
