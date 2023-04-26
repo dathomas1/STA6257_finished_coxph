@@ -121,8 +121,15 @@ ggpairs(va_subset, title = "Figure 1: Scatterplot Matrix of VA Lung Trial Data f
   scale_color_manual(values = c("#00BFC4", "#F8766D"))
 ```
 
+### Key Remarks
+
+-   test 1
+
+-   test 2
+
+
 ### Code
-```{r, eval = FALSE}
+```{r, eval = FALSE, echo = TRUE}
 #Create a scatter plot matrix using the GGally package
 library(GGally)
 library(tidyverse)
