@@ -57,7 +57,7 @@ kable(a,
       caption = "Table 1: Data Definition",
       col.names = c("Attribute", "Type", "Description"),
       align="lcl", escape = FALSE) %>%
-  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE, font_size = 20) %>%
+  kable_styling(bootstrap_options = c("striped"), full_width = TRUE, font_size = 25) %>%
   row_spec(0, bold = T, background = "#666666", color = "white")
 ```
 
@@ -65,7 +65,7 @@ kable(a,
 
 ```{r, echo=FALSE}
 kable(head(VA, 6), caption = "Table 2: Sample Rows from VA Lung Trial Data") %>%
-  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE, font_size = 20) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE, font_size = 25) %>%
   row_spec(0, bold = T, background = "#666666", color = "white")
 ```
 
@@ -85,7 +85,7 @@ kable(head(VA, 6), caption = "Table 2: Sample Rows from VA Lung Trial Data") %>%
 summary_stats <- summary(VA[, c("stime", "age", "Karn", "diag.time")])
 #Convert summary statistics to a table
 kable(summary_stats, caption = "Table 3: Summary Statistics for VA Lung Trial Data") %>%
-  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE, font_size = 20) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE, font_size = 25) %>%
   row_spec(0, bold = T, background = "#666666", color = "white")
 ```
 
