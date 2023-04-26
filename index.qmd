@@ -660,7 +660,6 @@ kable(anova(cox.modse_r, cox.modse, test="LRT"), caption = "Table 21: ANOVA Test
   row_spec(0, bold = T, background = "#666666", color = "white")
 cox.mod3 = cox.modse_r
 
-# Final models are stored as cox.mod1, cox.mod2, and cox.mod3 respectively
 ```
 
 Since the difference in Likelihood ratio test is insignificant, we can
@@ -699,8 +698,8 @@ Using the Stratified-Extended Cox model, a patient on the test treatment
 is 10% more likely to die than one receiving the standard when adjusting
 for cell type and Karnofsky's score. However, the treatment results are
 insignificant. The model also showed that the probability of dying for a
-male VA patient with a 1-point lower Karnofsky's score is 5% more likely
-to die than a patient with a 1-point higher score for the first 90 days.
+male VA patient with a 10-point lower Karnofsky's score is 57% more likely
+to die than a patient with a 10-point higher score for the first 90 days.
 The Karnofsky's scores across the other time intervals are
 insignificant.
 

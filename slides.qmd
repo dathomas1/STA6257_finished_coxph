@@ -29,7 +29,7 @@ Goals
 -   Determine if any other variables have significant effect on survival time
 -   Properly test assumptions and fit the Cox Proportional Hazards Model
 
-## Case Study: VA Lung Cander Trial
+## Case Study: VA Lung Cancer Trial
 
 ::: panel-tabset
 ### Data Definition
@@ -118,13 +118,13 @@ ggpairs(va_subset, title = "Figure 1: Scatterplot Matrix of VA Lung Trial Data",
   scale_color_manual(values = c("#00BFC4", "#F8766D"))
 ```
 
-## Statistic Model
+## Statistical Model
 
 The composition of the model is as follows:
 
 $$ H(t) = H_0(t) \times exp(b_1x_1 + b_2x_2 + ... + b_kx_k) $$
 
-Where $H_0 (t)$ is considered to be the baseline hazard function of the model. $ b_k $ are model parameters.
+Where $H_0 (t)$ is considered to be the baseline hazard function of the model. \$ b_k \$ are model parameters.
 
 ## Model in R
 
@@ -185,7 +185,7 @@ If log-log survival curves are parallel then the PH assumption is appropriate. S
 
 ![](index_files/figure-html/unnamed-chunk-8-1.png)
 
-## Multiple Variable Cox Model in R {.tabset}
+## Multiple Variable Cox Model {.tabset}
 
 ::: panel-tabset
 ## R Code
@@ -207,33 +207,50 @@ cox.zph(coxph(Y ~ treat + age + Karn + diag.time + cell + prior, data=VA), trans
 
 ## Options when PH assumption not met
 
--   Start Cox PH model after certain time period (ie fit model for 180-day survivors)
+1.  Subset data based time
 
--   Stratify on the non-proportional variable and obtain separate models for each group
+    -   Start Cox PH model after certain time period (ie fit model for 180-day survivors)
 
--   Use extended Cox model which allows for time-varying coefficients and/or time-dependent variables
+    -   Doesn't consider individuals whose event occurred before 180 days
 
-## Fitting Cox model for 180-day survivors
+2.  Stratified Cox model
 
-Only 27 individual left in study after 180 days. Sample too small to make conclusions.
+    -   Obtain separate models for each group (ie Cell Type)
 
-## Stratified Cox model
+    -   Cannot compare HR across stratified groups
+
+3.  Extended Cox model
+
+    -   Specify function time-varying coefficients and/or time-dependent variables
+
+    -   Could be harder to interpret depending on function
+
+4.  Combination of 1, 2, or 3
+
+## 1. Fitting Cox model for 180-day survivors
+
+Only 27 individual left in study after 180 days.
+
+Sample too small to make conclusions.
+
+## 2. Stratified Cox model {.tabset}
+
+::: panel-tabset
+## Model stratified on Cell Type
 
 Assumes a different baseline hazard function for each stratified variable.
 
 $$h_g(t) = {h_{0g}(t)} \times \exp(0.286\text{(treat-test)}-0.012\text{(age)}-0.0383\text{(Karn)}-0.0034\text{(diag.time)}+0.169\text{(prior-no)})$$ where $$g = 1, 2, 3, 4 \text{ (number of cell types)}$$ 
 
-## Stratified Cox model in R We the following code for stratifying on cell type.
+## Survival Curve of Model
+
+![](index_files/figure-html/unnamed-chunk-20-1.png)
+
+## R Code
 
 ```{r, echo=TRUE}
 coxph(Y ~ treat + age + Karn + diag.time + strata(cell) + prior, data=VA)
 ```
-
-## Stratified Cox model limitation
-
--   Continuous variables like Karnofsky score must be grouped to categories.
-
--   Cannot compare the effect of each cell type on survival using hazard ratios (HR).
 
 ## Stratified Cox model with Interaction
 
@@ -242,23 +259,9 @@ The previous stratified Cox model assumed the coefficients did not vary across c
 ```{r, echo=TRUE}
 coxph(Y ~ treat + age + Karn + diag.time + prior + treat:cell + age:cell + Karn:cell + diag.time:cell +strata(cell) + prior:cell, data=VA)
 ```
+:::
 
-## Likelihood Ratio Test
-
-We can use the Log-Likelihood Ratio Test to determine if there is a significant difference in nested models.
-
-```{r}
-cox.modstrat <- coxph(Y ~ treat + age + Karn + diag.time + strata(cell) + prior, data=VA)
-cox.modstratI <- coxph(Y ~ treat + age + Karn + diag.time + prior + treat:cell + age:cell + Karn:cell + diag.time:cell +strata(cell) + prior:cell, data=VA)
-```
-
-```{r, echo=TRUE}
-anova(cox.modstrat, cox.modstratI, test="LRT")
-```
-
-Based on the Log-Likelihood Ratio Test, the no-interaction stratified Cox is sufficient.
-
-## Extended Cox model for Time-Varying Coefficients
+## 3. Extended Cox model for Time-Varying Coefficients
 
 $$h_i(t)= h_0(t) \times exp(\beta_i(t)Z_i) $$
 
@@ -270,7 +273,7 @@ We used a step function for time intervals of 0-90, 90-180, and 180+ days.
 VA.cp = survSplit(Surv(stime, status)  ~ ., data=VA, cut=c(90,180), episode="tgroup")
 ```
 
-## Stratified-Extended Cox model
+## 4. Stratified-Extended (SE) Cox model
 
 We can both stratify on cell type while using the extended model for the Karnofsky score.
 
@@ -279,7 +282,9 @@ coxph(Surv(tstart, stime, status) ~ treat + age + diag.time + strata(cell) + pri
                  data=VA.cp)
 ```
 
-## Reducing Model with Likelihood Ratio Test
+## Reducing SE Cox Model with Likelihood Ratio Test
+
+We can use the Log-Likelihood Ratio Test to determine if there is a significant difference in nested models.
 
 ```{r}
 cox.modse = coxph(Surv(tstart, stime, status) ~ treat + age + diag.time + strata(cell) + prior + Karn:strata(tgroup),
@@ -293,13 +298,13 @@ cox.modse_r = coxph(Surv(tstart, stime, status) ~ treat + strata(cell) + Karn:st
 anova(cox.modse_r, cox.modse, test="LRT")
 ```
 
-## Final Stratified-Extended Cox model
+## Final SE Cox model
 
 Since the difference in Likelihood ratio test is insignificant, we can simplify the model to treat + Karn + cell.
 
 $$h_g(t) = {h_{0g}(t)} \times \exp(0.0988\text{(treat-test)}-0.0464\text{(Karn*tgroup1)}+0.0097\text{(Karn*tgroup2)}-0.0179\text{(Karn*tgroup3)}$$ where $$g = 1, 2, 3, 4 \text{ (number of cell types)}$$ $$tgroup1 = 1 \text{ if  } 0 \le t < 90 $$ $$tgroup2 = 1 \text{ if  } 90 \le t < 180 $$ $$tgroup3 = 1 \text{ if  } t \ge 180$$
 
-## Stratified-Extended Cox model Summary
+## SE Cox model Summary
 
 ```{r}
 library(gtsummary)
@@ -310,13 +315,19 @@ add_glance_table(
   modify_caption("**Stratified-Extended Cox Model**")
 ```
 
-## Model Interpretation for Treatment
+## SE Cox model Interpretations{.tabset}
+
+::: panel-tabset 
+
+## Treatment
 
 Using the Stratified-Extended Cox model, a patient on the test treatment is 10% more likely to die than one receiving the standard when adjusting for cell type and Karnofsky's score. However, the treatment results are insignificant.
 
-## Model Interpretation for Karnofsky Score
+## Karnofsky Score
 
-The model also showed that the probability of dying for a male VA patient with a 1-point lower Karnofsky's score is 5% more likely to die than a patient with a 1-point higher score for the first 90 days. The Karnofsky's scores across the other time intervals are insignificant.
+The model also showed that the probability of dying for a male VA patient with a 10-point lower Karnofsky's score is 57% more likely to die than a patient with a 10-point higher score for the first 90 days. However, Karnofsky's scores are insignificant as time increases.
+
+::: 
 
 ## Conclusion
 
