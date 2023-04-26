@@ -123,9 +123,9 @@ ggpairs(va_subset, title = "Figure 1: Scatterplot Matrix of VA Lung Trial Data f
 
 ### Key Remarks
 
--   test 1
+-   Distributions are roughly similar between standard and test treatment groups
 
--   test 2
+-   Karnofsky and treatment seem positively correlated
 
 
 ### Code
