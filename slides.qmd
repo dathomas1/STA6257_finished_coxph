@@ -122,9 +122,9 @@ ggpairs(va_subset, title = "Figure 1: Scatterplot Matrix of VA Lung Trial Data",
 
 The composition of the model is as follows:
 
-$$ H(t) = H_0(t) \times exp(b_1x_1 + b_2x_2 + ... + b_kx_k) $$
+$$ h_i(t) = h_0(t) \times exp(\beta_1X_{1i} + \beta_2X_{2i} + ... + \beta_kX_{ki}) $$
 
-Where $H_0 (t)$ is considered to be the baseline hazard function of the model. \$ b_k \$ are model parameters.
+Where $H_0 (t)$ is considered to be the baseline hazard function of the model. $\beta_k$ are model parameters.
 
 ## Model in R
 
@@ -159,31 +159,41 @@ Similar to interpreting log-odds. So, the test group has a 1.8% more likely to e
 
 -   Methods of checking PH assumption
 
-    1.  Graphical view of residuals versus time
+    1.  Schoenfeld Residuals vs Time Plot
 
-    2.  Statistical test of residuals versus time
+    2.  Statistical test of Schoenfeld Residuals
 
-    3.  Graphical view of log-log survival curve
+    3.  Log-Log Survival Curve
 
-## 1. Graphical view of residuals versus time
+## 1. Residuals vs Time Plot
 
 PH assumption is valid when coefficient is constant over time.
 
 ![](index_files/figure-html/unnamed-chunk-5-1.png){fig-alt="Plot of scaled Schoenfeld residuals and estimated beta versus time"}
 
-## 2. Statistical test of residuals versus time
+## 2. Statistical Test
 
-Test if Schoenfeld residuals are correlated with time. The null hypothesis $H_0$ is that the residuals are not correlated with time. If p-value \< $\alpha$: 0.05, then PH assumption is violated.
+Test if Schoenfeld residuals are correlated with time. The null hypothesis $H_0$ is that the residuals are not correlated with time.
+
+If p-value \< $\alpha$: 0.05, then PH assumption is violated.
 
 ```{r, echo=TRUE}
 cox.zph(coxph(Y ~ treat, data=VA), transform = rank)
 ```
 
-## 3. Graphical view of log-log survival curve
+## 3. Survival Curves {.tabset}
 
-If log-log survival curves are parallel then the PH assumption is appropriate. Since curves cross, PH assumption is violated.
+::: panel-tabset
+## Empirical
+
+![Kaplan-Meier Survival Curve](index_files/figure-html/unnamed-chunk-7-1.png)
+
+## Log-Log
+
+If log-log survival curves are parallel then the PH assumption is appropriate. **Since curves cross, PH assumption is violated.**
 
 ![](index_files/figure-html/unnamed-chunk-8-1.png)
+:::
 
 ## Multiple Variable Cox Model {.tabset}
 
@@ -194,13 +204,13 @@ If log-log survival curves are parallel then the PH assumption is appropriate. S
 coxph(Y ~ treat + age + Karn + diag.time + cell + prior, data=VA)
 ```
 
-## Checking PH Assumption
+## PH Test
 
 ```{r, echo=TRUE}
 cox.zph(coxph(Y ~ treat + age + Karn + diag.time + cell + prior, data=VA), transform=rank)
 ```
 
-## Graphical view of non-proportional variables
+## Non-PH Plot
 
 ![](index_files/figure-html/unnamed-chunk-12-1.png){fig-alt="Schoenfeld plot of nonproportional variables"}
 :::
@@ -219,6 +229,8 @@ cox.zph(coxph(Y ~ treat + age + Karn + diag.time + cell + prior, data=VA), trans
 
     -   Cannot compare HR across stratified groups
 
+## More Options when PH assumption not met
+
 3.  Extended Cox model
 
     -   Specify function time-varying coefficients and/or time-dependent variables
@@ -229,20 +241,20 @@ cox.zph(coxph(Y ~ treat + age + Karn + diag.time + cell + prior, data=VA), trans
 
 ## 1. Fitting Cox model for 180-day survivors
 
-Only 27 individual left in study after 180 days.
+-   Only 27 individual left in study after 180 days.
 
-Sample too small to make conclusions.
+-   Sample too small to make conclusions.
 
 ## 2. Stratified Cox model {.tabset}
 
 ::: panel-tabset
-## Model stratified on Cell Type
+## Model
 
-Assumes a different baseline hazard function for each stratified variable.
+Assumes a different baseline hazard function for each Cell Type.
 
-$$h_g(t) = {h_{0g}(t)} \times \exp(0.286\text{(treat-test)}-0.012\text{(age)}-0.0383\text{(Karn)}-0.0034\text{(diag.time)}+0.169\text{(prior-no)})$$ where $$g = 1, 2, 3, 4 \text{ (number of cell types)}$$ 
+$$h_g(t) = {h_{0g}(t)} \times \exp(0.286\text{(treat-test)}-0.012\text{(age)}-0.0383\text{(Karn)}-0.0034\text{(diag.time)}+0.169\text{(prior-no)})$$ where $$g = 1, 2, 3, 4 \text{ (number of cell types)}$$
 
-## Survival Curve of Model
+## Survival Curve
 
 ![](index_files/figure-html/unnamed-chunk-20-1.png)
 
@@ -251,27 +263,34 @@ $$h_g(t) = {h_{0g}(t)} \times \exp(0.286\text{(treat-test)}-0.012\text{(age)}-0.
 ```{r, echo=TRUE}
 coxph(Y ~ treat + age + Karn + diag.time + strata(cell) + prior, data=VA)
 ```
-
-## Stratified Cox model with Interaction
-
-The previous stratified Cox model assumed the coefficients did not vary across cell types. To check this assumption, we fit a Cox model with interaction terms for strata.
-
-```{r, echo=TRUE}
-coxph(Y ~ treat + age + Karn + diag.time + prior + treat:cell + age:cell + Karn:cell + diag.time:cell +strata(cell) + prior:cell, data=VA)
-```
 :::
 
-## 3. Extended Cox model for Time-Varying Coefficients
+## 3. Extended Cox model{.tabset}
 
-$$h_i(t)= h_0(t) \times exp(\beta_i(t)Z_i) $$
+:::panel-tabset
 
-Used to specify a function for the coefficients that change with time (linear, logarithmic, a step function, etc).
+## Time-Varying Coefficients
+
+$$h_i(t)= h_0(t) \times exp(\beta_1(t)X_{1i} + ... + \beta_k(t)X_{ki}) $$Used to specify a function for the coefficients that change with time (linear, logarithmic, a step function, etc).
 
 We used a step function for time intervals of 0-90, 90-180, and 180+ days.
 
+## R Code
 ```{r, echo=TRUE}
+#Creating tgroup column for each individual
 VA.cp = survSplit(Surv(stime, status)  ~ ., data=VA, cut=c(90,180), episode="tgroup")
+
+# Output first 7 entries
+VA.cp[1:7, c("age","Karn","cell","tstart", "stime", "status", "tgroup")]
 ```
+
+## R Code Model
+```{r, echo=TRUE}
+coxph(Surv(tstart, stime, status) ~ treat + age + diag.time + cell + prior + Karn:strata(tgroup),
+                 data=VA.cp)
+```
+
+:::
 
 ## 4. Stratified-Extended (SE) Cox model
 
@@ -282,9 +301,18 @@ coxph(Surv(tstart, stime, status) ~ treat + age + diag.time + strata(cell) + pri
                  data=VA.cp)
 ```
 
-## Reducing SE Cox Model with Likelihood Ratio Test
+## Reducing Model {.tabset}
 
-We can use the Log-Likelihood Ratio Test to determine if there is a significant difference in nested models.
+::: panel-tabset
+## Likelihood Ratio Test
+
+We can use the Log-Likelihood value ($L$) to determine if there is a significant difference in nested models.
+
+$$\chi_{LR}^2 = -2\ln L_\text{reduced-model} - (-2\ln L_\text{full-model})$$
+
+If $\chi_{LR}^2 > \chi_{df,\alpha}^2$ (ie p-value \< 0.05), then significant difference in models
+
+## R Code
 
 ```{r}
 cox.modse = coxph(Surv(tstart, stime, status) ~ treat + age + diag.time + strata(cell) + prior + Karn:strata(tgroup),
@@ -297,10 +325,11 @@ cox.modse_r = coxph(Surv(tstart, stime, status) ~ treat + strata(cell) + Karn:st
 # Using anova with Likelihood ratio test
 anova(cox.modse_r, cox.modse, test="LRT")
 ```
+:::
 
 ## Final SE Cox model
 
-Since the difference in Likelihood ratio test is insignificant, we can simplify the model to treat + Karn + cell.
+Simplified the model to treat + Karn + cell.
 
 $$h_g(t) = {h_{0g}(t)} \times \exp(0.0988\text{(treat-test)}-0.0464\text{(Karn*tgroup1)}+0.0097\text{(Karn*tgroup2)}-0.0179\text{(Karn*tgroup3)}$$ where $$g = 1, 2, 3, 4 \text{ (number of cell types)}$$ $$tgroup1 = 1 \text{ if  } 0 \le t < 90 $$ $$tgroup2 = 1 \text{ if  } 90 \le t < 180 $$ $$tgroup3 = 1 \text{ if  } t \ge 180$$
 
@@ -315,10 +344,9 @@ add_glance_table(
   modify_caption("**Stratified-Extended Cox Model**")
 ```
 
-## SE Cox model Interpretations{.tabset}
+## SE Cox model Interpretations {.tabset}
 
-::: panel-tabset 
-
+::: panel-tabset
 ## Treatment
 
 Using the Stratified-Extended Cox model, a patient on the test treatment is 10% more likely to die than one receiving the standard when adjusting for cell type and Karnofsky's score. However, the treatment results are insignificant.
@@ -326,8 +354,7 @@ Using the Stratified-Extended Cox model, a patient on the test treatment is 10% 
 ## Karnofsky Score
 
 The model also showed that the probability of dying for a male VA patient with a 10-point lower Karnofsky's score is 57% more likely to die than a patient with a 10-point higher score for the first 90 days. However, Karnofsky's scores are insignificant as time increases.
-
-::: 
+:::
 
 ## Conclusion
 
