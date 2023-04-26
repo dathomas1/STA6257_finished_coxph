@@ -29,10 +29,9 @@ Goals
 -   Determine if any other variables have significant effect on survival time
 -   Properly test assumptions and fit the Cox Proportional Hazards Model
 
-## Case Study: VA Lung Cander Trial 
+## Case Study: VA Lung Cander Trial
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ### Data Definition
 
 ```{r, echo=FALSE}
@@ -75,13 +74,11 @@ kable(head(VA, 6), caption = "Table 2: Sample Rows from VA Lung Trial Data") %>%
 -   137 Observations of patients with inoperable lung cancer
 -   Includes Censored Data
 -   Per the National Cancer Institute, the Karnofsky score is standard way to measure how well a patient can perform ordinary tasks. A higher score indicates a higher ability to do these tasks
-
 :::
 
 ## Summary Statistics {.tabset}
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ### Numerical Variables
 
 ```{r, echo=FALSE}
@@ -104,7 +101,6 @@ kable(summary_stats2, caption = "Table 4: Summary Count Statistics for VA Lung T
   kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
   row_spec(0, bold = T, background = "#666666", color = "white")
 ```
-
 :::
 
 ## Data Visualization
@@ -128,7 +124,7 @@ The composition of the model is as follows:
 
 $$ H(t) = H_0(t) \times exp(b_1x_1 + b_2x_2 + ... + b_kx_k) $$
 
-Where $H_0 (t)$ is considered to be the baseline hazard function of the model. \$ b_k \$ are model parameters.
+Where $H_0 (t)$ is considered to be the baseline hazard function of the model. $ b_k $ are model parameters.
 
 ## Model in R
 
@@ -151,51 +147,48 @@ coxph(Y ~ treat, data=VA)
 
 We use the hazard ratio (HR) to determine the effect of test treatment in comparison with the standard treatment:
 
-$$ HR = {h_{test}(t) \over h_{standard}(t)} = {h_0(t)\times exp(0.0177 \times X_{test}) \over h_0(t) \times exp(0.0177 \times X_{standard})} $$ $$ = {exp(0.0177 \times 1) \over exp(0.0177 \times 0)} = 1.018$$ This means that the hazard for the test group is 1.02 times the hazard for the standard treatment group. In order words, the test group has a 1.8% more likely to experience the event than the standard group.
+$$ HR = {h_{test}(t) \over h_{standard}(t)} = {h_0(t)\times exp(0.0177 \times X_{test}) \over h_0(t) \times exp(0.0177 \times X_{standard})} $$ $$ = {exp(0.0177 \times 1) \over exp(0.0177 \times 0)} = 1.018$$
+
+Similar to interpreting log-odds. So, the test group has a 1.8% more likely to experience the event than the standard group.
 
 ## Proportional Hazard Assumption
 
-The proportional hazard assumption is means that hazard ratio (HR) is constant over time. This means the predictor variables and regression coefficients are time-independent (no change over course of study).
+-   The proportional hazard assumption is means that hazard ratio (HR) is constant over time.
 
-Methods of checking PH assumption
+-   Variables and regression coefficients are time-independent (no change over course of study).
 
--   Graphical view of regression coefficients residuals
+-   Methods of checking PH assumption
 
--   Statistical test of residuals
+    1.  Graphical view of residuals versus time
 
--   Graphical view of log-log survival curve
+    2.  Statistical test of residuals versus time
 
-## Graphical view of regression coefficients residuals
+    3.  Graphical view of log-log survival curve
+
+## 1. Graphical view of residuals versus time
 
 PH assumption is valid when coefficient is constant over time.
 
 ![](index_files/figure-html/unnamed-chunk-5-1.png){fig-alt="Plot of scaled Schoenfeld residuals and estimated beta versus time"}
 
-Schoenfeld residuals for a variable are the observed value for i-th individual at the "event" time - the weight-average of the variable for other subjects still at risk.
+## 2. Statistical test of residuals versus time
 
-## Statistical test of residuals
-
-Test if Schoenfeld residuals are correlated with time. The null hypothesis $H_0$ is that the residuals are not correlated with time. Rejecting $H_0$ means the PH assumption is violated. In R, use the cox.zph function.
+Test if Schoenfeld residuals are correlated with time. The null hypothesis $H_0$ is that the residuals are not correlated with time. If p-value \< $\alpha$: 0.05, then PH assumption is violated.
 
 ```{r, echo=TRUE}
 cox.zph(coxph(Y ~ treat, data=VA), transform = rank)
 ```
 
-## Graphical view of log-log survival curve
+## 3. Graphical view of log-log survival curve
 
 If log-log survival curves are parallel then the PH assumption is appropriate. Since curves cross, PH assumption is violated.
 
 ![](index_files/figure-html/unnamed-chunk-8-1.png)
 
-## Options when PH assumption not met
+## Multiple Variable Cox Model in R {.tabset}
 
--   Start Cox PH model after certain time period (ie fit model for 180-day survivors)
-
--   Stratify on the non-proportional variable and obtain separate models for each group
-
--   Use extended Cox model which allows for time-varying coefficients and/or time-dependent variables
-
-## Multiple Variable Cox Model in R
+::: panel-tabset
+## R Code
 
 ```{r, echo=TRUE}
 coxph(Y ~ treat + age + Karn + diag.time + cell + prior, data=VA)
@@ -207,7 +200,18 @@ coxph(Y ~ treat + age + Karn + diag.time + cell + prior, data=VA)
 cox.zph(coxph(Y ~ treat + age + Karn + diag.time + cell + prior, data=VA), transform=rank)
 ```
 
+## Graphical view of non-proportional variables
+
 ![](index_files/figure-html/unnamed-chunk-12-1.png){fig-alt="Schoenfeld plot of nonproportional variables"}
+:::
+
+## Options when PH assumption not met
+
+-   Start Cox PH model after certain time period (ie fit model for 180-day survivors)
+
+-   Stratify on the non-proportional variable and obtain separate models for each group
+
+-   Use extended Cox model which allows for time-varying coefficients and/or time-dependent variables
 
 ## Fitting Cox model for 180-day survivors
 
@@ -215,9 +219,11 @@ Only 27 individual left in study after 180 days. Sample too small to make conclu
 
 ## Stratified Cox model
 
-Assumes a different baseline hazard function for each categorical variable.
+Assumes a different baseline hazard function for each stratified variable.
 
-$$h_g(t) = {h_{0g}(t)} \times \exp(0.286\text{(treat-test)}-0.012\text{(age)}-0.0383\text{(Karn)}-0.0034\text{(diag.time)}+0.169\text{(prior-no)})$$ where $$g = 1, 2, 3, 4 \text{ (number of cell types)}$$ \## Stratified Cox model in R We the following code for stratifying on cell type.
+$$h_g(t) = {h_{0g}(t)} \times \exp(0.286\text{(treat-test)}-0.012\text{(age)}-0.0383\text{(Karn)}-0.0034\text{(diag.time)}+0.169\text{(prior-no)})$$ where $$g = 1, 2, 3, 4 \text{ (number of cell types)}$$ 
+
+## Stratified Cox model in R We the following code for stratifying on cell type.
 
 ```{r, echo=TRUE}
 coxph(Y ~ treat + age + Karn + diag.time + strata(cell) + prior, data=VA)

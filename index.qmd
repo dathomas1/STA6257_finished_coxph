@@ -270,9 +270,14 @@ kable(summary_stats, caption = "Table 3: Summary Statistics for VA Lung Trial Da
   kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
   row_spec(0, bold = T, background = "#666666", color = "white")
 
+
+# Copied VA dataset so we can safely convert status to factors
+VA.summary <- VA
+VA.summary$status <- as.factor(VA.summary$status)
+
 #second prop summary
-summary_stats2 <- summary(VA[, c("status", "treat", "cell", "prior")])
-summary_stats2$status <- as.factor(summary_stats2$status)
+summary_stats2 <- summary(VA.summary[, c("status", "treat", "cell", "prior")])
+
 #Convert summary statistics to a table
 kable(summary_stats2, caption = "Table 4: Summary Count Statistics for VA Lung Trial Data") %>%
   kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE) %>%
@@ -347,7 +352,7 @@ add_glance_table(
 The Cox PH model found that the treatment type only is insignificant. A
 key assumption of the Cox PH model is that the hazard is proportional
 (i.e. the HR is constant across time). To validate the proportional
-hazard assumption, we will use the scaled Schoenfield's residuals to
+hazard assumption, we will use the scaled Schoenfeld's residuals to
 compare the difference between the observed treatment value and the
 weighted-average of other individuals. [@grambsch1994proportional] If
 the HR is constant, the smoothed residual curve will stay around 0 as
@@ -390,7 +395,7 @@ plot estimated survivor curves for both treatments.
 # Plotting graph of Kaplan-Meier curve
 kmfit = survfit(Y ~ treat, data=VA)
 
-plot(kmfit, main = "Figure 3: Kaplan-Meier Curve", lty = c("solid", "dashed"), col=c("black","grey"),
+plot(kmfit, main = "Figure 3: Survival Curve", lty = c("solid", "dashed"), col=c("black","grey"),
 xlab="survival time",ylab="survival probabilities")
 legend("topright", c("Standard","Test"), lty=c("solid","dashed"),
 col=c("black","grey"))
@@ -668,6 +673,7 @@ add_glance_table(
 ) %>%
   modify_caption("**Table 22: Stratified-Extended Cox Model**") 
 ```
+
 
 $$h_g(t) = {h_{0g}(t)} \times \exp(0.0988\text{(treat-test)}-0.0464\text{(Karn*tgroup1)}+0.0097\text{(Karn*tgroup2)}-0.0179\text{(Karn*tgroup3)}$$
 where $$g = 1, 2, 3, 4 \text{ (number of cell types)}$$
