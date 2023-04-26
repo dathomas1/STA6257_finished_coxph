@@ -57,7 +57,7 @@ kable(a,
       caption = "Table 1: Data Definition",
       col.names = c("Attribute", "Type", "Description"),
       align="lcl", escape = FALSE) %>%
-  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE, font_size = 14) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE, font_size = 20) %>%
   row_spec(0, bold = T, background = "#666666", color = "white")
 ```
 
@@ -65,7 +65,7 @@ kable(a,
 
 ```{r, echo=FALSE}
 kable(head(VA, 6), caption = "Table 2: Sample Rows from VA Lung Trial Data") %>%
-  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE, font_size = 14) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE, font_size = 20) %>%
   row_spec(0, bold = T, background = "#666666", color = "white")
 ```
 
@@ -85,7 +85,7 @@ kable(head(VA, 6), caption = "Table 2: Sample Rows from VA Lung Trial Data") %>%
 summary_stats <- summary(VA[, c("stime", "age", "Karn", "diag.time")])
 #Convert summary statistics to a table
 kable(summary_stats, caption = "Table 3: Summary Statistics for VA Lung Trial Data") %>%
-  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE, font_size = 14) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE, font_size = 20) %>%
   row_spec(0, bold = T, background = "#666666", color = "white")
 ```
 
@@ -111,7 +111,7 @@ library(GGally)
 library(tidyverse)
 va_subset <- VA[, c("stime", "age", "Karn", "diag.time", "treat")]
 
-ggpairs(va_subset, title = "Figure 1: Scatterplot Matrix of VA Lung Trial Data", 
+ggpairs(va_subset, title = "Figure 1: Scatterplot Matrix of VA Lung Trial Data for Standard (1) and Test (2)", 
         columns = c("stime", "age", "Karn", "diag.time"), ggplot2::aes(color = treat),
         lower = list(continuous = "points", combo = "dot_no_facet", mapping = ggplot2::aes(color=treat, alpha = 0.8)),
         diag = list(continuous = wrap("densityDiag"), mapping = ggplot2::aes(color = treat, alpha = 0.1))) +
