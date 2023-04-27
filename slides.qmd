@@ -182,6 +182,7 @@ coxph(Y ~ treat, data=VA)
 ```
 
 ## Summary
+
 ```{r, echo=TRUE}
 summary(coxph(Y ~ treat, data=VA))
 ```
@@ -228,7 +229,7 @@ cox.zph(coxph(Y ~ treat, data=VA), transform = rank)
 
 If log-log survival curves are parallel then the PH assumption is appropriate. **Since curves cross, PH assumption is violated.**
 
-![](index_files/figure-html/unnamed-chunk-8-1.png){width="800"}
+![](index_files/figure-html/unnamed-chunk-8-1.png){fig-align="center" width="600"}
 :::
 
 ## Multiple Variable Cox Model {.tabset}
@@ -288,7 +289,9 @@ cox.zph(coxph(Y ~ treat + age + Karn + diag.time + cell + prior, data=VA), trans
 
 Assumes a different baseline hazard function for each Cell Type.
 
-$$h_g(t) = {h_{0g}(t)} \times \exp(0.286\text{(treat-test)}-0.012\text{(age)}-0.0383\text{(Karn)}-0.0034\text{(diag.time)}+0.169\text{(prior-no)})$$ where $$g = 1, 2, 3, 4 \text{ (number of cell types)}$$
+![](stratified%20cox%20model.png){fig-alt="Stratified cox model" width="1200"}
+
+where $$g = 1, 2, 3, 4 \text{ (number of cell types)}$$
 
 ## Survival Curve
 
@@ -323,7 +326,7 @@ VA.cp[1:7, c("age","Karn","cell","tstart", "stime", "status", "tgroup")]
 ## R Code Model
 
 ```{r, echo=TRUE}
-coxph(Surv(tstart, stime, status) ~ treat + age + diag.time + cell:strata(tgroup) + prior + Karn:strata(tgroup),
+coxph(Surv(tstart, stime, status) ~ treat + age + diag.time + cell + prior + Karn:strata(tgroup),
                  data=VA.cp)
 ```
 :::
@@ -367,7 +370,9 @@ anova(cox.modse_r, cox.modse, test="LRT")
 
 Simplified the model to treat + Karn + cell.
 
-$$h_g(t) = {h_{0g}(t)} \times \exp(0.0988\text{(treat-test)}-0.0464\text{(Karn*tgroup1)}+0.0097\text{(Karn*tgroup2)}-0.0179\text{(Karn*tgroup3)}$$ where $$g = 1, 2, 3, 4 \text{ (number of cell types)}$$ $$tgroup1 = 1 \text{ if  } 0 \le t < 90 $$ $$tgroup2 = 1 \text{ if  } 90 \le t < 180 $$ $$tgroup3 = 1 \text{ if  } t \ge 180$$
+![](stratified-extended%20cox%20model.png){fig-alt="Final stratified-extended cox model" width="1200" height="61"}
+
+where $$g = 1, 2, 3, 4 \text{ (number of cell types)}$$ $$tgroup1 = 1 \text{ if  } 0 \le t < 90 $$ $$tgroup2 = 1 \text{ if  } 90 \le t < 180 $$ $$tgroup3 = 1 \text{ if  } t \ge 180$$
 
 ## SE Cox model Summary
 
@@ -398,4 +403,4 @@ The model also showed that the probability of dying for a male VA patient with a
 
 -   Regarding the case-study results...
 
--   Reiterating why it's popular in survival analysis
+-   Why it's popular in survival analysis
