@@ -398,13 +398,17 @@ add_glance_table(
 ## SE Cox model Interpretations {.tabset}
 
 ::: panel-tabset
-## Treatment
+### Treatment
 
-Using the Stratified-Extended Cox model, a patient on the test treatment is 10% more likely to die than one receiving the standard when adjusting for cell type and Karnofsky's score. However, the treatment results are insignificant.
+-   Treatment effect was not found to be significant, with a p value of 0.6, in final Statified-Extended Cox model
 
-## Karnofsky Score
+### Karnofsky Score
 
-The model also showed that the probability of dying for a male VA patient with a 10-point lower Karnofsky's score is 57% more likely to die than a patient with a 10-point higher score for the first 90 days. However, Karnofsky's scores are insignificant as time increases.
+-   Karnofsky's score was found to be significant but only in the first 90 days, with a p value <0.001
+
+-   In the first 90 days, for a 10-point decrease in Karnofsky score the probability of dying for a patient increase by 57%, all else constant
+
+-   Karnofsky score is measured at the time of entry to the trial
 :::
 
 ## Concluding Remarks
