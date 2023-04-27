@@ -11,7 +11,20 @@ editor: visual
 
 -   Known for its ability to handle censored data
 
--   Versatile and can achieve comparable results to its parametric counterparts
+
+## Statistical Model
+
+The composition of the model is as follows:
+
+$$ h_i(t) = h_0(t) \times exp(\beta_1X_{1i} + \beta_2X_{2i} + ... + \beta_kX_{ki}) $$
+
+Where $H_0 (t)$ is considered to be the baseline hazard function of the model. $\beta_k$ are model parameters.
+
+## The Hazard Ratio
+
+$$ HR = {h_{test}(t) \over h_{standard}(t)} = {h_0(t)\times exp(0.0177 \times X_{test}) \over h_0(t) \times exp(0.0177 \times X_{standard})} $$ $$ = {exp(0.0177 \times 1) \over exp(0.0177 \times 0)} = 1.018$$
+
+Similar to interpreting log-odds. So, the test group has a 1.8% more likely to experience the event than the standard group.
 
 ## Applications and Limitations
 
@@ -120,11 +133,10 @@ ggpairs(va_subset, title = "Figure 1: Scatterplot Matrix of VA Lung Trial Data",
 
 ## Statistical Model
 
-The composition of the model is as follows:
+Recall the composition:
 
 $$ h_i(t) = h_0(t) \times exp(\beta_1X_{1i} + \beta_2X_{2i} + ... + \beta_kX_{ki}) $$
 
-Where $H_0 (t)$ is considered to be the baseline hazard function of the model. $\beta_k$ are model parameters.
 
 ## Model in R
 
@@ -143,13 +155,6 @@ Y = Surv(VA$stime, VA$status)
 coxph(Y ~ treat, data=VA)
 ```
 
-## Interpreting R Output
-
-We use the hazard ratio (HR) to determine the effect of test treatment in comparison with the standard treatment:
-
-$$ HR = {h_{test}(t) \over h_{standard}(t)} = {h_0(t)\times exp(0.0177 \times X_{test}) \over h_0(t) \times exp(0.0177 \times X_{standard})} $$ $$ = {exp(0.0177 \times 1) \over exp(0.0177 \times 0)} = 1.018$$
-
-Similar to interpreting log-odds. So, the test group has a 1.8% more likely to experience the event than the standard group.
 
 ## Proportional Hazard Assumption
 
@@ -358,8 +363,8 @@ The model also showed that the probability of dying for a male VA patient with a
 
 ## Concluding Remarks
 
--   Cox Proportional Hazards Model is popular in survival analysis
+-   Cox Proportional Hazards Model is a useful tool in survival analysis
 
--   Considered robust, as it can handle censored data
+-   Regarding the case-study results...
 
--   Can be relied upon as an accurate indicator of risk factors
+-   Reiterating why it's popular in survival analysis
