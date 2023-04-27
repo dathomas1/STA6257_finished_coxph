@@ -11,7 +11,6 @@ editor: visual
 
 -   Known for its ability to handle censored data
 
-
 ## Defining the Statistical Model
 
 The composition of the model is as follows:
@@ -23,7 +22,6 @@ Where $H_0 (t)$ is considered to be the baseline hazard function of the model. $
 ## The Hazard Ratio
 
 $$ HR = {h_{test}(t) \over h_{standard}(t)} = {h_0(t)\times exp(0.0177 \times X_{test}) \over h_0(t) \times exp(0.0177 \times X_{standard})} $$ $$ = {exp(0.0177 \times 1) \over exp(0.0177 \times 0)} = 1.018$$
-
 
 ## Applications and Limitations
 
@@ -116,8 +114,8 @@ kable(summary_stats2, caption = "Table 4: Summary Count Statistics for VA Lung T
 :::
 
 ## Data Visualization
-::: panel-tabset
 
+::: panel-tabset
 ### Visualization
 
 ```{r}
@@ -139,8 +137,8 @@ ggpairs(va_subset, title = "Figure 1: Scatterplot Matrix of VA Lung Trial Data f
 
 -   Karnofsky and treatment seem positively correlated
 
-
 ### Code
+
 ```{r, eval = FALSE, echo = TRUE}
 #Create a scatter plot matrix using the GGally package
 library(GGally)
@@ -153,7 +151,6 @@ ggpairs(va_subset, title = "Figure 1: Scatterplot Matrix of VA Lung Trial Data f
         diag = list(continuous = wrap("densityDiag"), mapping = ggplot2::aes(color = treat, alpha = 0.1))) +
   scale_color_manual(values = c("#00BFC4", "#F8766D"))
 ```
-
 :::
 
 ## Statistical Model
@@ -162,24 +159,33 @@ Recall the composition:
 
 $$ h_i(t) = h_0(t) \times exp(\beta_1X_{1i} + \beta_2X_{2i} + ... + \beta_kX_{ki}) $$
 
+## Model in R {.tabset}
 
-## Model in R
+Cox PH model for a single variable (treat)
 
-The Cox PH model in R is ran from the survival package. Below is an example of running the model with a single variable (treat):
+::: panel-tabset
+## Model Fit
 
 ```{r}
+# Load Dataset
+library(MASS)
+data(VA)
+```
+
+```{r, echo=TRUE}
 # Import packages
 library(survival)
-library(MASS)
 
-# Load Data
-data(VA)
-
-# Fit Cox PH Model
+# Fit Cox PH Model for treatment only
 Y = Surv(VA$stime, VA$status)
 coxph(Y ~ treat, data=VA)
 ```
 
+## Summary
+```{r, echo=TRUE}
+summary(coxph(Y ~ treat, data=VA))
+```
+:::
 
 ## Proportional Hazard Assumption
 
@@ -216,13 +222,13 @@ cox.zph(coxph(Y ~ treat, data=VA), transform = rank)
 ::: panel-tabset
 ## Empirical
 
-![Kaplan-Meier Survival Curve](index_files/figure-html/unnamed-chunk-7-1.png)
+![Kaplan-Meier Survival Curve](index_files/figure-html/unnamed-chunk-7-1.png){width="800"}
 
 ## Log-Log
 
 If log-log survival curves are parallel then the PH assumption is appropriate. **Since curves cross, PH assumption is violated.**
 
-![](index_files/figure-html/unnamed-chunk-8-1.png)
+![](index_files/figure-html/unnamed-chunk-8-1.png){width="800"}
 :::
 
 ## Multiple Variable Cox Model {.tabset}
@@ -242,7 +248,7 @@ cox.zph(coxph(Y ~ treat + age + Karn + diag.time + cell + prior, data=VA), trans
 
 ## Non-PH Plot
 
-![](index_files/figure-html/unnamed-chunk-12-1.png){fig-alt="Schoenfeld plot of nonproportional variables"}
+![](index_files/figure-html/unnamed-chunk-12-1.png){fig-alt="Schoenfeld plot of nonproportional variables" width="800"}
 :::
 
 ## Options when PH assumption not met
@@ -286,7 +292,7 @@ $$h_g(t) = {h_{0g}(t)} \times \exp(0.286\text{(treat-test)}-0.012\text{(age)}-0.
 
 ## Survival Curve
 
-![](index_files/figure-html/unnamed-chunk-20-1.png)
+![](index_files/figure-html/unnamed-chunk-20-1.png){width="800"}
 
 ## R Code
 
@@ -304,7 +310,7 @@ $$h_i(t)= h_0(t) \times exp(\beta_1(t)X_{1i} + ... + \beta_k(t)X_{ki}) $$Used to
 
 We used a step function for time intervals of 0-90, 90-180, and 180+ days.
 
-## R Code
+## R Code Data
 
 ```{r, echo=TRUE}
 #Creating tgroup column for each individual
@@ -317,7 +323,7 @@ VA.cp[1:7, c("age","Karn","cell","tstart", "stime", "status", "tgroup")]
 ## R Code Model
 
 ```{r, echo=TRUE}
-coxph(Surv(tstart, stime, status) ~ treat + age + diag.time + cell + prior + Karn:strata(tgroup),
+coxph(Surv(tstart, stime, status) ~ treat + age + diag.time + cell:strata(tgroup) + prior + Karn:strata(tgroup),
                  data=VA.cp)
 ```
 :::
