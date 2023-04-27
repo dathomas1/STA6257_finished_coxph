@@ -13,7 +13,7 @@ editor: visual
 
 -   Known for its ability to handle censored data
 
--   Can accont for "realistic" outcomes of observations (i.e., the patient surviving)
+-   Can account for "realistic" outcomes of observations (i.e., the patient surviving)
 
 ## Defining the Statistical Model
 
