@@ -25,14 +25,13 @@ Where $H_0 (t)$ is considered to be the baseline hazard function of the model. $
 
 ## The Hazard Ratio {.smaller}
 
-Consider the following example: 
+Consider the following example:
 
-$$ HR = {h_{pre}(t) \over h_{post}(t)} = {h_0(t)\times exp(0.0177 \times X_{pre}) \over h_0(t) \times exp(0.0177 \times X_{post})} $$ $$ = {exp(0.0177 \times 1) \over exp(0.0177 \times 0)} = 1.018$$
-Similar to Odds Ratio in that: 
+$$ HR = {h_{pre}(t) \over h_{post}(t)} = {h_0(t)\times exp(0.0177 \times X_{pre}) \over h_0(t) \times exp(0.0177 \times X_{post})} $$ $$ = {exp(0.0177 \times 1) \over exp(0.0177 \times 0)} = 1.018$$ Similar to Odds Ratio in that:
 
-- HR > 1 = Positive Effect 
-- HR < 1 = Negative Effect
-- HR = 1 = No Effect
+-   HR \> 1 = Positive Effect
+-   HR \< 1 = Negative Effect
+-   HR = 1 = No Effect
 
 ## Applications and Limitations
 
@@ -42,7 +41,7 @@ Similar to Odds Ratio in that:
 
 -   Originally form of the model, could not account for time-dependent variable effects
 
-    - Proportional Hazard Assumption
+    -   Proportional Hazard Assumption
 
 ## Case Study: VA Lung Cancer Trial
 
@@ -148,7 +147,7 @@ ggpairs(va_subset, title = "Figure 1: Scatterplot Matrix of VA Lung Trial Data f
 
 -   Distributions are roughly similar between standard and test treatment groups
 
--   Karnofsky and treatment seem positively correlated
+-   Karnofsky and survival time seem positively correlated
 
 ### Code
 
@@ -201,13 +200,12 @@ summary(coxph(Y ~ treat, data=VA))
 ```
 
 ## GT Summary
+
 ```{r, echo=TRUE}
 library(gtsummary)
 coxph(Y ~ treat, data=VA) %>% tbl_regression(exponentiate = T) %>% 
 add_glance_table(include = c(logLik, concordance))
 ```
-
-
 :::
 
 ## Proportional Hazard Assumption
@@ -415,7 +413,7 @@ add_glance_table(
 
 ### Karnofsky Score
 
--   Karnofsky's score was found to be significant but only in the first 90 days, with a p value <0.001
+-   Karnofsky's score was found to be significant but only in the first 90 days, with a p value \<0.001
 
 -   In the first 90 days, for a 10-point decrease in Karnofsky score the probability of dying for a patient increase by 57%, all else constant
 
