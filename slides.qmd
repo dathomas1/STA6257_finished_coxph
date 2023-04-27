@@ -24,7 +24,6 @@ Where $H_0 (t)$ is considered to be the baseline hazard function of the model. $
 
 $$ HR = {h_{test}(t) \over h_{standard}(t)} = {h_0(t)\times exp(0.0177 \times X_{test}) \over h_0(t) \times exp(0.0177 \times X_{standard})} $$ $$ = {exp(0.0177 \times 1) \over exp(0.0177 \times 0)} = 1.018$$
 
-Similar to interpreting log-odds. So, the test group has a 1.8% more likely to experience the event than the standard group.
 
 ## Applications and Limitations
 
@@ -70,7 +69,7 @@ kable(a,
       caption = "Table 1: Data Definition",
       col.names = c("Attribute", "Type", "Description"),
       align="lcl", escape = FALSE) %>%
-  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE, font_size = 14) %>%
+  kable_styling(bootstrap_options = c("striped"), full_width = TRUE, font_size = 25) %>%
   row_spec(0, bold = T, background = "#666666", color = "white")
 ```
 
@@ -78,7 +77,7 @@ kable(a,
 
 ```{r, echo=FALSE}
 kable(head(VA, 6), caption = "Table 2: Sample Rows from VA Lung Trial Data") %>%
-  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE, font_size = 14) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE, font_size = 25) %>%
   row_spec(0, bold = T, background = "#666666", color = "white")
 ```
 
@@ -98,7 +97,7 @@ kable(head(VA, 6), caption = "Table 2: Sample Rows from VA Lung Trial Data") %>%
 summary_stats <- summary(VA[, c("stime", "age", "Karn", "diag.time")])
 #Convert summary statistics to a table
 kable(summary_stats, caption = "Table 3: Summary Statistics for VA Lung Trial Data") %>%
-  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE, font_size = 14) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE, font_size = 25) %>%
   row_spec(0, bold = T, background = "#666666", color = "white")
 ```
 
@@ -117,6 +116,9 @@ kable(summary_stats2, caption = "Table 4: Summary Count Statistics for VA Lung T
 :::
 
 ## Data Visualization
+::: panel-tabset
+
+### Visualization
 
 ```{r}
 #Create a scatter plot matrix using the GGally package
@@ -124,12 +126,35 @@ library(GGally)
 library(tidyverse)
 va_subset <- VA[, c("stime", "age", "Karn", "diag.time", "treat")]
 
-ggpairs(va_subset, title = "Figure 1: Scatterplot Matrix of VA Lung Trial Data", 
+ggpairs(va_subset, title = "Figure 1: Scatterplot Matrix of VA Lung Trial Data for Standard (Blue) and Test (Red)", 
         columns = c("stime", "age", "Karn", "diag.time"), ggplot2::aes(color = treat),
         lower = list(continuous = "points", combo = "dot_no_facet", mapping = ggplot2::aes(color=treat, alpha = 0.8)),
         diag = list(continuous = wrap("densityDiag"), mapping = ggplot2::aes(color = treat, alpha = 0.1))) +
   scale_color_manual(values = c("#00BFC4", "#F8766D"))
 ```
+
+### Key Remarks
+
+-   Distributions are roughly similar between standard and test treatment groups
+
+-   Karnofsky and treatment seem positively correlated
+
+
+### Code
+```{r, eval = FALSE, echo = TRUE}
+#Create a scatter plot matrix using the GGally package
+library(GGally)
+library(tidyverse)
+va_subset <- VA[, c("stime", "age", "Karn", "diag.time", "treat")]
+
+ggpairs(va_subset, title = "Figure 1: Scatterplot Matrix of VA Lung Trial Data for Standard (Blue) and Test (Red)", 
+        columns = c("stime", "age", "Karn", "diag.time"), ggplot2::aes(color = treat),
+        lower = list(continuous = "points", combo = "dot_no_facet", mapping = ggplot2::aes(color=treat, alpha = 0.8)),
+        diag = list(continuous = wrap("densityDiag"), mapping = ggplot2::aes(color = treat, alpha = 0.1))) +
+  scale_color_manual(values = c("#00BFC4", "#F8766D"))
+```
+
+:::
 
 ## Statistical Model
 
