@@ -25,11 +25,13 @@ $$ HR = {h_{test}(t) \over h_{standard}(t)} = {h_0(t)\times exp(0.0177 \times X_
 
 ## Applications and Limitations
 
--   Mainly used in medical field
+-   Often used in medical field, e.g. clinical trials
 
 -   While commonly used in medical research, can be applied to other fields, such as finance or social sciences
 
--   Limitations concerning time dependent variables
+-   Originally form of the model, could not account for time-dependent variable effects
+
+    - Proportional Hazard Assumption
 
 ## Case Study: VA Lung Cancer Trial
 
