@@ -12,7 +12,7 @@ editor: visual
 -   Known for its ability to handle censored data
 
 
-## Statistical Model
+## Defining the Statistical Model
 
 The composition of the model is as follows:
 
