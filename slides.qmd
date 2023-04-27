@@ -186,6 +186,15 @@ coxph(Y ~ treat, data=VA)
 ```{r, echo=TRUE}
 summary(coxph(Y ~ treat, data=VA))
 ```
+
+## GT Summary
+```{r, echo=TRUE}
+library(gtsummary)
+coxph(Y ~ treat, data=VA) %>% tbl_regression(exponentiate = T) %>% 
+add_glance_table(include = c(logLik, concordance))
+```
+
+
 :::
 
 ## Proportional Hazard Assumption
@@ -377,7 +386,6 @@ where $$g = 1, 2, 3, 4 \text{ (number of cell types)}$$ $$tgroup1 = 1 \text{ if 
 ## SE Cox model Summary
 
 ```{r}
-library(gtsummary)
 cox.modse_r %>% tbl_regression(exponentiate = T) %>% 
 add_glance_table(
   include = c(logLik, concordance)
