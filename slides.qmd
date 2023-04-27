@@ -9,7 +9,11 @@ editor: visual
 
 -   What is the Cox Proportional Hazards Model?
 
+-   Used to evaluate the association between survival time of a patient and one or more risk factors
+
 -   Known for its ability to handle censored data
+
+-   Can accont for "realistic" outcomes of observations (i.e., the patient surviving)
 
 ## Defining the Statistical Model
 
@@ -19,9 +23,16 @@ $$ h_i(t) = h_0(t) \times exp(\beta_1X_{1i} + \beta_2X_{2i} + ... + \beta_kX_{ki
 
 Where $H_0 (t)$ is considered to be the baseline hazard function of the model. $\beta_k$ are model parameters.
 
-## The Hazard Ratio
+## The Hazard Ratio {.smaller}
 
-$$ HR = {h_{test}(t) \over h_{standard}(t)} = {h_0(t)\times exp(0.0177 \times X_{test}) \over h_0(t) \times exp(0.0177 \times X_{standard})} $$ $$ = {exp(0.0177 \times 1) \over exp(0.0177 \times 0)} = 1.018$$
+Consider the following example: 
+
+$$ HR = {h_{pre}(t) \over h_{post}(t)} = {h_0(t)\times exp(0.0177 \times X_{pre}) \over h_0(t) \times exp(0.0177 \times X_{post})} $$ $$ = {exp(0.0177 \times 1) \over exp(0.0177 \times 0)} = 1.018$$
+Similar to Odds Ratio in that: 
+
+- HR > 1 = Positive Effect 
+- HR < 1 = Negative Effect
+- HR = 1 = No Effect
 
 ## Applications and Limitations
 
