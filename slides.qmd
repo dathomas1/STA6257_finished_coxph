@@ -426,4 +426,4 @@ add_glance_table(
 
 -   Regarding the case-study results...
 
--   Why it's popular in survival analysis
+-   It is due to the CPH's robust nature and being able to handle censored data, which leads it to be so          popular in survival analysis, as seen in our case-study
