@@ -290,7 +290,7 @@ kable(summary_stats2, caption = "Table 4: Summary Count Statistics for VA Lung T
 #Create a scatter plot matrix using the GGally package
 va_subset <- VA[, c("stime", "age", "Karn", "diag.time", "treat")]
 
-ggpairs(va_subset, title = "Figure 1: Scatterplot Matrix of VA Lung Trial Data", 
+ggpairs(va_subset, title = "Figure 1: Scatterplot Matrix of VA Lung Trial Data for Standard (Blue) and Test (Red)", 
         columns = c("stime", "age", "Karn", "diag.time"), ggplot2::aes(color = treat),
         lower = list(continuous = "points", combo = "dot_no_facet", mapping = ggplot2::aes(color=treat, alpha = 0.8)),
         diag = list(continuous = wrap("densityDiag"), mapping = ggplot2::aes(color = treat, alpha = 0.1))) +
@@ -301,16 +301,14 @@ This plot shows a scatterplot matrix of the variables of Survival Time,
 Age, Karnofsky Score, and Diagnosis Time where the lower half is a
 typical scatter plot between the two variables in the cell, the diagonal
 shows a density plot, and the upper diagonal shows a correlation
-coefficient between the two variables with significance indicators. The
-plots are grouped/colored by the treatment groups, with those receiving
-chemotherapy in red. The only variable significantly correlated with
+coefficient between the two variables with significance indicators. One asterisk denotes significance at an alpha = 0.10 level, ** = 0.05 level, and *** = <0.001 level. The plots are grouped/colored by the treatment groups, with those receiving
+the test treatment in red, and those receiving the standard treatment in blue. The only variable significantly correlated with
 Survival Time is the Karnofsky score, at the alpha 0.05 level. Looking
 at the density plots, the standard group's plot in blue is more
-concentrated to the left of the group receiving chemotherapy which
+concentrated to the left of the group receiving test treatment which
 indicates a lower survival time for those in the standard treatment
-group. In general survival time seems to be positively correlated with
-the other variables, but the strength of this correlation is not
-apparent from the graphs.
+group. In general, age and the diagnosis time variables, do not seem to be clearly correlated with survival time.  The Karnofsky score seems to be positively correlated with the survival time, which is reinforced by the significant correlation between the two. 
+We might expect Karnofsky score to then be correlated in the models, but this might change when accounting for the other variables. 
 
 ### 3.4. Statistical Modeling
 
