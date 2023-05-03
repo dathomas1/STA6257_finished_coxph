@@ -30,7 +30,7 @@ One of the key reasons why it is popular in survival analysis is due to
 its ability to handle censored time-to-event data [@fisher1999time].
 "Censored" in this case would mean that some observed units were
 recorded for various lengths of time, but the event of interest did not
-occur during those studies. With this, Sir David Cox, the inventor of
+occur during those studies. In our specific case-study, the event of interest would mean the patient passing away. With this, Sir David Cox, the inventor of
 the model, considered such predictors and covariates when creating the
 Cox method. The risks, or "hazards," were thought of as proportional to
 the probability of an event occurring at any particular time. Some of
@@ -54,8 +54,8 @@ variables that affect survival are constant over time, hence the
 composition of its formula [@d2021methods]. Where parametric models have
 completely specified functional forms, the unspecified nature of the
 baseline hazard function allows the CPH model to be naturally more
-flexible. Another reason for its popularity is that even with an
-unspecified hazard function, the CPH model is robust, being able to
+flexible. Another reason for its popularity is that because of the
+hazard function being unspecified, the CPH model is robust, being able to
 obtain favorable results such as good estimates of regression
 coefficients, hazard ratios of interest, and adjusted survival curves
 [@kleinbaum2012cox]. As a robust model, the CPH method can obtain
@@ -723,9 +723,7 @@ the survival time of any given patient. The testing ranged from the
 standard Cox PH model itself, to utilizing Schoenfeld's residuals and
 the stratified methods, as well as removing certain variables. We
 determined overall that treatment was insignificant and instead found
-that through the Stratified-Extended Cox model, the Karnofsky's scores
-and cell types were stronger predictors of the survival time of any
-given patient. While it is preferable to conduct a study with more
+that through the Stratified-Extended Cox model, the Karnofsky's scores were stronger predictors of the survival time of any given patient. While it is preferable to conduct a study with more
 available data, the Cox Proportional Hazards model allows some room for
 censored and missing information while not compromising much in terms of
 accuracy.
