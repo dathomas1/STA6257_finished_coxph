@@ -157,7 +157,7 @@ The benefit of the Cox PH model is that the baseline hazard function can
 fluctuate with time instead of being constant or multiplicative. Another
 benefit is that the regression coefficients can be estimated without
 knowing the baseline hazard using the partial likelihood method as
-proposed by Cox (1972). Although the baseline hazard function can
+proposed by Cox [@cox1972regression]. Although the baseline hazard function can
 fluctuate, the Cox PH model assumes that the hazard ratio (HR) is
 constant. If the constant HR assumption is broken, one solution is to
 include an interaction between the covariate and time into the Cox model
@@ -182,7 +182,7 @@ The hazard ratio (HR) then becomes the following:
 $$ {h_0(t) \times exp(Z_i(t)β) \over h_0(t) \times exp(Z_j(t)β)} =  {exp(Z_i(t)β) \over exp(Z_j(t)β)} $$
 
 This allows the use of Cox PH for non-constant HR if the covariate is
-time-dependent. In general, the log hazard and covariates are assumed to
+time-dependent. A similar approach can be used for time-independent covariates that violate proportional hazard assumption. In general, the log hazard and covariates are assumed to
 be linear in the Cox PH model [@fox2002r]. The Cox model also assumes
 that the failure time of an individual is independent of the other
 individuals. This means that if one participant in a study dies that no
@@ -192,7 +192,7 @@ individuals have a failure time that exceeds the censoring time
 end of the study and is right-censored. The assumptions of proportional
 HR, independent individuals and right-censoring also applies to other
 exponential survival distributions [@fox2002r] [@hendry2014data]. A key
-downside of Cox PH is that the survival function cannot be calculated
+downside of Cox PH is that the survival function cannot be calculated directly and is estimated
 since the baseline hazard is unknown. This hinders clinicians in
 determining the net benefit of treatments [@mclernon2023assessing].
 
@@ -210,8 +210,8 @@ biased effect estimates.
 
 The data used is from a Veteran's Administrative lung cancer trial of
 137 male patients with advanced inoperable lung cancer.
-@kalbfleisch2011statistical The data set is available through the MASS
-package in R. This data is ideal for modeling with a Cox Proportional
+[@kalbfleisch2011statistical] The data set is available through the MASS
+package [@mass] in R [@rproject]. This data is ideal for modeling with a Cox Proportional
 Hazard model with the survival time and treatment variables being of the
 most interest.
 
@@ -255,6 +255,7 @@ library(dslabs)
 library(MASS)
 library(GGally)
 library(gtsummary)
+
 ```
 
 ```{r, warning=FALSE, echo=TRUE}
@@ -314,6 +315,10 @@ We might expect Karnofsky score to then be correlated in the models, but this mi
 
 #### Treatment Only Cox PH Model
 
+Cox PH model allows us to determine the effect of variables by using the
+hazard ratio (HR). First, we will use treatment variable to determine if
+it is significant. We will use the survival package [@survival-package] in R to run the Cox PH.
+
 ```{r, echo = FALSE}
 # Import Survival package with Cox proportional-hazard model
 library(survival)
@@ -333,9 +338,6 @@ levels(VA$cell) = c("1-squamous", "2-small cell", "3-adeno", "4-large")
 levels(VA$prior) = c("yes", "no")
 ```
 
-Cox PH model allows us to determine the effect of variables by using the
-hazard ratio (HR). First, we will use treatment variable to determine if
-it is significant.
 
 ```{r}
 # Fit model with treatment only
@@ -389,7 +391,7 @@ We could use Cox PH to estimate survival probability curve based on
 fitted model. However, we will use the Kaplan-Meier method, which was
 does not depend on a fitted model, to estimate the probability of
 survival with respect to time. Using the Kaplan-Meier estimates, we can
-plot estimated survivor curves for both treatments.
+plot estimated survivor curves for both treatments. [@therneau2017using] [@kleinbaum2012cox]
 
 ```{r}
 # Plotting graph of Kaplan-Meier curve
@@ -516,7 +518,7 @@ cox.mod1 = cox.mod180
 
 Although we may be tempted to remove the insignificant variables, the
 model performs worse with the reduced model having a significantly lower
-Log Likelihood. Below is the final model using this method.
+Log Likelihood. [@kleinbaum2012cox] Below is the final model using this method.
 
 $$h(t) = {h_0(t)} \times \exp(-0.317 \text{(treat-test)}+0.012 \text{(age)}-0.0087 \text{(Karn)}+0.112\text{(diag.time)}-0.502 \text{(cell-small)}+0.965 \text{(cell-large)}-0.642 \text{(prior-no)})$$
 
@@ -534,7 +536,7 @@ look at using the Stratified Cox model on the full dataset.
 
 #### Stratified Cox model
 
-The stratified Cox model assumes a different baseline hazard function
+The Stratified Cox model assumes a different baseline hazard function
 for each categorical variable that does not meet the proportional hazard
 assumption. We can stratify on the non-proportional cell type, which
 will estimate the effects of the other variables for each cell type. The
@@ -578,13 +580,13 @@ kable(phtest.mod2$table, caption = "Table 16: Proportional-Hazards Assumption Te
   row_spec(0, bold = T, background = "#666666", color = "white")
 ```
 
-The Karnofsky's score still violates the proportional hazards
-assumption. If we wanted to stratify it, we would first need to group
-the continuous scores into categorical bins. If we grouped Karnofsky's
+The Karnofsky score still violates the proportional hazards
+assumption. If we wanted to stratify it, we would first need to combine
+the scores into fewer groups. If we grouped Karnofsky
 scores into high, medium, and low bins, that would result in 12
-different curves. We will not apply stratification to Karnofsky's score
+different curves. We will not apply stratification to Karnofsky score
 in this paper. Below are survival curves for cell type based the
-stratified Cox model.
+Stratified Cox model.
 
 ```{r}
 plot(survfit(cox.modstrat), main = "Figure 7: Survival Probabilities by Cell Type Across Survival Time",
@@ -600,7 +602,7 @@ Another approach to variables with nonproportional hazard ratios is
 specify a function for the coefficients that change with time. This
 function could be linear, logarithmic, or a step function. For this
 analysis, we will run the Cox PH model over specific time intervals
-using a step function for the Karnofsky's score. Before we can run the
+using a step function for the Karnofsky score. Before we can run the
 Cox PH across the intervals of 0-90, 90-180, and 180+ days, we must
 create a new column from the original dataset.
 
@@ -696,15 +698,15 @@ standard treatment, but these treatment results are insignificant.
 
 Using the Stratified-Extended Cox model, a patient on the test treatment
 is 10% more likely to die than one receiving the standard when adjusting
-for cell type and Karnofsky's score. However, the treatment results are
+for cell type and Karnofsky score. However, the treatment results are
 insignificant. The model also showed that the probability of dying for a
-male VA patient with a 10-point lower Karnofsky's score is 57% more likely
+male VA patient with a 10-point lower Karnofsky score is 57% more likely
 to die than a patient with a 10-point higher score for the first 90 days.
-The Karnofsky's scores across the other time intervals are
+The Karnofsky scores across the other time intervals are
 insignificant.
 
-Overall, it seems that Karnofsky's scores and cell type types are the
-strongest predictors of survival. The initial Karnofsky's score have
+Overall, it seems that Karnofsky scores and cell type types are the
+strongest predictors of survival. The initial Karnofsky score have
 significant predictive effects at the beginning of study but the effect
 diminishes as time increases. The effect of cell type also varies as
 time increases. Treatment seems insignificant based on the multiple
@@ -718,7 +720,7 @@ Proportional Hazard (PH) Assumption was upheld. In our example, we
 tested various iterations of the Cox Proportional Hazard model to
 determine which variables, specifically treatment, were significant in
 the survival time of any given patient. The testing ranged from the
-standard Cox PH model itself, to utilizing Schoenfield's residuals and
+standard Cox PH model itself, to utilizing Schoenfeld's residuals and
 the stratified methods, as well as removing certain variables. We
 determined overall that treatment was insignificant and instead found
 that through the Stratified-Extended Cox model, the Karnofsky's scores
